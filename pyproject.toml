@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "order-management-service"
+version = "0.1.0"
+description = "A generic multi-purpose order management service."
+authors = ["Kiran Kharade <Kiran.Kharade@inflectionzone.com>"]
+readme = "README.md"
+packages = [{include = "order_management_service"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.96.0"
+uvicorn = "^0.22.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.3.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
