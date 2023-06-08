@@ -16,13 +16,16 @@ class OrderLineItem(Base):
     Discount = Column(Float, default=0.0)
     DiscountSchemeId = Column(String(36), default=None)
     Tax = Column(Float, default=0.0)
-    Total = Column(Float, default=0.0)
+    ItemSubTotal = Column(Float, default=0.0)
     Order = relationship("Order", back_populates="OrderLineItems", default=None)
     Cart = relationship("Cart", back_populates="CartLineItems", default=None)
     CreatedAt = Column(DateTime(timezone=True), server_default=func.now())
     UpdatedAt = Column(DateTime(timezone=True), onupdate=func.now())
 
-    def __init__(self, id, Name, CatalogId, Quantity, UnitPrice, Discount, Tax, Total):
+    def __init__(self, id, Name,
+                 CatalogId = None, Quantity = 0,
+                 UnitPrice = 0.00, Discount = 0.00,
+                 Tax = 0.00, Total = 0.00):
         super().__init__()
         self.id = id
         self.Name = Name
@@ -31,7 +34,7 @@ class OrderLineItem(Base):
         self.UnitPrice = UnitPrice
         self.Discount = Discount
         self.Tax = Tax
-        self.Total = Total
+        self.ItemSubTotal = Total
 
     def __repr__(self):
         jsonStr = json.dumps(self.__dict__)

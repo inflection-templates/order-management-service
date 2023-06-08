@@ -22,7 +22,9 @@ class Merchant(Base):
     CreatedAt = Column(DateTime(timezone=True), server_default=func.now())
     UpdatedAt = Column(DateTime(timezone=True), onupdate=func.now())
 
-    def __init__(self, id, ReferenceId, Name, Email, Phone, Logo, WebsiteUrl, TaxNumber, GSTNumber, AddressId):
+    def __init__(self, id, ReferenceId, Name, Email, Phone,
+                 Logo = None, WebsiteUrl = None,
+                 TaxNumber = None, GSTNumber = None, AddressId = None):
         super().__init__()
         self.id = id
         self.ReferenceId = ReferenceId
