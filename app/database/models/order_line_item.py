@@ -1,6 +1,6 @@
 import json
 import uuid
-from sqlalchemy import Boolean, Column, Integer, String, Float
+from sqlalchemy import Boolean, Column, Integer, String, Float, DateTime, func
 from sqlalchemy.orm import relationship
 from app.database.connector import Base
 
@@ -18,6 +18,8 @@ class OrderLineItem(Base):
     Tax = Column(Float, default=0.0)
     Total = Column(Float, default=0.0)
     Order = relationship("Order", back_populates="OrderLineItems", default=None)
+    CreatedAt = Column(DateTime(timezone=True), server_default=func.now())
+    UpdatedAt = Column(DateTime(timezone=True), onupdate=func.now())
 
     def __init__(self, id, Name, CatalogId, Quantity, UnitPrice, Discount, Tax, Total):
         super().__init__()

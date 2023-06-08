@@ -1,6 +1,6 @@
 import json
 import uuid
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float, DateTime, func
 from sqlalchemy.orm import relationship
 from app.database.connector import Base
 
@@ -28,6 +28,8 @@ class Order(Base):
     RefundTransactionId = Column(String(36), ForeignKey("transactions.id"), default=None)
     OrderStatus = Column(String(36), ForeignKey("order_statuses.id"), default=None)
     OrderType = Column(String(36), ForeignKey("order_types.id"), default=None)
+    CreatedAt = Column(DateTime(timezone=True), server_default=func.now())
+    UpdatedAt = Column(DateTime(timezone=True), onupdate=func.now())
 
     def __init__(self, id, displayCode, invoiceNumber, customerCartId, TotalItemsCount, OrderDiscount, TipApplicable, TipAmount, TotalTax, TotalAmount, TotalDiscount, Notes):
         super().__init__()

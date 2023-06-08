@@ -13,8 +13,10 @@ class OrderStatus(Base):
 
     id = Column(String(36), primary_key=True, index=True, default=str(uuid.uuid4()))
     Status = Column(EnumColumn(OrderStatusTypes), default=OrderStatusTypes.DRAFT.value)
-    Description = Column(String(64))
+    Description = Column(String(64), default=None)
     OrderId = Column(String(36), ForeignKey("orders.id"), default=None)
+    CreatedAt = Column(DateTime(timezone=True), server_default=func.now())
+    UpdatedAt = Column(DateTime(timezone=True), onupdate=func.now())
 
     def __init__(self, id, Status, Description):
         super().__init__()
