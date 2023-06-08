@@ -18,6 +18,7 @@ class OrderLineItem(Base):
     Tax = Column(Float, default=0.0)
     Total = Column(Float, default=0.0)
     Order = relationship("Order", back_populates="OrderLineItems", default=None)
+    Cart = relationship("Cart", back_populates="CartLineItems", default=None)
     CreatedAt = Column(DateTime(timezone=True), server_default=func.now())
     UpdatedAt = Column(DateTime(timezone=True), onupdate=func.now())
 
