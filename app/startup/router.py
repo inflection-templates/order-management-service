@@ -6,7 +6,7 @@ from app.config.constants import PORT, SERVICE_NAME
 router = APIRouter()
 
 @router.get('/', status_code=200)
-def service():
+def service_info():
     return "{service} is running on port {port}".format(service=SERVICE_NAME, port=PORT)
 
 @router.get('/health-check', status_code=200)
