@@ -72,3 +72,6 @@ You can update the poetry version using poetry itself like `$ poetry self update
 
 ### PLEASE NOTE
 We are using poetry to setup order management service.
+For any new package installation, please use
+`$ poetry add <package-name>`
+
