@@ -75,23 +75,23 @@ We are using poetry to setup order management service.
 For any new package installation, please use
 `$ poetry add <package-name>`
 
-## Run Server from Command Line
+### Run Server from Command Line
 
 `$ uvicorn main:app --port 12345`
 
-## Run server in debug mode from VSCode through Debugger
+### Run server in debug mode in VSCode
 
 1. Select debugging button on the left most toolbar.
 2. Select 'Launch Server' from drop down menu.
 3. Click on 'Start Debugging' button or press F5.
 4. Add breakpoints in code wherever needed.
 
-## Run Tests from command line
+### Run Tests from command line
 
 To run the tests from command line, run the following
 `$ pytest`
 
-## Run the tests from VSCode's Test Functionality
+### Run the tests from VSCode's Test Extension
 
 1. Select 'Test' button on the left most toolbar.
 2. All the tests in the code will be hierarchically displayed.
