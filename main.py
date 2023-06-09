@@ -1,11 +1,12 @@
 import uvicorn
 from app.startup.application import get_application
 from app.config.constants import PORT
-from app.config import settings
+from app.config.config import get_settings
 
 app = get_application()
 
 if __name__ == "__main__":
+    settings = get_settings()
     if settings.ENVIRONMENT == "development":
         uvicorn.run(app, host="localhost", port=PORT)
     else:
