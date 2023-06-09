@@ -1,0 +1,58 @@
+{
+	"info": {
+		"_postman_id": "6b7d1234-5b37-483c-987c-570306ea5bc4",
+		"name": "Order Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5510218",
+		"_collection_link": "https://www.postman.com/solar-water-153775/workspace/inflection-experiments/collection/5510218-6b7d1234-5b37-483c-987c-570306ea5bc4?action=share&creator=5510218&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "Get all orders",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/orders",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"OrderTypeId\": \"db6623ef-d860-41cf-b02e-003855be363e\",\r\n    \"CustomerId\": \"69fa141e-19a4-43c2-9bf2-207f008dec65\",\r\n    \"CartId\" : \"9617aed1-1f05-4cb8-9846-db87a9428723\",\r\n    \"TipApplicable\": false,\r\n    \"Notes\": \"This is some serious order!\",\r\n    \"CouponId\": \"d53ee56f-a795-47ba-b606-5f1982fe6dbb\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/orders",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
