@@ -1,6 +1,7 @@
+from datetime import datetime
 from typing import List, Optional
 from pydantic import UUID4, BaseModel, Field
-from app.domain_types.order_status_types import OrderStatusTypes
+from app.domain_types.enums.order_status_types import OrderStatusTypes
 from app.domain_types.base_search_types import BaseSearchFilter, BaseSearchResults
 
 class OrderCreateModel(BaseModel):
@@ -40,7 +41,6 @@ class OrderSearchFilter(BaseSearchFilter):
     TotalAmountGreaterThan    : Optional[float]    = Field(ge=0.0)
     TotalAmountLessThan       : Optional[float]    = Field(ge=0.0)
     OrderLineItemId           : Optional[UUID4]
-    CouponId                  : Optional[UUID4]
     OrderStatus               : Optional[OrderStatusTypes]
     OrderType                 : Optional[str]      = Field(min_length=2, max_length=64)
     CreatedBefore             : Optional[datetime]
@@ -50,8 +50,8 @@ class OrderSearchFilter(BaseSearchFilter):
 class OrderResponseModel(BaseModel):
     id                 : UUID4
     DisplayCode        : str
-    InvoiceNumber      : str
-    CartId             : UUID4
+    InvoiceNumber      : str | None
+    CartId             : UUID4 | None
     TotalItemsCount    : int
     OrderDiscount      : float
     TipApplicable      : bool
@@ -59,14 +59,13 @@ class OrderResponseModel(BaseModel):
     TotalTax           : float
     TotalDiscount      : float
     TotalAmount        : float
-    Notes              : str
-    OrderLineItems     : List[dict]
-    CouponId           : UUID4
-    Coupon             : dict
-    PaymentTransaction : dict
-    RefundTransactionId: dict
-    OrderStatus        : str
-    OrderType          : str
+    Notes              : str | None
+    OrderLineItems     : List[dict] | None
+    Coupons            : List[dict] | None
+    PaymentTransaction : dict | None
+    RefundTransactionId: dict | None
+    OrderStatus        : OrderStatusTypes
+    OrderType          : str | None
     CreatedAt          : datetime
     UpdatedAt          : datetime
 

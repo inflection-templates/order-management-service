@@ -3,7 +3,7 @@ import uuid
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float, DateTime, func, Enum as EnumColumn
 from sqlalchemy.orm import relationship
 from app.database.connector import Base
-from app.domain_types.order_status_types import OrderStatusTypes
+from app.domain_types.enums.order_status_types import OrderStatusTypes
 
 
 class Order(Base):
@@ -49,7 +49,6 @@ class Order(Base):
         self.TotalAmount = TotalAmount
         self.TotalDiscount = TotalDiscount
         self.Notes = Notes
-
 
     def __repr__(self):
         jsonStr = json.dumps(self.__dict__)

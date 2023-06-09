@@ -9,10 +9,9 @@ class Cart(Base):
     __tablename__ = "carts"
 
     id = Column(String(36), primary_key=True, index=True, default=str(uuid.uuid4()))
-    UserId = Column(String(36), default=None)
+    CustomerId = Column(String(36), default=None)
     CartLineItems = relationship("OrderLineItem", back_populates="Cart", default=None)
     TotalItemsCount = Column(Integer, default=0)
-    Discount = Column(Float, default=0.0)
     TotalTax = Column(Float, default=0.0)
     TotalDiscount = Column(Float, default=0.0)
     TotalAmount = Column(Float, default=0.0)
@@ -22,10 +21,10 @@ class Cart(Base):
     UpdatedAt = Column(DateTime(timezone=True), onupdate=func.now())
     DeletedAt = Column(DateTime(timezone=True), default=None)
 
-    def __init__(self, id, UserId):
+    def __init__(self, id, customerId):
         super().__init__()
         self.id = id
-        self.UserId = UserId
+        self.CustomerId = customerId
 
     def __repr__(self):
         jsonStr = json.dumps(self.__dict__)

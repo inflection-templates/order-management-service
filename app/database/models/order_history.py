@@ -4,7 +4,7 @@ import uuid
 from sqlalchemy import Column, DateTime, ForeignKey, String, Enum as EnumColumn
 from app.database.connector import Base
 from sqlalchemy.sql import func
-from app.domain_types.order_status_types import OrderStatusTypes
+from app.domain_types.enums.order_status_types import OrderStatusTypes
 
 class OrderHistory(Base):
 
