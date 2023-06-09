@@ -4,7 +4,7 @@ from functools import lru_cache
 class Settings(BaseSettings):
 
     # App
-    ENV: str = "development"
+    ENVIRONMENT: str = "development"
     BASE_URL: str = "http://localhost:12345"
     USER_ACCESS_TOKEN_SECRET="secret"
     CIPHER_SALT="salt"
