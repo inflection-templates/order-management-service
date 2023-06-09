@@ -9,8 +9,7 @@
             "name": "Launch server",
             "type": "python",
             "request": "launch",
-            // "program": "${file}",
-            "program": "${workspaceFolder}/app/main.py",
+            "program": "${workspaceFolder}/main.py",
             "cwd": "${workspaceFolder}",
             "console": "integratedTerminal",
             "justMyCode": true
