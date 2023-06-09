@@ -11,8 +11,17 @@
             "request": "launch",
             // "program": "${file}",
             "program": "${workspaceFolder}/app/main.py",
+            "cwd": "${workspaceFolder}",
             "console": "integratedTerminal",
             "justMyCode": true
-        }
+        },
+        {
+            "name": "Python: Attach",
+            "type": "python",
+            "request": "attach",
+            "processId": "${command:pickProcess}",
+            "justMyCode": true,
+            "port": 8000
+          }
     ]
 }
