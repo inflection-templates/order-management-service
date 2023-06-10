@@ -3,7 +3,7 @@ from typing import List, Optional
 from pydantic import UUID4, BaseModel, Field
 from app.domain_types.enums.discount_type import DiscountTypes
 from app.domain_types.enums.order_status_types import OrderStatusTypes
-from app.domain_types.base_search_types import BaseSearchFilter, BaseSearchResults
+from app.domain_types.schemas.base_search_types import BaseSearchFilter, BaseSearchResults
 
 class CouponCreateModel(BaseModel):
     Name               : str           = Field(..., min_length=2, max_length=64)

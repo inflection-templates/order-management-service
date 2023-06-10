@@ -1,7 +1,7 @@
 import uuid
 from app.common.utils import print_colorized_json
 from app.database.database_accessor import DatabaseSession
-from app.domain_types.order import OrderCreateModel, OrderResponseModel
+from app.domain_types.schemas.order import OrderCreateModel, OrderResponseModel
 
 
 def create_order(db_session: DatabaseSession, model: OrderCreateModel) -> OrderResponseModel:
