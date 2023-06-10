@@ -70,6 +70,28 @@ You can update the poetry version using poetry itself like `$ poetry self update
    Or if the project folder already exists, generate the pyproject.toml interactively using poetry using `$ poetry init`.
    Specify the dependencies during the whole process.
 
+5. To add a new package, run
+   `$ poetry add <package-name>`
+
+6. To add a new package as a dev dependency, run
+   `$ poetry add <package-name> --dev
+
+7. To remove a package, run
+   `$ poetry remove <package-name>`
+
+8. To update poetry.lock from project.toml, run
+   `$ poetry update`
+   This will update/create poetry.lock
+
+9.  To install from poetry.lock, run
+   `$ poetry install`
+
+10. To list all installed packages, run
+    `$ poetry list`
+
+11. To export poetry packages to requirements.txt from poetry.lock, run
+    `$ poetry export --output requirements.txt`
+
 ### PLEASE NOTE
 We are using poetry to setup order management service.
 For any new package installation, please use

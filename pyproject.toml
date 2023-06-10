@@ -10,7 +10,7 @@ packages = [{include = "order_management_service"}]
 python = "^3.11"
 fastapi = "^0.96.0"
 uvicorn = "^0.22.0"
-pygments = "^2.151"
+pygments = "^2.15.1"
 python-dotenv = "^1.0.0"
 
 [tool.poetry.group.dev.dependencies]
