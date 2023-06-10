@@ -16,7 +16,8 @@ router = APIRouter(
 @router.post("/", status_code=201, response_model=CustomerResponseModel|None)
 async def create_order(model: CustomerCreateModel, db_session = Depends(get_db_session)):
     print_colorized_json(model)
-    return customer_service.create_customer(db_session, model)
+    customer = customer_service.create_customer(db_session, model)
+    return customer
 
 # @router.get("/{id}", status_code=200, response_model=CustomerResponseModel|None)
 # async def get_customer_by_id(id: str, db_session = Depends(get_db_session)):

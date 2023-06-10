@@ -1,3 +1,4 @@
+import datetime as dt
 import uuid
 from app.common.utils import print_colorized_json
 from app.database.database_accessor import LocalSession
@@ -11,16 +12,18 @@ def create_customer(session: Session, model: CustomerCreateModel) -> CustomerRes
     try:
         model_dict = model.dict()
         db_model = Customer(**model_dict)
-        customer = session.add(db_model)
+        db_model.UpdatedAt = dt.datetime.now()
+        session.add(db_model)
         session.commit()
-        session.refresh(model)
+        temp = session.refresh(db_model)
+        customer = db_model
     except Exception as e:
         print(e)
         session.rollback()
         raise e
 
     print_colorized_json(customer)
-    return customer
+    return customer.__dict__
 
 # def get_customer_by_id(session: Session, customer_id: str) -> CustomerResponseModel:
 #     try:
