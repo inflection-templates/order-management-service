@@ -20,6 +20,7 @@ engine = create_engine(settings.DB_CONNECTION_STRING, echo=True)
 #     database=settings.DB_NAME,
 #     pool_size=settings.DB_POOL_SIZE,
 #     pool_recycle=settings.DB_POOL_RECYCLE,
+#     drivername=settings.DB_DRIVER,
 #     echo=True,
 # )
 
