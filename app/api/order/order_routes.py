@@ -1,5 +1,6 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from app.common.utils import print_colorized_json
+from app.database.database_accessor import DatabaseSession, get_db_session
 from app.database.services import order_service
 from app.domain_types.order import OrderCreateModel, OrderResponseModel
 
@@ -15,5 +16,5 @@ async def get_orders():
     return "get_orders"
 
 @router.post("/", status_code=201, response_model=OrderResponseModel|None)
-async def create_order(model: OrderCreateModel):
-    return order_service.create_order(model)
+async def create_order(model: OrderCreateModel, db_session: DatabaseSession = Depends(get_db_session)):
+    return order_service.create_order(db_session, model)

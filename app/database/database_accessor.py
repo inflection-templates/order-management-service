@@ -1,7 +1,6 @@
-import uuid
-from sqlalchemy import create_engine, Column, Integer, String, GUID
+from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, DeclarativeBase
+from sqlalchemy.orm import sessionmaker
 from config.config import get_settings
 
 settings = get_settings()
@@ -25,3 +24,24 @@ engine = create_engine(
 LocalSession = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
+
+class DatabaseSession:
+    ''' Dependency class for getting transactional session '''
+
+    def __init__(self):
+        self.db = self.get_db_session()
+        pass
+
+    def get_db_session(self):
+        session = LocalSession()
+        try:
+            yield session
+        finally:
+            session.close()
+
+def get_db_session()-> DatabaseSession:
+    session = DatabaseSession()
+    try:
+        yield session
+    finally:
+        session.close()
