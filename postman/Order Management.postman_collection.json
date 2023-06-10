@@ -8,6 +8,39 @@
 	},
 	"item": [
 		{
+			"name": "Create customer",
+			"item": [
+				{
+					"name": "Create customer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"ReferenceId\": \"7addbdb5-affe-4761-ab7b-dffe5e40a409\",\r\n  \"Name\": \"Inflection Zone\",\r\n  \"Email\": \"purchase@inflectionzone.com\",\r\n  \"PhoneCode\": \"+91\",\r\n  \"Phone\": \"9999900000\",\r\n  \"ProfilePicture\": \"https://loremflickr.com/320/240\",\r\n  \"TaxNumber\": \"32324FDFDS\",\r\n  \"ShippingAddressId\": null,\r\n  \"BillingAddressId\": null\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/customers",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Get all orders",
 			"request": {
 				"method": "GET",
