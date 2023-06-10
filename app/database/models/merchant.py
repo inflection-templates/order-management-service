@@ -2,7 +2,7 @@ import json
 import uuid
 from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Float
 from sqlalchemy.orm import relationship
-from app.database.database_accessor import Base
+from app.database.base import Base
 from sqlalchemy.sql import func
 
 class Merchant(Base):

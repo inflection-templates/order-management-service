@@ -2,7 +2,7 @@ import json
 import uuid
 from sqlalchemy import Boolean, Column, Integer, String, Float, DateTime, func
 from sqlalchemy.orm import relationship
-from app.database.database_accessor import Base
+from app.database.base import Base
 
 class Cart(Base):
 
@@ -10,7 +10,6 @@ class Cart(Base):
 
     id                   = Column(String(36), primary_key=True, index=True, default=str(uuid.uuid4()))
     CustomerId           = Column(String(36), default=None)
-    CartLineItems        = relationship("OrderLineItem", back_populates="Cart", default=None)
     TotalItemsCount      = Column(Integer, default=0)
     TotalTax             = Column(Float, default=0.0)
     TotalDiscount        = Column(Float, default=0.0)

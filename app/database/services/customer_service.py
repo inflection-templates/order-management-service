@@ -1,36 +1,38 @@
 import uuid
 from app.common.utils import print_colorized_json
-from app.database.database_accessor import DatabaseSession
+from app.database.database_accessor import LocalSession
+from app.database.models.customer import Customer
 from app.domain_types.schemas.customer import CustomerCreateModel, CustomerResponseModel
+from sqlalchemy.orm import Session
 
+def create_customer(session: Session, model: CustomerCreateModel) -> CustomerResponseModel:
 
-def create_customer(db_session: DatabaseSession, model: CustomerCreateModel) -> CustomerResponseModel:
+    customer = None
     try:
-        customer = db_session.db.add(model)
-        db_session.db.commit()
-        db_session.db.refresh(model)
+        model_dict = model.dict()
+        db_model = Customer(**model_dict)
+        customer = session.add(db_model)
+        session.commit()
+        session.refresh(model)
     except Exception as e:
         print(e)
-        db_session.db.rollback()
+        session.rollback()
         raise e
-    finally:
-        db_session.db.close()
 
-    # customer = CustomerResponseModel(**model.dict(), id=uuid.uuid4(), DisplayCode="1234", InvoiceNumber="1234")
     print_colorized_json(customer)
     return customer
 
-# def get_customer_by_id(db_session: DatabaseSession, customer_id: str) -> CustomerResponseModel:
+# def get_customer_by_id(session: Session, customer_id: str) -> CustomerResponseModel:
 #     try:
-#         customer = db_session.db.f(model)
-#         db_session.db.commit()
-#         db_session.db.refresh(model)
+#         customer = session.db.f(model)
+#         session.db.commit()
+#         session.db.refresh(model)
 #     except Exception as e:
 #         print(e)
-#         db_session.db.rollback()
+#         session.db.rollback()
 #         raise e
 #     finally:
-#         db_session.db.close()
+#         session.db.close()
 
 #     # customer = CustomerResponseModel(**model.dict(), id=uuid.uuid4(), DisplayCode="1234", InvoiceNumber="1234")
 #     print_colorized_json(customer)

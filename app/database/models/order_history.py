@@ -2,7 +2,7 @@ from collections import OrderedDict
 import json
 import uuid
 from sqlalchemy import Column, DateTime, ForeignKey, String, Enum as EnumColumn
-from app.database.database_accessor import Base
+from app.database.base import Base
 from sqlalchemy.sql import func
 from app.domain_types.enums.order_status_types import OrderStatusTypes
 

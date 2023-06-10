@@ -4,12 +4,13 @@ from pydantic import UUID4, BaseModel, Field
 from app.domain_types.schemas.base_search_types import BaseSearchFilter, BaseSearchResults
 
 class AddressCreateModel(BaseModel):
-    AddressLine1: str           = Field(..., min_length=2, max_length=512)
-    AddressLine2: Optional[str] = Field(default=None, min_length=2, max_length=512)
-    City        : str           = Field(..., min_length=2, max_length=64)
-    State       : Optional[str] = Field(default=None, min_length=2, max_length=64)
-    Country     : Optional[str] = Field(default=None, min_length=2, max_length=32)
-    ZipCode     : Optional[str] = Field(default=None, min_length=2, max_length=32)
+    AddressLine1 : str             = Field(..., min_length=2, max_length=512)
+    AddressLine2 : Optional[str]   = Field(default=None, min_length=2, max_length=512)
+    City         : str             = Field(..., min_length=2, max_length=64)
+    State        : Optional[str]   = Field(default=None, min_length=2, max_length=64)
+    Country      : Optional[str]   = Field(default=None, min_length=2, max_length=32)
+    ZipCode      : Optional[str]   = Field(default=None, min_length=2, max_length=32)
+    CreatedBy    : Optional[UUID4] = Field(default=None)
 
 class AddressUpdateModel(BaseModel):
     AddressLine1: Optional[str] = Field(default=None, min_length=2, max_length=512)

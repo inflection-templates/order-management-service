@@ -3,7 +3,7 @@ import uuid
 from sqlalchemy import Column, DateTime, Integer, String, Float, Boolean, func, Enum as EnumColumn
 from sqlalchemy.orm import relationship
 
-from app.database.database_accessor import Base
+from app.database.base import Base
 from app.domain_types.enums.discount_type import DiscountTypes
 
 class Coupon(Base):

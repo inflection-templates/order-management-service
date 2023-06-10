@@ -1,7 +1,7 @@
 import json
 import uuid
 from sqlalchemy import Column, DateTime, String
-from app.database.database_accessor import Base
+from app.database.base import Base
 from sqlalchemy.sql import func
 
 class OrderType(Base):

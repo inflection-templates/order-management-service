@@ -1,14 +1,15 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 from app.config.config import get_settings
+from .base import Base
+
+from .models import Address, Cart, Coupon, Customer, Merchant, Order
+from .models import OrderCoupon, OrderLineItem, OrderType, OrderHistory, PaymentTransaction
 
 settings = get_settings()
-
-engine = create_engine(
-    settings.DB_CONNECTION_STRING
-)
-
+print(settings.DB_CONNECTION_STRING)
+engine = create_engine(settings.DB_CONNECTION_STRING, echo=True)
 # or
 # engine = create_engine(
 #     settings.DB_DIALECT,
@@ -19,32 +20,12 @@ engine = create_engine(
 #     database=settings.DB_NAME,
 #     pool_size=settings.DB_POOL_SIZE,
 #     pool_recycle=settings.DB_POOL_RECYCLE,
+#     echo=True,
 # )
+
+Base.metadata.create_all(bind=engine)
 
 LocalSession = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-Base = declarative_base()
-
-class DatabaseSession:
-    ''' Dependency class for getting transactional session '''
-
-    def __init__(self):
-        self.db = self.get_sqlalchemy_session()
-        pass
-
-    def get_sqlalchemy_session(self):
-        sqlalchemy_session = LocalSession()
-        try:
-            yield sqlalchemy_session
-        finally:
-            sqlalchemy_session.close()
-
-    def close(self):
-        self.db.close()
-
-def get_db_session()-> DatabaseSession:
-    session = DatabaseSession()
-    try:
-        yield session
-    finally:
-        session.close()
+def get_db_session()-> Session:
+    return LocalSession()
