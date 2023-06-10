@@ -29,15 +29,18 @@ class DatabaseSession:
     ''' Dependency class for getting transactional session '''
 
     def __init__(self):
-        self.db = self.get_db_session()
+        self.db = self.get_sqlalchemy_session()
         pass
 
-    def get_db_session(self):
-        session = LocalSession()
+    def get_sqlalchemy_session(self):
+        sqlalchemy_session = LocalSession()
         try:
-            yield session
+            yield sqlalchemy_session
         finally:
-            session.close()
+            sqlalchemy_session.close()
+
+    def close(self):
+        self.db.close()
 
 def get_db_session()-> DatabaseSession:
     session = DatabaseSession()

@@ -15,10 +15,11 @@ router = APIRouter(
 
 @router.post("/", status_code=201, response_model=CustomerResponseModel|None)
 async def create_order(model: CustomerCreateModel, db_session: DatabaseSession = Depends(get_db_session)):
-    return customer_service.create(db_session, model)
+    print_colorized_json(model)
+    return customer_service.create_customer(db_session, model)
 
-@router.get("/{id}", status_code=200, response_model=CustomerResponseModel|None)
-async def get_customer_by_id(id: str, db_session: DatabaseSession = Depends(get_db_session)):
-    customer_id = validate_uuid4(id)
-    return customer_service.get_by_id(db_session, customer_id)
+# @router.get("/{id}", status_code=200, response_model=CustomerResponseModel|None)
+# async def get_customer_by_id(id: str, db_session: DatabaseSession = Depends(get_db_session)):
+#     customer_id = validate_uuid4(id)
+#     return customer_service.get_customer_by_id(db_session, customer_id)
 
