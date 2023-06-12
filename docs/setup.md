@@ -127,6 +127,3 @@ To run the tests from command line, run the following
 3. Make modifications to the values of the variables as per your need.
 4. For MySQL database, please install pymysl using `$ pip install pymysql`.
 5. For PostgreSQL database, please install psycopg2 using `$ pip install psycopg2`.
-6. For MongoDB database, please install pymongo using `$ pip install pymongo`.
-
-
