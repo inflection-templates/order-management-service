@@ -113,9 +113,20 @@ For any new package installation, please use
 To run the tests from command line, run the following
 `$ pytest`
 
-### Run the tests from VSCode's Test Extension
+### Run the tests from VSCode's Test Explorer Extension
 
 1. Select 'Test' button on the left most toolbar.
 2. All the tests in the code will be hierarchically displayed.
 3. Run all the tests in 'Run' Mode or in 'Debug' mode. In debug mode, you can add breakpoints in server-code or in test-code.
 4. Test results will be displayed in the adjacent panel.
+
+### Setup Environment Variables
+
+1. Create a file named `.env` in the root directory of the project.
+2. Copy the content of `.env.example` to `.env` file.
+3. Make modifications to the values of the variables as per your need.
+4. For MySQL database, please install pymysl using `$ pip install pymysql`.
+5. For PostgreSQL database, please install psycopg2 using `$ pip install psycopg2`.
+6. For MongoDB database, please install pymongo using `$ pip install pymongo`.
+
+
