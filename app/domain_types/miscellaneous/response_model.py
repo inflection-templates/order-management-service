@@ -15,13 +15,6 @@ class ResponseStatusTypes(str, Enum):
     Error = "Error"
 
 class ResponseModel(GenericModel, Generic[T]):
-
-    Status: ResponseStatusTypes = Field(..., description="Status of the response", default=ResponseStatusTypes.Success)
+    Status: ResponseStatusTypes = Field(description="Status of the response", default=ResponseStatusTypes.Success)
     Message: str = ""
     Data: T | None = None
-
-    def __repr__(self) -> str:
-        jsonStr = json.dumps(self.__dict__, default=str, indent=2)
-        colored = highlight(jsonStr, lexers.JsonLexer(), formatters.TerminalFormatter())
-        return colored
-

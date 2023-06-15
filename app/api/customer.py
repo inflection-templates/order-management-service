@@ -20,8 +20,9 @@ async def create_customer(model: CustomerCreateModel, db_session = Depends(get_d
     try:
         print_colorized_json(model)
         customer = customer_service.create_customer(db_session, model)
-        resp = ResponseModel[CustomerResponseModel](ResponseStatusTypes.Success, "Customer created successfully", customer)
-        logger.info(resp)
+        message = "Customer created successfully"
+        resp = ResponseModel[CustomerResponseModel](Message=message, Data=customer)
+        # logger.info(resp)
         return resp
     except Exception as e:
         print(e)
