@@ -69,7 +69,7 @@ def update_customer(session: Session, customer_id: str, model: CustomerUpdateMod
         #     update_data["ProfilePicture"] = model.ProfilePicture
         customer = session.query(Customer).filter(Customer.id == customer_id).first()
         if not customer:
-          raise HTTPException(status_code=404, detail="Customer with id {customer_id} not found")
+          raise HTTPException(status_code=404, detail=f"Customer with id {customer_id} not found")
         
         update_data = model.dict(exclude_unset=True)
         update_data["UpdatedAt"] = dt.datetime.now()

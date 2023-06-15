@@ -20,4 +20,9 @@ async def create_address(model: AddressCreateModel, db_session = Depends(get_db_
 @router.get("/{id}", status_code=status.HTTP_302_FOUND, response_model=AddressResponseModel|None)
 async def get_address_by_id(id: str, db_session = Depends(get_db_session)):
     address_id = validate_uuid4(id)
-    return address_service.get_address_by_id(db_session, address_id)
+    return address_service.get_address_by_id(db_session, address_id) 
+
+@router.put("/{id}", status_code=200, response_model=AddressResponseModel|None)
+async def update_address(id: str, model: AddressUpdateModel, db_session = Depends(get_db_session)):
+    address_id = validate_uuid4(id)
+    return address_service.update_address(db_session, address_id, model) 
