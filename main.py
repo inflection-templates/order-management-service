@@ -18,7 +18,7 @@ app = get_application()
 
 # Exception Handlers
 
-# Predefined Common Errors
+# Predefined Commonly raised HTTP Errors
 
 @app.exception_handler(HTTPError)
 async def api_error_handler(request: Request, exc: HTTPError):
