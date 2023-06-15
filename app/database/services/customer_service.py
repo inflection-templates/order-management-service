@@ -40,7 +40,7 @@ def get_customer_by_id(session: Session, customer_id: str) -> CustomerResponseMo
     try:
         customer = session.query(Customer).filter(Customer.id == customer_id).first()
         if not customer:
-          raise HTTPException(status_code=404, detail="Customer with id {customer_id} not found")
+          raise HTTPException(status_code=404, detail=f"Customer with id {customer_id} not found")
     except Exception as e:
         print(e)
         session.rollback()
