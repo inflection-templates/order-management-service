@@ -2,12 +2,11 @@ import datetime as dt
 import uuid
 from fastapi import HTTPException, Query, Body
 from app.common.utils import print_colorized_json
-from app.database.database_accessor import LocalSession
 from app.database.models.customer import Customer
 from app.domain_types.miscellaneous.exceptions import Conflict
 from app.domain_types.schemas.customer import CustomerCreateModel, CustomerUpdateModel, CustomerResponseModel, CustomerSearchFilter, CustomerSearchResults
 from sqlalchemy.orm import Session
-from sqlalchemy import or_
+from sqlalchemy import func
 
 def create_customer(session: Session, model: CustomerCreateModel) -> CustomerResponseModel:
 
@@ -15,7 +14,7 @@ def create_customer(session: Session, model: CustomerCreateModel) -> CustomerRes
 
     if model.Email != None and model.Email != "":
         existing_customer = session.query(Customer).filter(
-            Customer.Email.lower() == model.Email.lower()
+            func.lower(Customer.Email) == func.lower(model.Email)
         ).first()
         if existing_customer:
             raise Conflict("Customer with email {model.Email} already exists!")
@@ -29,7 +28,7 @@ def create_customer(session: Session, model: CustomerCreateModel) -> CustomerRes
 
     if model.TaxNumber != None and model.TaxNumber != "":
         existing_customer = session.query(Customer).filter(
-            Customer.TaxNumber.lower() == model.TaxNumber.lower()
+            func.lower(Customer.TaxNumber) == func.lower(model.TaxNumber)
         ).first()
         if existing_customer:
             raise Conflict("Customer with tax number {model.TaxNumber} already exists!")

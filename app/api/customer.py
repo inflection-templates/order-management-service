@@ -1,10 +1,12 @@
 import uuid
 from fastapi import APIRouter, Depends, status, Query, Body
+from app.common.logger import logger
 from app.common.utils import print_colorized_json, validate_uuid4
 from app.database.database_accessor import get_db_session
 from app.database.services import customer_service
 from app.domain_types.schemas.customer import CustomerCreateModel, CustomerUpdateModel, CustomerResponseModel, CustomerSearchFilter, CustomerSearchResults
 from app.domain_types.schemas.order import OrderCreateModel, OrderResponseModel
+from app.domain_types.miscellaneous.response_model import ResponseModel, ResponseStatusTypes
 
 router = APIRouter(
     prefix="/customers",
@@ -13,12 +15,14 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=CustomerResponseModel|None)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=ResponseModel[CustomerResponseModel]|None)
 async def create_customer(model: CustomerCreateModel, db_session = Depends(get_db_session)):
     try:
         print_colorized_json(model)
         customer = customer_service.create_customer(db_session, model)
-        return customer
+        resp = ResponseModel[CustomerResponseModel](ResponseStatusTypes.Success, "Customer created successfully", customer)
+        logger.info(resp)
+        return resp
     except Exception as e:
         print(e)
         db_session.rollback()
