@@ -2,38 +2,47 @@ import datetime as dt
 import uuid
 from fastapi import HTTPException, Query, Body
 from app.common.utils import print_colorized_json
-from app.database.database_accessor import LocalSession
 from app.database.models.customer import Customer
+from app.domain_types.miscellaneous.exceptions import Conflict
 from app.domain_types.schemas.customer import CustomerCreateModel, CustomerUpdateModel, CustomerResponseModel, CustomerSearchFilter, CustomerSearchResults
 from sqlalchemy.orm import Session
-from sqlalchemy import or_
+from sqlalchemy import func
 
 def create_customer(session: Session, model: CustomerCreateModel) -> CustomerResponseModel:
 
     customer = None
-    try:
+
+    if model.Email != None and model.Email != "":
         existing_customer = session.query(Customer).filter(
-            or_(
-            Customer.Email == model.Email,
-            Customer.Phone == model.Phone,
-            Customer.TaxNumber == model.TaxNumber
-            )).first()
+            func.lower(Customer.Email) == func.lower(model.Email)
+        ).first()
         if existing_customer:
-            raise HTTPException(status_code=406, detail="Customer already exists")
-        
-        model_dict = model.dict()
-        db_model = Customer(**model_dict)
-        db_model.UpdatedAt = dt.datetime.now()
-        session.add(db_model)
-        session.commit()
-        temp = session.refresh(db_model)
-        customer = db_model
-    except Exception as e:
-        print(e)
-        session.rollback()
-        raise e
+            raise Conflict("Customer with email {model.Email} already exists!")
+
+    if model.Phone != None and model.Phone != "":
+        existing_customer = session.query(Customer).filter(
+            Customer.Phone == model.Phone
+        ).first()
+        if existing_customer:
+            raise Conflict("Customer with phone {model.Phone} already exists!")
+
+    if model.TaxNumber != None and model.TaxNumber != "":
+        existing_customer = session.query(Customer).filter(
+            func.lower(Customer.TaxNumber) == func.lower(model.TaxNumber)
+        ).first()
+        if existing_customer:
+            raise Conflict("Customer with tax number {model.TaxNumber} already exists!")
+
+    model_dict = model.dict()
+    db_model = Customer(**model_dict)
+    db_model.UpdatedAt = dt.datetime.now()
+    session.add(db_model)
+    session.commit()
+    temp = session.refresh(db_model)
+    customer = db_model
 
     print_colorized_json(customer)
+
     return customer.__dict__
 
 def get_customer_by_id(session: Session, customer_id: str) -> CustomerResponseModel:
@@ -50,7 +59,7 @@ def get_customer_by_id(session: Session, customer_id: str) -> CustomerResponseMo
 
     # customer = CustomerResponseModel(**Customer.dict(), id=uuid.uuid4(), DisplayCode="1234", InvoiceNumber="1234")
     print_colorized_json(customer)
-    return customer.__dict__ 
+    return customer.__dict__
 
 def update_customer(session: Session, customer_id: str, model: CustomerUpdateModel) -> CustomerResponseModel:
     try:
@@ -58,19 +67,24 @@ def update_customer(session: Session, customer_id: str, model: CustomerUpdateMod
         # if model.Name:
         #     update_data["Name"] = model.Name
         # if model.Email :
-        #     update_data["Email"] = model.Email 
+        #     update_data["Email"] = model.Email
         # if model.PhoneCode:
         #     update_data["PhoneCode"] = model.PhoneCode
         # if model.Phone:
         #     update_data["Phone"] = model.Phone
         # if model.TaxNumber :
-        #     update_data["TaxNumber"] = model.TaxNumber 
+        #     update_data["TaxNumber"] = model.TaxNumber
         # if model.ProfilePicture:
         #     update_data["ProfilePicture"] = model.ProfilePicture
         customer = session.query(Customer).filter(Customer.id == customer_id).first()
         if not customer:
+<<<<<<< HEAD
           raise HTTPException(status_code=404, detail=f"Customer with id {customer_id} not found")
         
+=======
+          raise HTTPException(status_code=404, detail="Customer with id {customer_id} not found")
+
+>>>>>>> origin/main
         update_data = model.dict(exclude_unset=True)
         update_data["UpdatedAt"] = dt.datetime.now()
         session.query(Customer).filter(Customer.id == customer_id).update(update_data, synchronize_session="auto")
@@ -86,7 +100,7 @@ def update_customer(session: Session, customer_id: str, model: CustomerUpdateMod
 
     # customer = CustomerResponseModel(**Customer.dict(), id=uuid.uuid4(), DisplayCode="1234", InvoiceNumber="1234")
     print_colorized_json(customer)
-    return customer.__dict__ 
+    return customer.__dict__
 
 # def search_customer(session: Session, filter: str = Query(None)) -> CustomerSearchResults:
 #     try:
@@ -102,7 +116,7 @@ def update_customer(session: Session, customer_id: str, model: CustomerUpdateMod
 #         if filter.TaxNumber:
 #           query = query.filter(Customer.TaxNumber == filter.TaxNumber)
 #         customers = query.all()
-    
+
 #     except Exception as e:
 #         print(e)
 #         session.rollback()

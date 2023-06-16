@@ -13,6 +13,6 @@ def validate_uuid4(uuid_str):
     try:
         val = uuid.UUID(uuid_str, version=4)
     except ValueError:
-        raise UUIDValidationError("{uuid_string} is not valid UUID".format(uuid_string=uuid_str))
+        raise UUIDValidationError("{uuid_str} is not valid UUID.")
     return uuid_str
 
