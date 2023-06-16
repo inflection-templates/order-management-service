@@ -35,7 +35,7 @@ async def get_customer_by_id(id: str, db_session = Depends(get_db_session)):
     try:
         customer_id = validate_uuid4(id)
         customer = customer_service.get_customer_by_id(db_session, customer_id)
-        message = "Customer found successfully"
+        message = "Customer retrieved successfully"
         resp = ResponseModel[CustomerResponseModel](Message=message, Data=customer)
         # logger.info(resp)
         return resp

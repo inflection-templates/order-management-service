@@ -11,8 +11,8 @@ class CustomerAddress(Base):
     __tablename__ = "customer_addresses"
 
     id           = Column(String(36), primary_key=True, index=True, default=str(uuid.uuid4()))
-    CustomerId   = Column(Column(String(36), ForeignKey("customers.id"), default=None))
-    AddressId    = Column(Column(String(36), ForeignKey("addresses.id"), default=None))
+    CustomerId   = Column(String(36), ForeignKey("customers.id"), default=None)
+    AddressId    = Column(String(36), ForeignKey("addresses.id"), default=None)
     AddressType  = Column(EnumColumn(AddressTypes), default=AddressTypes.SHIPPING.value)
     IsFavorite   = Column(Boolean, default=False)
 
