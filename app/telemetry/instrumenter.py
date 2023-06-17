@@ -4,13 +4,10 @@ from .tracing import tracer_provider
 # from .metrics import meter_provider
 
 def instrument(app: FastAPI):
-   
-    excluded_paths = [
-        "/health-check",    # Health check endpoint
-        "/"                 # Service root endpoint
-        "/docs"             # Swagger UI endpoint
-        ]
     
+    # This has to be comma separated list...
+    excluded_paths = "/health-check,/,/docs"    # Health check, service root, and swagger UI endpoints
+
     FastAPIInstrumentor.instrument_app(
         app, 
         excluded_urls=excluded_paths, 

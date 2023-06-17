@@ -12,12 +12,40 @@
 			"item": [
 				{
 					"name": "Create customer",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"//Randomly generated user details\r",
+									"\r",
+									"var first_names = ['Jerry', 'Tom', 'Garfield', 'Jerome', 'Hobbes', 'Calvin', 'Nate', 'Peanuts', 'John', 'Abigale', 'Erin'];\r",
+									"\r",
+									"var last_names = ['Smith', 'Johnson',  'Williams', 'Jones', 'Brown', 'Davis', 'Miller', 'Wilson', 'Moore', 'Taylor', 'Anderson', 'Thomas', 'Jackson', 'White', 'Harris', 'Martin', 'Thompson', 'Garcia', 'Martinez', 'Robinson', 'Clark', 'Rodriguez', 'Lewis', 'Lee', 'Walker', 'Hall'];\r",
+									"\r",
+									"var first = first_names[Math.floor(Math.random() * first_names.length)];\r",
+									"var last = last_names[Math.floor(Math.random() * last_names.length)];\r",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();\r",
+									"var random_postfix = (Math.floor(Math.random() * 90000) + 10000).toString();\r",
+									"var email = first + \".\" + random_postfix + \".\" + last + \"@gmail.com\";\r",
+									"var password = \"Test@123\";\r",
+									"\r",
+									"pm.environment.set(\"PHONE\", phonenumber);\r",
+									"pm.environment.set(\"TAX_CODE\", phonenumber);\r",
+									"pm.environment.set(\"EMAIL\", email);\r",
+									"pm.environment.set(\"REFERENCE_ID\", )\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"ReferenceId\": \"7addbdb5-affe-4761-ab7b-dffe5e40a409\",\r\n  \"Name\": \"Inflection Zone\",\r\n  \"Email\": \"purchase@inflectionzone.com\",\r\n  \"PhoneCode\": \"+91\",\r\n  \"Phone\": \"9999900000\",\r\n  \"ProfilePicture\": \"https://loremflickr.com/320/240\",\r\n  \"TaxNumber\": \"32324FDFDS\",\r\n  \"ShippingAddressId\": null,\r\n  \"BillingAddressId\": null\r\n}\r\n",
+							"raw": "{\r\n  \"ReferenceId\": \"{{$guid}}\",\r\n  \"Name\": \"Inflection Zone\",\r\n  \"Email\": \"{{EMAIL}}\",\r\n  \"PhoneCode\": \"+91\",\r\n  \"Phone\": \"{{PHONE}}\",\r\n  \"ProfilePicture\": \"https://loremflickr.com/320/240\",\r\n  \"TaxNumber\": \"{{TAX_CODE}}\",\r\n  \"ShippingAddressId\": null,\r\n  \"BillingAddressId\": null\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"

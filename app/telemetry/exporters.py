@@ -1,4 +1,4 @@
-from app.common.telemetry.enums import TracingExporterType
+from app.telemetry.enums import TracingExporterType
 
 def get_tracing_exporter(
         exporter: TracingExporterType, 

@@ -2,9 +2,9 @@ from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.resources import SERVICE_NAME, Resource
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from app.common.telemetry.exporters import get_tracing_exporter
+from app.telemetry.exporters import get_tracing_exporter
 from app.config.config import get_settings
-from app.common.telemetry.enums import (
+from app.telemetry.enums import (
     get_tracing_exporter_type, 
     TracingExporterType
 )

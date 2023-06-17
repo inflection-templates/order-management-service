@@ -13,12 +13,12 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy.exc import SQLAlchemyError
 
 # Telemetry imports
-from app.common.telemetry.tracing import (
+from app.telemetry.tracing import (
     tracing_enabled,
     tracer
 )
 from opentelemetry import trace
-from app.common.telemetry.instrumenter import instrument
+from app.telemetry.instrumenter import instrument
 
 #################################################################
 
@@ -118,7 +118,7 @@ async def add_tracing_header(request: Request, call_next):
         with tracer.start_as_current_span("Request"):
             response = await call_next(request)
             trace_id = trace.get_current_span().get_span_context().trace_id
-            response.headers["trace_id"] = trace_id
+            response.headers["trace_id"] = str(trace_id)
             return response
     else:
         response = await call_next(request)
