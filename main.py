@@ -1,14 +1,24 @@
 from fastapi import Request, status
 import uvicorn
 from app.common.logger import logger
-from app.domain_types.miscellaneous.exceptions import HTTPError
 from app.startup.application import get_application
+
+# Exception Handling imports
+from app.domain_types.miscellaneous.exceptions import HTTPError
 from app.config.constants import PORT
 from app.config.config import get_settings
 from fastapi.responses import JSONResponse, PlainTextResponse
 from fastapi.exceptions import RequestValidationError
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.exc import SQLAlchemyError
+
+# Telemetry imports
+from app.common.telemetry.tracing import (
+    tracing_enabled,
+    tracer
+)
+from opentelemetry import trace
+from app.common.telemetry.instrumenter import instrument
 
 #################################################################
 
@@ -92,6 +102,27 @@ async def generic_exception_handler(request: Request, exc: Exception):
             }
         ),
     )
+
+#################################################################
+
+# Telemetry
+
+tracing = tracing_enabled()
+if tracing:
+    instrument(app)
+
+# Add a middleware to add a tracing header to all requests
+@app.middleware("http")
+async def add_tracing_header(request: Request, call_next):
+    if tracing:
+        with tracer.start_as_current_span("Request"):
+            response = await call_next(request)
+            trace_id = trace.get_current_span().get_span_context().trace_id
+            response.headers["trace_id"] = trace_id
+            return response
+    else:
+        response = await call_next(request)
+        return response
 
 #################################################################
 
