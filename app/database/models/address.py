@@ -1,7 +1,6 @@
 import json
-import uuid
-from sqlalchemy import Boolean, Column, DateTime, Integer, String, Float
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, DateTime, String
+from app.common.utils import generate_uuid4
 from app.database.base import Base
 from sqlalchemy.sql import func
 
@@ -9,7 +8,7 @@ class Address(Base):
 
     __tablename__ = "addresses"
 
-    id           = Column(String(36), primary_key=True, index=True, default=str(uuid.uuid4()))
+    id           = Column(String(36), primary_key=True, index=True, default=generate_uuid4)
     AddressLine1 = Column(String(512))
     AddressLine2 = Column(String(512), default=None)
     City         = Column(String(64))

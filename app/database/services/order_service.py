@@ -15,8 +15,6 @@ def create_order(session: Session, model: OrderCreateModel) -> OrderResponseMode
         raise e
     finally:
         session.db.close()
-
-    # order = OrderResponseModel(**model.dict(), id=uuid.uuid4(), DisplayCode="1234", InvoiceNumber="1234")
-    print_colorized_json(order)
+    # print_colorized_json(order)
     return order
 

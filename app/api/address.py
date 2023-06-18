@@ -13,7 +13,7 @@ router = APIRouter(
 
 @router.post("/", status_code=201, response_model=AddressResponseModel|None)
 async def create_address(model: AddressCreateModel, db_session = Depends(get_db_session)):
-    print_colorized_json(model)
+    # print_colorized_json(model)
     address = address_service.create_address(db_session, model)
     return address 
 

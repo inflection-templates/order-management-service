@@ -2,6 +2,7 @@ import json
 import uuid
 from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Float
 from sqlalchemy.orm import relationship
+from app.common.utils import generate_uuid4
 from app.database.base import Base
 from sqlalchemy.sql import func
 
@@ -9,7 +10,7 @@ class Customer(Base):
 
     __tablename__ = "customers"
 
-    id                       = Column(String(36), primary_key=True, index=True, default=str(uuid.uuid4()))
+    id                       = Column(String(36), primary_key=True, index=True, default=generate_uuid4)
     ReferenceId              = Column(String(36), unique=True, default=None)
     Name                     = Column(String(128), default=None)
     Email                    = Column(String(512), unique=True, default=None)

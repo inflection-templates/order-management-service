@@ -2,6 +2,7 @@ import json
 import uuid
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float, DateTime, func, Enum as EnumColumn
 from sqlalchemy.orm import relationship
+from app.common.utils import generate_uuid4
 from app.database.base import Base
 from app.domain_types.enums.order_status_types import OrderStatusTypes
 
@@ -10,7 +11,7 @@ class Order(Base):
 
     __tablename__ = "orders"
 
-    id                   = Column(String(36), primary_key=True, index=True, default=str(uuid.uuid4()))
+    id                   = Column(String(36), primary_key=True, index=True, default=generate_uuid4)
     DisplayCode          = Column(String(36), unique=True, index=True)
     OrderStatus          = Column(EnumColumn(OrderStatusTypes), default=OrderStatusTypes.DRAFT.value)
     InvoiceNumber        = Column(String(64), unique=True, index=True)

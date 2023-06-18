@@ -2,6 +2,7 @@ import json
 import uuid
 from sqlalchemy import Column, DateTime, Integer, String, Float, Boolean, func, Enum as EnumColumn
 from sqlalchemy.orm import relationship
+from app.common.utils import generate_uuid4
 
 from app.database.base import Base
 from app.domain_types.enums.discount_type import DiscountTypes
@@ -10,7 +11,7 @@ class Coupon(Base):
 
     __tablename__ = "coupons"
 
-    id                 = Column(String(36), primary_key=True, index=True, default=str(uuid.uuid4()))
+    id                 = Column(String(36), primary_key=True, index=True, default=generate_uuid4)
     Name               = Column(String(64))
     Description        = Column(String(1024))
     CouponCode         = Column(String(64), unique=True)

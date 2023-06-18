@@ -17,3 +17,4 @@ class BaseSearchResults(BaseModel):
     ItemsPerPage     : int  = Field(default=10, ge=1, le=100, description="Items per page")
     OrderBy          : str  = Field(default='CreatedAt', min_length=2, max_length=64, description="Sort by this field")
     OrderByDescending: bool = Field(Default=True, description="Sort by descending or ascending")
+

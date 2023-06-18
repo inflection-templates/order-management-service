@@ -23,7 +23,7 @@ def create_address(session: Session, model: AddressCreateModel) -> AddressRespon
     finally:
         session.close()
 
-    print_colorized_json(address)
+    # print_colorized_json(address)
     return address.__dict__ 
 
 def get_address_by_id(session: Session, address_id: str) -> AddressResponseModel:
@@ -39,7 +39,7 @@ def get_address_by_id(session: Session, address_id: str) -> AddressResponseModel
         session.close()
 
     # customer = CustomerResponseModel(**Customer.dict(), id=uuid.uuid4(), DisplayCode="1234", InvoiceNumber="1234")
-    print_colorized_json(address)
+    # print_colorized_json(address)
     return address.__dict__  
 
 def update_address(session: Session, address_id: str, model: AddressUpdateModel) -> AddressResponseModel:
@@ -60,5 +60,5 @@ def update_address(session: Session, address_id: str, model: AddressUpdateModel)
         raise e
     finally:
         session.close()
-    print_colorized_json(address)
+    # print_colorized_json(address)
     return address.__dict__ 

@@ -2,6 +2,7 @@ import json
 import uuid
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float, DateTime, func, Enum as EnumColumn
 from sqlalchemy.orm import relationship
+from app.common.utils import generate_uuid4
 from app.database.base import Base
 from app.domain_types.enums.order_status_types import OrderStatusTypes
 from app.domain_types.enums.payment_status_types import PaymentStatusTypes
@@ -11,7 +12,7 @@ class PaymentTransaction(Base):
 
     __tablename__ = "payment_transactions"
 
-    id = Column(String(36), primary_key=True, index=True, default=str(uuid.uuid4()))
+    id = Column(String(36), primary_key=True, index=True, default=generate_uuid4)
     DisplayCode = Column(String(36), unique=True, index=True)
     InvoiceNumber = Column(String(64), unique=True, index=True)
     BankTransactionId = Column(String(36), default=None)
