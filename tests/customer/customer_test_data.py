@@ -9,7 +9,7 @@ def get_customer_create_model():
     model = {
         "ReferenceId": uuid.uuid4(),
         "Name": fake.name(),
-        "Email": fake.internet.email(),
-        "Phone": fake.phone.phoneNumber(),
+        "Email": fake.email(),
+        "Phone": fake.phoneNumber(),
     }
     return model
