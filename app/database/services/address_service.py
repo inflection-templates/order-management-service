@@ -8,8 +8,10 @@ from app.database.models.customer_address import CustomerAddress
 from app.domain_types.schemas.address import AddressCreateModel, AddressResponseModel, AddressUpdateModel
 from sqlalchemy.orm import Session
 from app.domain_types.miscellaneous.exceptions import Conflict, NotFound
+from app.telemetry.tracing import trace_span
 
 
+@trace_span("service: create_address")
 def create_address(session: Session, model: AddressCreateModel) -> AddressResponseModel:
     model_dict = model.dict()
     db_model = Address(**model_dict)
@@ -27,6 +29,7 @@ def create_address(session: Session, model: AddressCreateModel) -> AddressRespon
     return address.__dict__
 
 
+@trace_span("service: get_address_by_id")
 def get_address_by_id(session: Session, address_id: str) -> AddressResponseModel:
     address = session.query(Address).filter(Address.id == address_id).first()
     if not address:
@@ -38,26 +41,7 @@ def get_address_by_id(session: Session, address_id: str) -> AddressResponseModel
     return address.__dict__
 
 
-def get_address_by_id(session: Session, address_id: str) -> AddressResponseModel:
-    try:
-        address = session.query(Address).filter(
-            Address.id == address_id).first()
-        if not address:
-            raise HTTPException(
-                status_code=404, detail=f"Address with id {address_id} not found")
-    except Exception as e:
-        print(e)
-        session.rollback()
-        raise e
-    finally:
-        session.close()
-
-    # customer = CustomerResponseModel(**Customer.dict(), id=uuid.uuid4(), DisplayCode="1234", InvoiceNumber="1234")
-    # print_colorized_json(address)
-
-    return address.__dict__
-
-
+@trace_span("service: update_address")
 def update_address(session: Session, address_id: str, model: AddressUpdateModel) -> AddressResponseModel:
     address = session.query(Address).filter(Address.id == address_id).first()
     if not address:
@@ -75,6 +59,7 @@ def update_address(session: Session, address_id: str, model: AddressUpdateModel)
     return address.__dict__
 
 
+@trace_span("service: delete_address")
 def delete_address(session: Session, address_id: str) -> AddressResponseModel:
     address = session.query(Address).get(address_id)
     if not address:

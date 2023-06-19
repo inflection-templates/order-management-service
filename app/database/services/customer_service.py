@@ -94,6 +94,7 @@ def update_customer(session: Session, customer_id: str, model: CustomerUpdateMod
     return customer.__dict__
 
 
+@trace_span("service: delete_customer")
 def delete_customer(session: Session, customer_id: str) -> CustomerResponseModel:
     customer = session.query(Customer).get(customer_id)
     if not customer:
