@@ -9,7 +9,7 @@ from .models import OrderCoupon, OrderLineItem, OrderType, OrderHistory, Payment
 
 settings = get_settings()
 print(settings.DB_CONNECTION_STRING)
-engine = create_engine(settings.DB_CONNECTION_STRING, echo=True)
+engine = create_engine(settings.DB_CONNECTION_STRING, echo=False)
 # or
 # engine = create_engine(
 #     settings.DB_DIALECT,

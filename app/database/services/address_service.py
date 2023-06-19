@@ -18,6 +18,7 @@ def create_address(session: Session, model: AddressCreateModel) -> AddressRespon
     temp = session.refresh(db_model)
     address = db_model
 
+<<<<<<< HEAD
     # if address.CreatedBy != "None" and address.CreatedBy != "":
     #     CustomerAddress.AddressId = address.id
     #     CustomerAddress.CustomerId = address.CreatedBy
@@ -31,6 +32,25 @@ def get_address_by_id(session: Session, address_id: str) -> AddressResponseModel
         raise NotFound(f"Address with id {address_id} not found")
     
     print_colorized_json(address)
+=======
+    # print_colorized_json(address)
+    return address.__dict__ 
+
+def get_address_by_id(session: Session, address_id: str) -> AddressResponseModel:
+    try:
+        address = session.query(Address).filter(Address.id == address_id).first()
+        if not address:
+          raise HTTPException(status_code=404, detail=f"Address with id {address_id} not found")
+    except Exception as e:
+        print(e)
+        session.rollback()
+        raise e
+    finally:
+        session.close()
+
+    # customer = CustomerResponseModel(**Customer.dict(), id=uuid.uuid4(), DisplayCode="1234", InvoiceNumber="1234")
+    # print_colorized_json(address)
+>>>>>>> origin/main
     return address.__dict__  
 
 def update_address(session: Session, address_id: str, model: AddressUpdateModel) -> AddressResponseModel:
@@ -45,6 +65,7 @@ def update_address(session: Session, address_id: str, model: AddressUpdateModel)
     session.commit()
     session.refresh(address)
 
+<<<<<<< HEAD
     print_colorized_json(address)
     return address.__dict__   
 
@@ -60,3 +81,15 @@ def delete_address(session: Session, address_id: str) -> AddressResponseModel:
     print_colorized_json(address)
     return address.__dict__
 
+=======
+        session.commit()
+        session.refresh(address)
+    except Exception as e:
+        print(e)
+        session.rollback()
+        raise e
+    finally:
+        session.close()
+    # print_colorized_json(address)
+    return address.__dict__ 
+>>>>>>> origin/main

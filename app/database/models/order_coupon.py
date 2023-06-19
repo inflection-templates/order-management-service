@@ -1,13 +1,14 @@
 import json
 import uuid
 from sqlalchemy import Column, ForeignKey, String, Float, Boolean, DateTime, func
+from app.common.utils import generate_uuid4
 from app.database.base import Base
 
 class OrderCoupon(Base):
 
     __tablename__ = "order_coupons"
 
-    id                 = Column(String(36), primary_key=True, index=True, default=str(uuid.uuid4()))
+    id                 = Column(String(36), primary_key=True, index=True, default=generate_uuid4)
     Code               = Column(String(64))
     CouponId           = Column(String(36), ForeignKey("coupons.id"))
     OrderId            = Column(String(36), ForeignKey("orders.id"))

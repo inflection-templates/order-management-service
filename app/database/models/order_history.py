@@ -2,6 +2,7 @@ from collections import OrderedDict
 import json
 import uuid
 from sqlalchemy import Column, DateTime, ForeignKey, String, Enum as EnumColumn
+from app.common.utils import generate_uuid4
 from app.database.base import Base
 from sqlalchemy.sql import func
 from app.domain_types.enums.order_status_types import OrderStatusTypes
@@ -10,7 +11,7 @@ class OrderHistory(Base):
 
     __tablename__ = "order_histories"
 
-    id              = Column(String(36), primary_key=True, index=True, default=str(uuid.uuid4()))
+    id              = Column(String(36), primary_key=True, index=True, default=generate_uuid4)
     OrderId         = Column(String(36), ForeignKey("orders.id"), default=None)
     PreviousStatus  = Column(EnumColumn(OrderStatusTypes), default=OrderStatusTypes.DRAFT.value)
     Status          = Column(EnumColumn(OrderStatusTypes), default=OrderStatusTypes.DRAFT.value)

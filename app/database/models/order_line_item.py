@@ -2,13 +2,14 @@ import json
 import uuid
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float, DateTime, func
 from sqlalchemy.orm import relationship
+from app.common.utils import generate_uuid4
 from app.database.base import Base
 
 class OrderLineItem(Base):
 
     __tablename__ = "order_line_items"
 
-    id               = Column(String(36), primary_key=True, index=True, default=str(uuid.uuid4()))
+    id               = Column(String(36), primary_key=True, index=True, default=generate_uuid4)
     Name             = Column(String(512))
     CatalogId        = Column(String(36), default=None)
     Quantity         = Column(Integer, default=0)

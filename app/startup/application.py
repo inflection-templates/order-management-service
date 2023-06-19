@@ -2,12 +2,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.startup.router import router
 
+#################################################################
+
 def get_application():
 
-    app = FastAPI()
+    server = FastAPI()
 
     # Add CORS middleware
-    app.add_middleware(
+    server.add_middleware(
         CORSMiddleware,
         allow_origins=['*'],
         allow_credentials=True,
@@ -15,6 +17,8 @@ def get_application():
         allow_headers=['*'],
     )
 
-    app.include_router(router)
+    server.include_router(router)
 
-    return app
+    return server
+
+app = get_application()

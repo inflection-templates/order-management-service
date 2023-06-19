@@ -1,6 +1,7 @@
 import json
 import uuid
 from sqlalchemy import Column, DateTime, String
+from app.common.utils import generate_uuid4
 from app.database.base import Base
 from sqlalchemy.sql import func
 
@@ -8,7 +9,7 @@ class OrderType(Base):
 
     __tablename__ = "order_types"
 
-    id          = Column(String(36), primary_key=True, index=True, default=str(uuid.uuid4()))
+    id          = Column(String(36), primary_key=True, index=True, default=generate_uuid4)
     Name        = Column(String(128))
     Description = Column(String(64))
     CreatedAt   = Column(DateTime(timezone=True), server_default=func.now())

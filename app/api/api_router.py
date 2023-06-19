@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from app.config.constants import API_PREFIX
 from .order import router as order_router
-from .customer import router as customer_router 
+from .customer.customer_routes import router as customer_router 
 from .address import router as address_router
 
 router = APIRouter(prefix=API_PREFIX)

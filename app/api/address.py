@@ -14,6 +14,7 @@ router = APIRouter(
 
 @router.post("/", status_code=201, response_model=ResponseModel[AddressResponseModel]|None)
 async def create_address(model: AddressCreateModel, db_session = Depends(get_db_session)):
+<<<<<<< HEAD
     try:
         print_colorized_json(model)
         address = address_service.create_address(db_session, model)
@@ -27,6 +28,11 @@ async def create_address(model: AddressCreateModel, db_session = Depends(get_db_
         raise e
     finally:
         db_session.close() 
+=======
+    # print_colorized_json(model)
+    address = address_service.create_address(db_session, model)
+    return address 
+>>>>>>> origin/main
 
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[AddressResponseModel]|None)
 async def get_address_by_id(id: str, db_session = Depends(get_db_session)):
