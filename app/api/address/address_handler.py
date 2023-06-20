@@ -59,7 +59,7 @@ def update_address_(id, model, db_session):
 
 
 @trace_span("handler: delete_address")
-def delete_customer_(id, db_session):
+def delete_address_(id, db_session):
     try:
         customer_id = validate_uuid4(id)
         customer = address_service.delete_address(db_session, customer_id)
@@ -77,7 +77,7 @@ def delete_customer_(id, db_session):
 
 
 @trace_span("handler: search_addresses")
-def search_customers_(filter, db_session):
+def search_addresses_(filter, db_session):
     try:
         addresses = address_service.search_customers(db_session, filter)
         message = "Addresses retrieved successfully"
