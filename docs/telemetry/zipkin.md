@@ -27,20 +27,24 @@
 
     <img src="./Images/Zipkin-UI.png" width="600" />
 &nbsp;<br>
+
 3. Next open `.env` file of project and add following configurations:
     ```
     TRACING_ENABLED=true
     TRACING_EXPORTER_TYPE=ZipkinJson
     TRACING_COLLECTOR_ENDPOINT=http://localhost:9411/api/v2/spans
     ```
-&nbsp;<br>
+
 4. Select `Run and Debug` from left side bar. And then click on `Start Debugging`.
 &nbsp;<br>
+
 5. Open `Postman`. Create and send new get request to `Get customer`. You may send some more requests too.
     <img src="./Images/get-req.png" width="600" />
 &nbsp;<br>
+
 6. Open Zipkin UI and click on `Run Query`. You may see your request in the result as:
     <img src="./Images/run-query.png" width="600" />
 &nbsp;<br>
+
 7. Then click on `SHOW` button. You may see the traces of the request.
     <img src="./Images/zipkin-traces.png" width="600" />
