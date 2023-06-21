@@ -10,7 +10,6 @@ from sqlalchemy.orm import Session
 from app.domain_types.miscellaneous.exceptions import Conflict, NotFound
 from app.telemetry.tracing import trace_span
 
-
 @trace_span("service: create_address")
 def create_address(session: Session, model: AddressCreateModel) -> AddressResponseModel:
     model_dict = model.dict()
@@ -21,13 +20,8 @@ def create_address(session: Session, model: AddressCreateModel) -> AddressRespon
     temp = session.refresh(db_model)
     address = db_model
 
-    # if address.CreatedBy != "None" and address.CreatedBy != "":
-    #     CustomerAddress.AddressId = address.id
-    #     CustomerAddress.CustomerId = address.CreatedBy
-
     print_colorized_json(address)
     return address.__dict__
-
 
 @trace_span("service: get_address_by_id")
 def get_address_by_id(session: Session, address_id: str) -> AddressResponseModel:
@@ -36,10 +30,7 @@ def get_address_by_id(session: Session, address_id: str) -> AddressResponseModel
         raise NotFound(f"Address with id {address_id} not found")
 
     print_colorized_json(address)
-
-    # print_colorized_json(address)
     return address.__dict__
-
 
 @trace_span("service: update_address")
 def update_address(session: Session, address_id: str, model: AddressUpdateModel) -> AddressResponseModel:
@@ -57,7 +48,6 @@ def update_address(session: Session, address_id: str, model: AddressUpdateModel)
 
     print_colorized_json(address)
     return address.__dict__
-
 
 @trace_span("service: delete_address")
 def delete_address(session: Session, address_id: str) -> AddressResponseModel:
