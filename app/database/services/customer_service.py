@@ -9,35 +9,25 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from app.telemetry.tracing import trace_span
 
-
 @trace_span("service: create_customer")
 def create_customer(session: Session, model: CustomerCreateModel) -> CustomerResponseModel:
-
     customer = None
 
     if model.Email != None and model.Email != "":
-        existing_customer = session.query(Customer).filter(
-            func.lower(Customer.Email) == func.lower(model.Email)
-        ).first()
+        existing_customer = session.query(Customer).filter(func.lower(Customer.Email) == func.lower(model.Email)).first()
         if existing_customer:
-            raise Conflict(
-                f"Customer with email {model.Email} already exists!")
+            raise Conflict(f"Customer with email {model.Email} already exists!")
 
     if model.Phone != None and model.Phone != "":
-        existing_customer = session.query(Customer).filter(
-            Customer.Phone == model.Phone
-        ).first()
+        existing_customer = session.query(Customer).filter(Customer.Phone == model.Phone).first()
         if existing_customer:
-            raise Conflict(
-                f"Customer with phone {model.Phone} already exists!")
+            raise Conflict(f"Customer with phone {model.Phone} already exists!")
 
     if model.TaxNumber != None and model.TaxNumber != "":
         existing_customer = session.query(Customer).filter(
-            func.lower(Customer.TaxNumber) == func.lower(model.TaxNumber)
-        ).first()
+            func.lower(Customer.TaxNumber) == func.lower(model.TaxNumber)).first()
         if existing_customer:
-            raise Conflict(
-                f"Customer with tax number {model.TaxNumber} already exists!")
+            raise Conflict(f"Customer with tax number {model.TaxNumber} already exists!")
 
     model_dict = model.dict()
     db_model = Customer(**model_dict)
@@ -46,41 +36,21 @@ def create_customer(session: Session, model: CustomerCreateModel) -> CustomerRes
     session.commit()
     temp = session.refresh(db_model)
     customer = db_model
-    # print_colorized_json(customer)
-    return customer.__dict__
 
+    return customer.__dict__
 
 @trace_span("service: get_customer_by_id")
 def get_customer_by_id(session: Session, customer_id: str) -> CustomerResponseModel:
-    customer = session.query(Customer).filter(
-        Customer.id == customer_id).first()
+    customer = session.query(Customer).filter(Customer.id == customer_id).first()
     if not customer:
         raise NotFound(f"Customer with id {customer_id} not found")
 
-    # customer = CustomerResponseModel(**Customer.dict(), id=uuid.uuid4(), DisplayCode="1234", InvoiceNumber="1234")
     print_colorized_json(customer)
     return customer.__dict__
 
-
 @trace_span("service: update_customer")
 def update_customer(session: Session, customer_id: str, model: CustomerUpdateModel) -> CustomerResponseModel:
-
-    # update_data = {}
-    # if model.Name != None and model.Name != "":
-    #     update_data["Name"] = model.Name
-    # if model.Email != None:
-    #     update_data["Email"] = model.Email
-    # if model.PhoneCode != None:
-    #     update_data["PhoneCode"] = model.PhoneCode
-    # if model.Phone != None:
-    #     update_data["Phone"] = model.Phone
-    # if model.TaxNumber != None:
-    #     update_data["TaxNumber"] = model.TaxNumber
-    # if model.ProfilePicture != None:
-    #     update_data["ProfilePicture"] = model.ProfilePicture
-
-    customer = session.query(Customer).filter(
-        Customer.id == customer_id).first()
+    customer = session.query(Customer).filter(Customer.id == customer_id).first()
     if not customer:
         raise NotFound(f"Customer with id {customer_id} not found")
 
@@ -92,7 +62,6 @@ def update_customer(session: Session, customer_id: str, model: CustomerUpdateMod
     session.commit()
     session.refresh(customer)
     return customer.__dict__
-
 
 @trace_span("service: delete_customer")
 def delete_customer(session: Session, customer_id: str) -> CustomerResponseModel:
@@ -106,7 +75,6 @@ def delete_customer(session: Session, customer_id: str) -> CustomerResponseModel
 
     print_colorized_json(customer)
     return customer.__dict__
-
 
 @trace_span("service: search_customers")
 def search_customers(session: Session, filter) -> CustomerSearchResults:
@@ -135,11 +103,9 @@ def search_customers(session: Session, filter) -> CustomerSearchResults:
 
     return results.__dict__
 
-
 @trace_span("service: delete_customer")
 def delete_customer(session: Session, customer_id: str):
-    customer = session.query(Customer).filter(
-        Customer.id == customer_id).first()
+    customer = session.query(Customer).filter(Customer.id == customer_id).first()
     if not customer:
         raise NotFound(f"Customer with id {customer_id} not found")
     session.delete(customer)
