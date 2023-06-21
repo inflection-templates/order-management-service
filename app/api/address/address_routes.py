@@ -11,7 +11,6 @@ from app.api.address.address_handler import (
 from app.domain_types.schemas.address import AddressCreateModel, AddressUpdateModel, AddressResponseModel, AddressSearchResults, AddressSearchFilter
 from app.domain_types.miscellaneous.response_model import ResponseModel, ResponseStatusTypes
 
-
 router = APIRouter(
     prefix="/addresses",
     tags=["addresses"],
@@ -19,26 +18,21 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-
-@router.post("/", status_code=201, response_model=ResponseModel[AddressResponseModel] | None)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=ResponseModel[AddressResponseModel] | None)
 async def create_address(model: AddressCreateModel, db_session=Depends(get_db_session)):
     return create_address_(model, db_session)
-
 
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[AddressResponseModel] | None)
 async def get_address_by_id(id: str, db_session=Depends(get_db_session)):
     return get_address_by_id_(id, db_session)
 
-
 @router.put("/{id}", status_code=status.HTTP_200_OK, response_model=AddressResponseModel | None)
 async def update_address(id: str, model: AddressUpdateModel, db_session=Depends(get_db_session)):
     return update_address_(id, model, db_session)
 
-
-@router.delete("/{id}", status_code=200, response_model=ResponseModel[AddressResponseModel] | None)
+@router.delete("/{id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[AddressResponseModel] | None)
 async def delete_address(id: str, db_session=Depends(get_db_session)):
     return delete_address(id, db_session)
-
 
 @router.get("/search", status_code=status.HTTP_200_OK, response_model=ResponseModel[AddressSearchResults | None])
 async def search_customer(

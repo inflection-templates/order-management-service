@@ -6,12 +6,10 @@ from .address.address_routes import router as address_router
 
 router = APIRouter(prefix=API_PREFIX)
 
-
 def add_routes():
     router.include_router(order_router)
     router.include_router(customer_router)
     router.include_router(address_router)
     # Add other routes here
-
 
 add_routes()

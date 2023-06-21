@@ -4,7 +4,6 @@ from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.address import AddressResponseModel
 from app.telemetry.tracing import trace_span
 
-
 @trace_span("handler: create_address")
 def create_address_(model, db_session):
     try:
@@ -20,7 +19,6 @@ def create_address_(model, db_session):
         raise e
     finally:
         db_session.close()
-
 
 @trace_span("handler: get_address_by_id")
 def get_address_by_id_(id, db_session):
@@ -39,7 +37,6 @@ def get_address_by_id_(id, db_session):
     finally:
         db_session.close()
 
-
 @trace_span("handler: update_address")
 def update_address_(id, model, db_session):
     try:
@@ -56,7 +53,6 @@ def update_address_(id, model, db_session):
         raise e
     finally:
         db_session.close()
-
 
 @trace_span("handler: delete_address")
 def delete_address_(id, db_session):
@@ -75,11 +71,10 @@ def delete_address_(id, db_session):
     finally:
         db_session.close()
 
-
 @trace_span("handler: search_addresses")
 def search_addresses_(filter, db_session):
     try:
-        addresses = address_service.search_customers(db_session, filter)
+        addresses = address_service.search_addresses(db_session, filter)
         message = "Addresses retrieved successfully"
         resp = ResponseModel[AddressResponseModel](
             Message=message, Data=addresses)
