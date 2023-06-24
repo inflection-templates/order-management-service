@@ -44,8 +44,6 @@ def get_customer_by_id(session: Session, customer_id: str) -> CustomerResponseMo
     customer = session.query(Customer).filter(Customer.id == customer_id).first()
     if not customer:
         raise NotFound(f"Customer with id {customer_id} not found")
-
-    print_colorized_json(customer)
     return customer.__dict__
 
 @trace_span("service: update_customer")
@@ -61,19 +59,6 @@ def update_customer(session: Session, customer_id: str, model: CustomerUpdateMod
 
     session.commit()
     session.refresh(customer)
-    return customer.__dict__
-
-@trace_span("service: delete_customer")
-def delete_customer(session: Session, customer_id: str) -> CustomerResponseModel:
-    customer = session.query(Customer).get(customer_id)
-    if not customer:
-        raise NotFound(f"Customer with id {customer_id} not found")
-
-    session.delete(customer)
-
-    session.commit()
-
-    print_colorized_json(customer)
     return customer.__dict__
 
 @trace_span("service: search_customers")
