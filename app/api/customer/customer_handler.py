@@ -66,7 +66,7 @@ def delete_customer_(id, db_session):
         db_session.close()
         raise e
     finally:
-        db_session.close()    
+        db_session.close()
 
 @trace_span("handler: search_customers")
 def search_customers_(filter, db_session):
