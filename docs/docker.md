@@ -37,3 +37,25 @@
     docker rm order-container
     ```
 
+## Docker Compose
+
+To test whole application in containerized environment, you need to use `Docker-compose`. We need three containers i.e. database-container, application-container and either Zipkin or Jaeger container. So instead of running them separately, we can run them in one go using `Docker-compose`. To do so, follow these steps:
+1. Create a new file in root directory of application and name it `docker-compose.yml`.
+2. Write configurations for three containers in `Yaml` format. Refer this [file](../docker-compose.yml).
+3. Once finished with configurations, save the file and open terminal. Run following command:
+    ```
+    docker compose up --build -d
+    ```
+    This command will pull docker images for `MYSQL` and `Zipkin` from docker hub and use them to run their containers and it will also build docker image of application using `Dockerfile` that we have already created.
+
+4. To see list of running containers, run command:
+    ```
+    docker compose ps
+    ```
+
+5. Now you may access application at `http://localhost:12345` and Zipkin UI at `http://localhost:9411`. Test application by sending `Postman` requests. You may see thr traces of your requests on Zipkin UI.
+
+6. To stop and remove all containers, run command:
+    ```
+    docker compose down
+    ```
