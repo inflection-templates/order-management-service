@@ -13,6 +13,7 @@ def create_customer_(model, db_session):
         resp = ResponseModel[CustomerResponseModel](Message=message, Data=customer)
         # print_colorized_json(model)
         return resp
+
     except Exception as e:
         db_session.rollback()
         db_session.close()

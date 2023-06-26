@@ -3,11 +3,13 @@ import uuid
 # from fastapi import HTTPException, Query, Body
 from app.common.utils import print_colorized_json
 from app.database.models.customer import Customer
+from app.database.models.customer_address import CustomerAddress
 from app.domain_types.miscellaneous.exceptions import Conflict, NotFound
 from app.domain_types.schemas.customer import CustomerCreateModel, CustomerUpdateModel, CustomerResponseModel, CustomerSearchFilter, CustomerSearchResults
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from app.telemetry.tracing import trace_span
+from app.domain_types.schemas.customer_address import CustomerAddressCreateModel
 
 @trace_span("service: create_customer")
 def create_customer(session: Session, model: CustomerCreateModel) -> CustomerResponseModel:
@@ -36,6 +38,13 @@ def create_customer(session: Session, model: CustomerCreateModel) -> CustomerRes
     session.commit()
     temp = session.refresh(db_model)
     customer = db_model
+
+    customer_address = CustomerAddress(
+        CustomerId=customer.id,
+        AddressId=model.DefaultShippingAddressId,
+    )
+    session.add(customer_address)
+    session.commit()
 
     return customer.__dict__
 
