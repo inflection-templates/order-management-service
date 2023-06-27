@@ -21,10 +21,10 @@ class Cart(Base):
     UpdatedAt            = Column(DateTime(timezone=True), onupdate=func.now())
     DeletedAt            = Column(DateTime(timezone=True), default=None)
 
-    def __init__(self, id, customerId):
-        super().__init__()
-        self.id         = id
-        self.CustomerId = customerId
+    # def __init__(self, id, customerId):
+    #     super().__init__()
+    #     self.id         = id
+    #     self.CustomerId = customerId
 
     def __repr__(self):
         jsonStr = json.dumps(self.__dict__)
