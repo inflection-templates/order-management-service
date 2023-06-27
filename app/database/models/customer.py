@@ -24,8 +24,6 @@ class Customer(Base):
     CreatedAt                = Column(DateTime(timezone=True), server_default=func.now())
     UpdatedAt                = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
-    shipping_address = relationship("Address", foreign_keys=[DefaultShippingAddressId])
-    billing_address = relationship("Address", foreign_keys=[DefaultBillingAddressId])
 
     def __repr__(self):
         jsonStr = json.dumps(self.__dict__)

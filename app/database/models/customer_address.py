@@ -9,7 +9,6 @@ from app.domain_types.enums.address_types import AddressTypes
 from app.database.models.address import Address
 from app.database.models.customer import Customer
 
-
 class CustomerAddress(Base):
 
     __tablename__ = "customer_addresses"
@@ -19,11 +18,6 @@ class CustomerAddress(Base):
     AddressId   = Column(String(36), ForeignKey("addresses.id"), default=None)
     AddressType = Column(EnumColumn(AddressTypes), default=AddressTypes.SHIPPING.value)
     IsFavorite  = Column(Boolean, default=False)
-    CreatedAt   = Column(DateTime(timezone=True), server_default=func.now())
-    UpdatedAt   = Column(DateTime(timezone=True), onupdate=func.now())
-
-    customer = relationship("Customer")
-    address = relationship("Address")
 
     def __repr__(self):
         jsonStr = json.dumps(self.__dict__)

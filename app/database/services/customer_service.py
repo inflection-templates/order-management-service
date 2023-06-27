@@ -39,14 +39,24 @@ def create_customer(session: Session, model: CustomerCreateModel) -> CustomerRes
     temp = session.refresh(db_model)
     customer = db_model
 
-    customer_address = CustomerAddress(
-        CustomerId=customer.id,
-        AddressId=model.DefaultShippingAddressId,
-    )
-    session.add(customer_address)
-    session.commit()
+    if model.DefaultShippingAddressId != None and model.DefaultShippingAddressId != "" :
+        customer_address = add_customer_address(session, customer.id, customer.DefaultShippingAddressId, "Shipping")
+
+    if model.DefaultBillingAddressId != model.DefaultShippingAddressId :
+        customer_address = add_customer_address(session, customer.id, customer.DefaultBillingAddressId, "Billing")
 
     return customer.__dict__
+
+def add_customer_address(session, customer_id, address_id, address_type):
+    customer_address = CustomerAddress(
+            CustomerId = customer_id,
+            AddressId = address_id,
+            AddressType = address_type,
+            IsFavorite = True
+        )
+    session.add(customer_address)
+    session.commit()
+    return customer_address
 
 @trace_span("service: get_customer_by_id")
 def get_customer_by_id(session: Session, customer_id: str) -> CustomerResponseModel:

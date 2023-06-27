@@ -4,7 +4,6 @@ from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.customer import CustomerResponseModel
 from app.telemetry.tracing import trace_span
 
-
 @trace_span("handler: create_customer")
 def create_customer_(model, db_session):
     try:
