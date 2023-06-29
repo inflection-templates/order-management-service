@@ -50,3 +50,31 @@ def delete_cart(session: Session, cart_id: str):
     session.delete(cart)
     session.commit()
     return True
+
+@trace_span("service: search_carts")
+def search_carts(session: Session, filter) -> CartSearchResults:
+
+    query = session.query(Cart)
+    if filter.CustomerId :
+        query = query.filter(Cart.CustomerId == filter.CustomerId)
+    if filter.ProductId :
+        query = query.filter(Cart.ProductId == filter.ProductId)
+    if filter.TotalItemsCountGreaterThan:
+        query = query.filter(Cart.TotalItems > filter.TotalItemsCountGreaterThan)
+    if filter.TotalItemsCountLessThan:
+        query = query.filter(Cart.TotalItems < filter.TotalItemsCountLessThan)
+    if filter.TotalAmountGreaterThan:
+        query = query.filter(Cart.TotalAmount > filter.TotalAmountGreaterThan)
+    if filter.TotalAmountLessThan:
+        query = query.filter(Cart.TotalAmount < filter.TotalAmountLessThan)
+    carts = query.all()
+
+    results = CartSearchResults(
+        TotalCount=len(carts),
+        ItemsPerPage=filter.ItemsPerPage,
+        PageNumber=filter.PageNumber,
+        OrderBy=filter.OrderBy,
+        OrderByDescending=filter.OrderByDescending,
+        Items=carts
+    )
+
