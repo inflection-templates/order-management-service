@@ -1,4 +1,4 @@
-poetry.lock 
+poetry.lock
 
 venv/
 
@@ -8,6 +8,6 @@ docs/
 
 .vscode/
 
-.pytest_cache/ 
+.pytest_cache/
 
 tests/
