@@ -19,7 +19,6 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=ResponseModel[OrderResponseModel|None])
 async def create_order(model: OrderCreateModel, db_session = Depends(get_db_session)):
     return create_order_(model, db_session)
