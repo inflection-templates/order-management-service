@@ -32,13 +32,13 @@ class Coupon(Base):
     CreatedAt          = Column(DateTime(timezone=True), server_default=func.now())
     UpdatedAt          = Column(DateTime(timezone=True), onupdate=func.now())
 
-    def __init__(self, id, name, description, couponCode, couponType):
-        super().__init__()
-        self.id          = id
-        self.Name        = name
-        self.Description = description
-        self.CouponCode  = couponCode
-        self.CouponType  = couponType
+    # def __init__(self, id, name, description, couponCode, couponType):
+    #     super().__init__()
+    #     self.id          = id
+    #     self.Name        = name
+    #     self.Description = description
+    #     self.CouponCode  = couponCode
+    #     self.CouponType  = couponType
 
     def __repr__(self):
         jsonStr = json.dumps(self.__dict__)
