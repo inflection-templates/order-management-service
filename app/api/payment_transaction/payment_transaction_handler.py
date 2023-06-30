@@ -53,10 +53,10 @@ def delete_payment_transaction_(id, db_session):
         db_session.close()
 
 @trace_span("handler: search_payment_transactions")
-def search_customers_(filter, db_session):
+def search_payment_transactions_(filter, db_session):
     try:
         payment_transactions = payment_transaction_service.search_payment_transactions(db_session, filter)
-        message = "Customers retrieved successfully"
+        message = "Payment transactions retrieved successfully"
         resp = ResponseModel[PaymentTransactionResponseModel](Message=message, Data=payment_transactions)
         # print_colorized_json(model)
         return resp
