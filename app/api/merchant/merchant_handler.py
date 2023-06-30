@@ -4,7 +4,6 @@ from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.merchant import MerchantResponseModel
 from app.telemetry.tracing import trace_span
 
-
 @trace_span("handler: create_merchant")
 def create_merchant_(model, db_session):
     try:
