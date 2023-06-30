@@ -4,7 +4,7 @@ from app.api.coupon.coupon_handler import (
     get_coupon_by_id_,
     update_coupon_,
     delete_coupon_,
-    search_coupon_
+    search_coupons_
 )
 from app.database.database_accessor import get_db_session
 from app.domain_types.miscellaneous.response_model import ResponseModel
@@ -36,8 +36,8 @@ async def delete_coupon(id: str, db_session = Depends(get_db_session)):
     return delete_coupon_(id, db_session)
 
 @router.get("/search", status_code=status.HTTP_200_OK, response_model=ResponseModel[CouponSearchResults|None])
-async def search_coupon(
+async def search_coupons(
         query_params: CouponSearchFilter = Depends(),
         db_session = Depends(get_db_session)):
     filter = CouponSearchFilter(**query_params.dict())
-    return search_coupon_(filter, db_session)
+    return search_coupons_(filter, db_session)
