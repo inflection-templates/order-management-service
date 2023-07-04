@@ -5,25 +5,25 @@ from app.domain_types.schemas.base_search_types import BaseSearchFilter, BaseSea
 from app.domain_types.enums.order_status_types import OrderStatusTypes
 
 class OrderHistoryCreateModel(BaseModel):
-    OrderId         : str                       = Field(description="Id of order")
-    PreviousStatus  : OrderStatusTypes          = Field(default=OrderStatusTypes.DRAFT.value, description="Previous status of order")
-    Status          : OrderStatusTypes          = Field(default=OrderStatusTypes.DRAFT.value, description="Current status of order")
-    UpdatedByUserId : str                       = Field(description="Id of user")
-    Timestamp       = datetime                  = Field(description="Date and time of order")
+    OrderId         : str                                        = Field(description="Id of order")
+    PreviousStatus  : OrderStatusTypes                           = Field(default=OrderStatusTypes.DRAFT.value, description="Previous status of order")
+    Status          : OrderStatusTypes                           = Field(default=OrderStatusTypes.DRAFT.value, description="Current status of order")
+    UpdatedByUserId : str                                        = Field(description="Id of user")
+    Timestamp       = datetime                                   = Field(description="Date and time of order")
 
 class OrderHistoryUpdateModel(BaseModel):
-    OrderId         : Optional[str]                       = Field(description="Id of order")
-    PreviousStatus  : Optional[OrderStatusTypes]          = Field(description="Previous status of order")
-    Status          : Optional[OrderStatusTypes]          = Field(description="Current status of order")
-    UpdatedByUserId : Optional[str]                       = Field(description="Id of user")
-    Timestamp       : Optional[datetime]                  = Field(description="Date and time of order")
+    OrderId         : Optional[str]                              = Field(description="Id of order")
+    PreviousStatus  : Optional[OrderStatusTypes]                 = Field(description="Previous status of order")
+    Status          : Optional[OrderStatusTypes]                 = Field(description="Current status of order")
+    UpdatedByUserId : Optional[str]                              = Field(description="Id of user")
+    Timestamp       : Optional[datetime]                         = Field(description="Date and time of order")
 
 class OrderHistorySearchFilter(BaseSearchFilter):
-    OrderId         : Optional[str]                       = Field(description="Id of order")
-    PreviousStatus  : Optional[OrderStatusTypes]          = Field(description="Previous status of order")
-    Status          : Optional[OrderStatusTypes]          = Field(description="Current status of order")
-    UpdatedByUserId : Optional[str]                       = Field(description="Id of user")
-    Timestamp       : Optional[datetime]                  = Field(description="Date and time of order")
+    OrderId         : Optional[str]                              = Field(description="Id of order")
+    PreviousStatus  : Optional[OrderStatusTypes]                 = Field(description="Previous status of order")
+    Status          : Optional[OrderStatusTypes]                 = Field(description="Current status of order")
+    UpdatedByUserId : Optional[str]                              = Field(description="Id of user")
+    Timestamp       : Optional[datetime]                         = Field(description="Date and time of order")
 
 class OrderHistoryResponseModel(BaseModel):
     id              : UUID4                                      = Field(description="Id of order history")
