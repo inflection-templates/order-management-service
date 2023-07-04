@@ -22,6 +22,6 @@ class OrderTypeResponseModel(BaseModel):
     CreatedAt   : datetime       = Field(default=datetime.now())
     UpdatedAt   : datetime       = Field(default=datetime.now())
 
-class OrderSearchResults(BaseSearchResults):
+class OrderTypeSearchResults(BaseSearchResults):
     Items: List[OrderTypeResponseModel] = Field(default=[])
 

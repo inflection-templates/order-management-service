@@ -1,13 +1,13 @@
 from app.common.utils import validate_uuid4
 from app.database.services import order_line_item_service
 from app.domain_types.miscellaneous.response_model import ResponseModel
-from app.domain_types.schemas.merchant import OrderLineItemResponseModel
+from app.domain_types.schemas.order_line_item import OrderLineItemResponseModel
 from app.telemetry.tracing import trace_span
 
 @trace_span("handler: create_order_line_item")
 def create_order_line_item_(model, db_session):
     try:
-        order_line_item = order_line_item_service.create_merchant(db_session, model)
+        order_line_item = order_line_item_service.create_order_line_item(db_session, model)
         message = "Order line item created successfully"
         resp = ResponseModel[OrderLineItemResponseModel](Message=message, Data=order_line_item)
         # print_colorized_json(model)
