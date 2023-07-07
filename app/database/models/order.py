@@ -25,8 +25,6 @@ class Order(Base):
     TotalAmount          = Column(Float, default=0.0)
     Notes                = Column(String(1024), default=None)
     CustomerId           = Column(String(36), ForeignKey("customers.id"), default=None)
-    PaymentTransactionId = Column(String(36), ForeignKey("payment_transactions.id"), default=None)
-    RefundTransactionId  = Column(String(36), ForeignKey("payment_transactions.id"), default=None)
     ShippingAddressId    = Column(String(36), ForeignKey("addresses.id"), default=None)
     BillingAddressId     = Column(String(36), ForeignKey("addresses.id"), default=None)
     OrderType            = Column(String(36), ForeignKey("order_types.id"), default=None)
