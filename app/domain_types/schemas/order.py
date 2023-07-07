@@ -25,8 +25,7 @@ class OrderUpdateModel(BaseModel):
     TipApplicable        : Optional[bool]  = Field(description="Tip applicable or not")
     TipAmount            : Optional[float] = Field(ge=0.0, description="Tip amount")
     Notes                : Optional[str]   = Field(min_length=5, max_length=1024, description="Notes for the delivery")
-    PaymentTransactionId : Optional[UUID4] = Field(description="Id of the payment transaction")
-    RefundTransactionId  : Optional[UUID4] = Field(description="Id of the refund transaction")
+
 
 class OrderSearchFilter(BaseSearchFilter):
     CustomerId                 : Optional[UUID4]            = Field(description="Search by the Id of the customer")
@@ -61,8 +60,6 @@ class OrderResponseModel(BaseModel):
     Notes               : str | None                  = Field(min_length=5, max_length=1024, default=None, description="Notes added for the order for the delivery")
     OrderLineItems      : List[dict] | None           = Field(default=None, description="Order line items")
     Coupons             : Optional[List[dict] | None] = Field(default=None, description="Coupons applied to the order")
-    PaymentTransaction  : Optional[dict | None]       = Field(default=None, description="Payment transaction details for the order")
-    RefundTransactionId : Optional[dict | None]       = Field(default=None, description="Refund transaction details for the order")
     OrderStatus         : OrderStatusTypes            = Field(default=OrderStatusTypes.DRAFT, description="Order status")
     OrderType           : Optional[str | None]        = Field(min_length=2, max_length=64, default=None, description="Order type")
     CreatedAt           : Optional[datetime]          = Field(default=None, description="Order creation date")
