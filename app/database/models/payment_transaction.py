@@ -28,6 +28,7 @@ class PaymentTransaction(Base):
     InitiatedBy                 = Column(String(36), default=None)
     CustomerId                  = Column(String(36), ForeignKey("customers.id"), default=None)
     OrderId                     = Column(String(36), ForeignKey("orders.id"), default=None)
+    IsRefund                    = Column(Boolean, default=False)
     CreatedAt                   = Column(DateTime(timezone=True), server_default=func.now())
     UpdatedAt                   = Column(DateTime(timezone=True), onupdate=func.now())
 
