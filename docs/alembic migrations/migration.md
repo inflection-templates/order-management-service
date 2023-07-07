@@ -25,3 +25,9 @@
     ```
     alembic revision --autogenerate
     ```
+7. If you get error like `ERROR [alembic.util.messaging] Target database is not up to date.`, run following command and then again try to create revision:
+    ```
+    alembic upgrade head
+    ```
+    This command will apply any pending migrations to bring the target database up to date.
+
