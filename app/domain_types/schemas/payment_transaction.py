@@ -20,6 +20,7 @@ class PaymentTransactionCreateModel(BaseModel):
     InitiatedBy                 : str                  = Field(...)
     CustomerId                  : UUID4                = Field(description="Id of customer who did payment")
     OrderId                     : UUID4                = Field(description="Id of order for which payment is done")
+    IsRefund                    : bool                 = Field(default=False, description="Whether the transaction is refund or not")
 
 class PaymentTransactionSearchFilter(BaseSearchFilter):
     DisplayCode                 : Optional[str]        = Field(description="Search by display code")
@@ -30,6 +31,7 @@ class PaymentTransactionSearchFilter(BaseSearchFilter):
     OrderId                     : Optional[UUID4]      = Field(description="Search by id of order")
     PaymentMode                 : Optional[str]        = Field(description="Search by mode of payment")
     PaymentAmount               : Optional[float]      = Field(description="Search by payment amount")
+    IsRefund                    : Optional[bool]       = Field(default=False, description="Whether the transaction is refund or not")
 
 class PaymentTransactionResponseModel(BaseModel):
     id                          : UUID4                = Field(description="Id of payment transaction")
@@ -48,6 +50,7 @@ class PaymentTransactionResponseModel(BaseModel):
     InitiatedBy                 : str                  = Field(...)
     CustomerId                  : UUID4                = Field(description="Id of customer who did payment")
     OrderId                     : UUID4                = Field(description="Id of order for which payment is done")
+    IsRefund                    : bool                 = Field(default=False, description="Whether the transaction is refund or not")
     CreatedAt                   : Optional[datetime]   = Field(default=None, description="Order creation date")
     UpdatedAt                   : Optional[datetime]   = Field(default=None, description="Order last updated date")
 
