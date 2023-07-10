@@ -5,8 +5,7 @@ from sqlalchemy.orm import relationship
 from app.common.utils import generate_uuid4
 from app.database.base import Base
 from app.domain_types.enums.order_status_types import OrderStatusTypes
-
-
+from finite_state_machine import StateMachine, transition
 class Order(Base):
 
     __tablename__ = "orders"
@@ -34,3 +33,92 @@ class Order(Base):
     def __repr__(self):
         jsonStr = json.dumps(self.__dict__)
         return jsonStr
+
+class OrderStatus(StateMachine):
+    def __init__(self):
+        self.state = OrderStatusTypes.DRAFT.value
+        super().__init__()
+
+    @transition(source=OrderStatusTypes.DRAFT.value, target=OrderStatusTypes.INVENTRY_CHECKED.value)
+    def create_order(self):
+        pass
+
+    @transition(source=OrderStatusTypes.INVENTRY_CHECKED.value, target=OrderStatusTypes.CONFIRMED.value)
+    def confirm_order(self):
+        pass
+
+    @transition(source=OrderStatusTypes.CONFIRMED.value, target=OrderStatusTypes.PAYMENT_INITIATED.value)
+    def initiate_payment(self):
+        pass
+
+    @transition(source=OrderStatusTypes.PAYMENT_INITIATED.value, target=OrderStatusTypes.PAYMENT_COMPLETED.value)
+    def complete_payment(self):
+        pass
+
+    @transition(source=OrderStatusTypes.PAYMENT_INITIATED.value, target=OrderStatusTypes.PAYMENT_FAILED.value)
+    def retry_payment(self):
+        pass
+
+    @transition(source=OrderStatusTypes.PAYMENT_COMPLETED.value, target=OrderStatusTypes.PLACED.value)
+    def placed_order(self):
+        pass
+
+    @transition(source=[OrderStatusTypes.PAYMENT_FAILED.value,
+                        OrderStatusTypes.DRAFT.value,
+                        OrderStatusTypes.CONFIRMED.value,
+                        OrderStatusTypes.PAYMENT_INITIATED.value,
+                        OrderStatusTypes.PAYMENT_COMPLETED.value,
+                        OrderStatusTypes.PLACED.value,
+                        OrderStatusTypes.SHIPPED.value
+                        ],
+                        target=OrderStatusTypes.CANCELLED.value)
+    def cancel_order(self):
+        pass
+
+    @transition(source=OrderStatusTypes.PLACED.value, target=OrderStatusTypes.SHIPPED.value)
+    def shipped_order(self):
+        pass
+
+    @transition(source=OrderStatusTypes.SHIPPED.value, target=OrderStatusTypes.DELIVERED.value)
+    def delivers_order(self):
+        pass
+
+    @transition(source=[OrderStatusTypes.DELIVERED.value,
+                        OrderStatusTypes.REFUNDED.value,
+                        OrderStatusTypes.EXCHANGED.value
+                        ],
+                        target=OrderStatusTypes.CLOSED.value)
+    def closed_order(self):
+        pass
+
+    @transition(source=OrderStatusTypes.CLOSED.value, target=OrderStatusTypes.REOPENED.value)
+    def reopen_order(self):
+        pass
+
+    @transition(source=OrderStatusTypes.REOPENED.value, target=OrderStatusTypes.RETURN_INITIATED.value)
+    def initiate_return(self):
+        pass
+
+    @transition(source=OrderStatusTypes.RETURN_INITIATED.value, target=OrderStatusTypes.RETURNED.value)
+    def return_item(self):
+        pass
+
+    @transition(source=OrderStatusTypes.RETURNED.value, target=OrderStatusTypes.REFUND_INITIATED.value)
+    def initiate_refund(self):
+        pass
+
+    @transition(source=OrderStatusTypes.REFUND_INITIATED.value, target=OrderStatusTypes.REFUNDED.value)
+    def complete_refund(self):
+        pass
+
+    @transition(source=OrderStatusTypes.REOPENED.value, target=OrderStatusTypes.EXCHANGE_INITIATED.value)
+    def complete_refund(self):
+        pass
+
+    @transition(source=OrderStatusTypes.EXCHANGE_INITIATED.value, target=OrderStatusTypes.EXCHANGED.value)
+    def complete_refund(self):
+        pass
+
+
+
+
