@@ -8,13 +8,19 @@ from app.domain_types.schemas.order import OrderCreateModel, OrderResponseModel,
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from app.telemetry.tracing import trace_span
+from app.domain_types.enums.order_status_types import OrderStatusTypes
 
 @trace_span("service: create_order")
 def create_order(session: Session, model: OrderCreateModel) -> OrderResponseModel:
-    order = session.add(model)
+    model_dict = model.dict()
+    db_model = Order(**model_dict)
+    db_model.UpdatedAt = dt.datetime.now()
+    session.add(db_model)
     session.commit()
-    session.refresh(model)
-    return order
+    temp = session.refresh(db_model)
+    order = db_model
+
+    return order.__dict__
 
 @trace_span("service: get_order_by_id")
 def get_order_by_id(session: Session, order_id: str) -> OrderResponseModel:
@@ -46,4 +52,20 @@ def delete_order(session: Session, order_id: str) -> OrderResponseModel:
     session.delete(order)
     session.commit()
     return True
+
+@trace_span("service: update_order_status")
+def update_order_status(session: Session, order_id: str, status: OrderStatusTypes) -> OrderResponseModel:
+    order = session.query(Order).filter(Order.id == order_id).first()
+    if not order:
+        raise NotFound(f"Order with id {order_id} not found")
+
+    transition_method = getattr(order, status.value, None)
+    if not transition_method:
+        return {"message": "Invalid state transition"}
+
+    order.OrderStatus = status
+
+    session.commit()
+    session.refresh(order)
+    return order.__dict__
 
