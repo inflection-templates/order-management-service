@@ -5,12 +5,12 @@ from app.domain_types.enums.order_status_types import OrderStatusTypes
 from app.domain_types.schemas.base_search_types import BaseSearchFilter, BaseSearchResults
 
 class OrderCreateModel(BaseModel):
-      OrderTypeId    : Optional[UUID4 | None] = Field(default=None, description="Id of the order type")
-      CustomerId     : UUID4                  = Field(description="Id of the customer")
-      CartId         : Optional[UUID4 | None] = Field(default=None, description="Id of the cart")
-      TipApplicable  : Optional[bool | None]  = Field(default=False, description="Tip applicable or not")
-      Notes          : Optional[str | None]   = Field(default=None, min_length=5, max_length=1024, description="Notes for the delivery")
-      OrderLineItems : Optional[list]         = Field(default=[], description="List of order line items")
+      OrderType         : Optional[UUID4 | None] = Field(default=None, description="Id of the order type")
+      CustomerId        : UUID4                  = Field(description="Id of the customer")
+      AssociatedCartId  : Optional[UUID4 | None] = Field(default=None, description="Id of the cart")
+      TipApplicable     : Optional[bool | None]  = Field(default=False, description="Tip applicable or not")
+      Notes             : Optional[str | None]   = Field(default=None, min_length=5, max_length=1024, description="Notes for the delivery")
+    #   OrderLineItems    : Optional[list]         = Field(default=[], description="List of order line items")
 
 # Please note that -
 # CustomerId, OrderLineItems, OrderStatus cannot be updated through regular update API.
@@ -19,8 +19,8 @@ class OrderCreateModel(BaseModel):
 # OrderLineItems are updated through a different set of APIs.
 
 class OrderUpdateModel(BaseModel):
-    OrderTypeId          : Optional[UUID4] = Field(description="Id of the order type")
-    CartId               : Optional[UUID4] = Field(description="Id of the cart")
+    OrderType            : Optional[UUID4] = Field(description="Id of the order type")
+    AssociatedCartId     : Optional[UUID4] = Field(description="Id of the cart")
     OrderDiscount        : Optional[float] = Field(ge=0.0, description="Discount applied to the order")
     TipApplicable        : Optional[bool]  = Field(description="Tip applicable or not")
     TipAmount            : Optional[float] = Field(ge=0.0, description="Tip amount")
@@ -29,7 +29,7 @@ class OrderUpdateModel(BaseModel):
 
 class OrderSearchFilter(BaseSearchFilter):
     CustomerId                 : Optional[UUID4]            = Field(description="Search by the Id of the customer")
-    CartId                     : Optional[UUID4]            = Field(description="Search by the associated cart Id")
+    AssociatedCartId           : Optional[UUID4]            = Field(description="Search by the associated cart Id")
     CouponId                   : Optional[UUID4]            = Field(description="Search by the applied coupon Id")
     TotalItemsCountGreaterThan : Optional[int]              = Field(ge=0, le=100, description="Search orders with total items greater than given value")
     TotalItemsCountLessThan    : Optional[int]              = Field(ge=1, le=100, description="Search orders with total items less than given value")
@@ -47,9 +47,9 @@ class OrderSearchFilter(BaseSearchFilter):
 
 class OrderResponseModel(BaseModel):
     id                  : UUID4                       = Field(description="Id of the order")
-    DisplayCode         : str                         = Field(min_length=4, max_length=64, description="Display code for the order")
+    DisplayCode         : str | None                  = Field(min_length=4, max_length=64, description="Display code for the order")
     InvoiceNumber       : str | None                  = Field(default=None, description="Invoice number for the order")
-    CartId              : UUID4 | None                = Field(default=None, description="Cart Id for the order")
+    AssociatedCartId    : UUID4 | None                = Field(default=None, description="Cart Id for the order")
     TotalItemsCount     : int                         = Field(ge=0, le=100, default=0, description="Total items in the order")
     OrderDiscount       : float                       = Field(ge=0.0, default=0.0, description="Discount applied to the order")
     TipApplicable       : bool                        = Field(default=False, description="Is tip applicable for the order")
@@ -58,7 +58,7 @@ class OrderResponseModel(BaseModel):
     TotalDiscount       : float                       = Field(ge=0.0, default=0.0, description="Total discount for the order")
     TotalAmount         : float                       = Field(ge=0.0, default=0.0, description="Total amount for the order")
     Notes               : str | None                  = Field(min_length=5, max_length=1024, default=None, description="Notes added for the order for the delivery")
-    OrderLineItems      : List[dict] | None           = Field(default=None, description="Order line items")
+    # OrderLineItems      : List[dict] | None           = Field(default=None, description="Order line items")
     Coupons             : Optional[List[dict] | None] = Field(default=None, description="Coupons applied to the order")
     OrderStatus         : OrderStatusTypes            = Field(default=OrderStatusTypes.DRAFT, description="Order status")
     OrderType           : Optional[str | None]        = Field(min_length=2, max_length=64, default=None, description="Order type")
