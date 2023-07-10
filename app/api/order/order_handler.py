@@ -82,3 +82,19 @@ def search_orders_(filter, db_session):
         raise e
     finally:
         db_session.close()
+
+@trace_span("handler: update_order_status")
+def update_order_status_(id, status, db_session):
+    try:
+        order_id = validate_uuid4(id)
+        order= order_service.update_order_status(db_session, order_id, status)
+        message = "Order status updated successfully"
+        resp = ResponseModel[OrderResponseModel](Message=message, Data=order)
+        # print_colorized_json(model)
+        return resp
+    except Exception as e:
+        db_session.rollback()
+        db_session.close()
+        raise e
+    finally:
+        db_session.close()
