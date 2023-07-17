@@ -34,34 +34,34 @@ class Order(Base):
         jsonStr = json.dumps(self.__dict__)
         return jsonStr
 
-class OrderStatus(StateMachine):
+class OrderStatusMachine(StateMachine):
     def __init__(self):
         self.state = OrderStatusTypes.DRAFT.value
         super().__init__()
 
     @transition(source=OrderStatusTypes.DRAFT.value, target=OrderStatusTypes.INVENTRY_CHECKED.value)
     def create_order(self):
-        pass
+        print("Order Created")
 
     @transition(source=OrderStatusTypes.INVENTRY_CHECKED.value, target=OrderStatusTypes.CONFIRMED.value)
     def confirm_order(self):
-        pass
+        print("Order Confirmed")
 
     @transition(source=OrderStatusTypes.CONFIRMED.value, target=OrderStatusTypes.PAYMENT_INITIATED.value)
     def initiate_payment(self):
-        pass
+        print("Payment is initiated")
 
     @transition(source=OrderStatusTypes.PAYMENT_INITIATED.value, target=OrderStatusTypes.PAYMENT_COMPLETED.value)
     def complete_payment(self):
-        pass
+        print("Payment completed")
 
     @transition(source=OrderStatusTypes.PAYMENT_INITIATED.value, target=OrderStatusTypes.PAYMENT_FAILED.value)
     def retry_payment(self):
-        pass
+        print("Payment failed")
 
     @transition(source=OrderStatusTypes.PAYMENT_COMPLETED.value, target=OrderStatusTypes.PLACED.value)
     def placed_order(self):
-        pass
+        print("Your order placed successfully!")
 
     @transition(source=[OrderStatusTypes.PAYMENT_FAILED.value,
                         OrderStatusTypes.DRAFT.value,
@@ -73,15 +73,15 @@ class OrderStatus(StateMachine):
                         ],
                         target=OrderStatusTypes.CANCELLED.value)
     def cancel_order(self):
-        pass
+        print("Your order is cancelled")
 
     @transition(source=OrderStatusTypes.PLACED.value, target=OrderStatusTypes.SHIPPED.value)
     def shipped_order(self):
-        pass
+        print("Order is shipped")
 
     @transition(source=OrderStatusTypes.SHIPPED.value, target=OrderStatusTypes.DELIVERED.value)
-    def delivers_order(self):
-        pass
+    def delivered_order(self):
+        print("Order delivered successfully!")
 
     @transition(source=[OrderStatusTypes.DELIVERED.value,
                         OrderStatusTypes.REFUNDED.value,
@@ -89,35 +89,35 @@ class OrderStatus(StateMachine):
                         ],
                         target=OrderStatusTypes.CLOSED.value)
     def closed_order(self):
-        pass
+        print("Order closed")
 
     @transition(source=OrderStatusTypes.CLOSED.value, target=OrderStatusTypes.REOPENED.value)
     def reopen_order(self):
-        pass
+        print("Order reopened")
 
     @transition(source=OrderStatusTypes.REOPENED.value, target=OrderStatusTypes.RETURN_INITIATED.value)
     def initiate_return(self):
-        pass
+        print("Initialized return")
 
     @transition(source=OrderStatusTypes.RETURN_INITIATED.value, target=OrderStatusTypes.RETURNED.value)
-    def return_item(self):
-        pass
+    def complete_return(self):
+        print("Return completed")
 
     @transition(source=OrderStatusTypes.RETURNED.value, target=OrderStatusTypes.REFUND_INITIATED.value)
     def initiate_refund(self):
-        pass
+        print("Refund initiated")
 
     @transition(source=OrderStatusTypes.REFUND_INITIATED.value, target=OrderStatusTypes.REFUNDED.value)
     def complete_refund(self):
-        pass
+        print("Refund completed")
 
     @transition(source=OrderStatusTypes.REOPENED.value, target=OrderStatusTypes.EXCHANGE_INITIATED.value)
-    def complete_refund(self):
-        pass
+    def initiate_exchange(self):
+        print("Exchange initiated")
 
     @transition(source=OrderStatusTypes.EXCHANGE_INITIATED.value, target=OrderStatusTypes.EXCHANGED.value)
-    def complete_refund(self):
-        pass
+    def complete_exchange(self):
+        print("Exchange completed")
 
 
 
