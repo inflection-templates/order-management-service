@@ -5,7 +5,7 @@ from app.config.config import get_settings
 from .base import Base
 
 from .models import Address, Cart, Coupon, Customer, Merchant, Order
-from .models import OrderCoupon, OrderLineItem, OrderType, OrderHistory, PaymentTransaction
+from .models import OrderCoupon, OrderLineItem, OrderType, OrderHistory, PaymentTransaction, customer_address
 
 settings = get_settings()
 print(settings.DB_CONNECTION_STRING)

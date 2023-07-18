@@ -74,7 +74,7 @@ You can update the poetry version using poetry itself like `$ poetry self update
    `$ poetry add <package-name>`
 
 6. To add a new package as a dev dependency, run
-   `$ poetry add <package-name> --dev
+   `$ poetry add <package-name> --dev`
 
 7. To remove a package, run
    `$ poetry remove <package-name>`

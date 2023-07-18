@@ -5,6 +5,7 @@ from sqlalchemy.orm import relationship
 from app.common.utils import generate_uuid4
 from app.database.base import Base
 from sqlalchemy.sql import func
+from app.database.models.address import Address
 
 class Customer(Base):
 
@@ -22,6 +23,7 @@ class Customer(Base):
     DefaultBillingAddressId  = Column(String(36), ForeignKey("addresses.id"), default=None)
     CreatedAt                = Column(DateTime(timezone=True), server_default=func.now())
     UpdatedAt                = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
 
     def __repr__(self):
         jsonStr = json.dumps(self.__dict__)

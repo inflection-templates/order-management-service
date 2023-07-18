@@ -4,7 +4,6 @@ from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.customer import CustomerResponseModel
 from app.telemetry.tracing import trace_span
 
-
 @trace_span("handler: create_customer")
 def create_customer_(model, db_session):
     try:
@@ -13,6 +12,7 @@ def create_customer_(model, db_session):
         resp = ResponseModel[CustomerResponseModel](Message=message, Data=customer)
         # print_colorized_json(model)
         return resp
+
     except Exception as e:
         db_session.rollback()
         db_session.close()
@@ -66,7 +66,7 @@ def delete_customer_(id, db_session):
         db_session.close()
         raise e
     finally:
-        db_session.close()    
+        db_session.close()
 
 @trace_span("handler: search_customers")
 def search_customers_(filter, db_session):

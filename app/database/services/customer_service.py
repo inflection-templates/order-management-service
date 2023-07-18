@@ -1,39 +1,35 @@
 import datetime as dt
 import uuid
-from fastapi import HTTPException, Query, Body
+# from fastapi import HTTPException, Query, Body
 from app.common.utils import print_colorized_json
 from app.database.models.customer import Customer
+from app.database.models.customer_address import CustomerAddress
 from app.domain_types.miscellaneous.exceptions import Conflict, NotFound
 from app.domain_types.schemas.customer import CustomerCreateModel, CustomerUpdateModel, CustomerResponseModel, CustomerSearchFilter, CustomerSearchResults
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from app.telemetry.tracing import trace_span
+from app.domain_types.schemas.customer_address import CustomerAddressCreateModel
 
 @trace_span("service: create_customer")
 def create_customer(session: Session, model: CustomerCreateModel) -> CustomerResponseModel:
-
     customer = None
 
     if model.Email != None and model.Email != "":
-        existing_customer = session.query(Customer).filter(
-            func.lower(Customer.Email) == func.lower(model.Email)
-        ).first()
+        existing_customer = session.query(Customer).filter(func.lower(Customer.Email) == func.lower(model.Email)).first()
         if existing_customer:
-            raise Conflict("Customer with email {model.Email} already exists!")
+            raise Conflict(f"Customer with email {model.Email} already exists!")
 
     if model.Phone != None and model.Phone != "":
-        existing_customer = session.query(Customer).filter(
-            Customer.Phone == model.Phone
-        ).first()
+        existing_customer = session.query(Customer).filter(Customer.Phone == model.Phone).first()
         if existing_customer:
-            raise Conflict("Customer with phone {model.Phone} already exists!")
+            raise Conflict(f"Customer with phone {model.Phone} already exists!")
 
     if model.TaxNumber != None and model.TaxNumber != "":
         existing_customer = session.query(Customer).filter(
-            func.lower(Customer.TaxNumber) == func.lower(model.TaxNumber)
-        ).first()
+            func.lower(Customer.TaxNumber) == func.lower(model.TaxNumber)).first()
         if existing_customer:
-            raise Conflict("Customer with tax number {model.TaxNumber} already exists!")
+            raise Conflict(f"Customer with tax number {model.TaxNumber} already exists!")
 
     model_dict = model.dict()
     db_model = Customer(**model_dict)
@@ -42,8 +38,25 @@ def create_customer(session: Session, model: CustomerCreateModel) -> CustomerRes
     session.commit()
     temp = session.refresh(db_model)
     customer = db_model
-    # print_colorized_json(customer)
+
+    if model.DefaultShippingAddressId != None and model.DefaultShippingAddressId != "" :
+        customer_address = add_customer_address(session, customer.id, customer.DefaultShippingAddressId, "Shipping")
+
+    if model.DefaultBillingAddressId != model.DefaultShippingAddressId :
+        customer_address = add_customer_address(session, customer.id, customer.DefaultBillingAddressId, "Billing")
+
     return customer.__dict__
+
+def add_customer_address(session, customer_id, address_id, address_type):
+    customer_address = CustomerAddress(
+            CustomerId = customer_id,
+            AddressId = address_id,
+            AddressType = address_type,
+            IsFavorite = True
+        )
+    session.add(customer_address)
+    session.commit()
+    return customer_address
 
 @trace_span("service: get_customer_by_id")
 def get_customer_by_id(session: Session, customer_id: str) -> CustomerResponseModel:
@@ -54,27 +67,14 @@ def get_customer_by_id(session: Session, customer_id: str) -> CustomerResponseMo
 
 @trace_span("service: update_customer")
 def update_customer(session: Session, customer_id: str, model: CustomerUpdateModel) -> CustomerResponseModel:
-    update_data = {}
-    if model.Name != None and model.Name != "":
-        update_data["Name"] = model.Name
-    if model.Email != None:
-        update_data["Email"] = model.Email
-    if model.PhoneCode != None:
-        update_data["PhoneCode"] = model.PhoneCode
-    if model.Phone != None:
-        update_data["Phone"] = model.Phone
-    if model.TaxNumber != None:
-        update_data["TaxNumber"] = model.TaxNumber
-    if model.ProfilePicture != None:
-        update_data["ProfilePicture"] = model.ProfilePicture
-
     customer = session.query(Customer).filter(Customer.id == customer_id).first()
     if not customer:
         raise NotFound(f"Customer with id {customer_id} not found")
-    
+
     update_data = model.dict(exclude_unset=True)
     update_data["UpdatedAt"] = dt.datetime.now()
-    session.query(Customer).filter(Customer.id == customer_id).update(update_data, synchronize_session="auto")
+    session.query(Customer).filter(Customer.id == customer_id).update(
+        update_data, synchronize_session="auto")
 
     session.commit()
     session.refresh(customer)

@@ -23,20 +23,20 @@ class Merchant(Base):
     CreatedAt   = Column(DateTime(timezone=True), server_default=func.now())
     UpdatedAt   = Column(DateTime(timezone=True), onupdate=func.now())
 
-    def __init__(self, id, ReferenceId, Name, Email, Phone,
-                 Logo = None, WebsiteUrl = None,
-                 TaxNumber = None, GSTNumber = None, AddressId = None):
-        super().__init__()
-        self.id          = id
-        self.ReferenceId = ReferenceId
-        self.Name        = Name
-        self.Email       = Email
-        self.Phone       = Phone
-        self.Logo        = Logo
-        self.WebsiteUrl  = WebsiteUrl
-        self.TaxNumber   = TaxNumber
-        self.GSTNumber   = GSTNumber
-        self.AddressId   = AddressId
+    # def __init__(self, id, ReferenceId, Name, Email, Phone,
+    #              Logo = None, WebsiteUrl = None,
+    #              TaxNumber = None, GSTNumber = None, AddressId = None):
+    #     super().__init__()
+    #     self.id          = id
+    #     self.ReferenceId = ReferenceId
+    #     self.Name        = Name
+    #     self.Email       = Email
+    #     self.Phone       = Phone
+    #     self.Logo        = Logo
+    #     self.WebsiteUrl  = WebsiteUrl
+    #     self.TaxNumber   = TaxNumber
+    #     self.GSTNumber   = GSTNumber
+    #     self.AddressId   = AddressId
 
     def __repr__(self):
         jsonStr = json.dumps(self.__dict__)
