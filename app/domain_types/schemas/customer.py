@@ -50,4 +50,4 @@ class CustomerResponseModel(BaseModel):
     UpdatedAt                : datetime               = Field(description="Updated at")
 
 class CustomerSearchResults(BaseSearchResults):
-    results : List[CustomerResponseModel] = Field(description="List of customers")
+    Items : List[CustomerResponseModel] = Field(description="List of customers")
