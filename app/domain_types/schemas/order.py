@@ -6,7 +6,7 @@ from app.domain_types.schemas.base_search_types import BaseSearchFilter, BaseSea
 
 class OrderCreateModel(BaseModel):
       OrderType         : Optional[UUID4 | None] = Field(default=None, description="Id of the order type")
-      CustomerId        : UUID4                  = Field(description="Id of the customer")
+      CustomerId        : Optional[UUID4 | None] = Field(description="Id of the customer")
       AssociatedCartId  : Optional[UUID4 | None] = Field(default=None, description="Id of the cart")
       TipApplicable     : Optional[bool | None]  = Field(default=False, description="Tip applicable or not")
       Notes             : Optional[str | None]   = Field(default=None, min_length=5, max_length=1024, description="Notes for the delivery")

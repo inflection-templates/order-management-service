@@ -8,10 +8,11 @@ def get_order_create_model():
     fake = Faker()
     model = {
         "OrderTypeId": uuid.uuid4(),
-        "CustomerId": uuid.uuid4(),
-        "CartId": uuid.uuid4(),
+        # "CustomerId": uuid.uuid4(),
+        # "AssociatedCartId": uuid.uuid4(),
+        "OrderDiscount": fake.pyfloat(),
         "TipApplicable": fake.pybool(),
         "Notes": fake.text(),
-        "OrderLineItems": None
+        # "OrderLineItems": None
     }
     return model

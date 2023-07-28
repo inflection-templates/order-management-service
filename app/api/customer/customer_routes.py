@@ -36,7 +36,7 @@ async def delete_customer(id: str, db_session = Depends(get_db_session)):
     return delete_customer_(id, db_session)
 
 @router.get("/search", status_code=status.HTTP_200_OK, response_model=ResponseModel[CustomerSearchResults|None])
-async def search_customer(
+async def search_customers(
         query_params: CustomerSearchFilter = Depends(),
         db_session = Depends(get_db_session)):
     filter = CustomerSearchFilter(**query_params.dict())
