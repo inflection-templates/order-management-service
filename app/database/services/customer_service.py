@@ -7,7 +7,7 @@ from app.database.models.customer_address import CustomerAddress
 from app.domain_types.miscellaneous.exceptions import Conflict, NotFound
 from app.domain_types.schemas.customer import CustomerCreateModel, CustomerUpdateModel, CustomerResponseModel, CustomerSearchFilter, CustomerSearchResults
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import asc, desc, func
 from app.telemetry.tracing import trace_span
 from app.domain_types.schemas.customer_address import CustomerAddressCreateModel
 
@@ -81,31 +81,48 @@ def update_customer(session: Session, customer_id: str, model: CustomerUpdateMod
     return customer.__dict__
 
 @trace_span("service: search_customers")
-def search_customers(session: Session, filter) -> CustomerSearchResults:
+def search_customers(session: Session, filter: CustomerSearchFilter) -> CustomerSearchResults:
 
     query = session.query(Customer)
+
+    if filter.OrderBy == None:
+        filter.OrderBy = "CreatedAt"
+    else:
+        if not hasattr(Customer, filter.OrderBy):
+            filter.OrderBy = "CreatedAt"
+    orderBy = getattr(Customer, filter.OrderBy)
+
+    if filter.OrderByDescending:
+        query = query.order_by(desc(orderBy))
+    else:
+        query = query.order_by(asc(orderBy))
+
+    query = query.offset(filter.PageIndex * filter.ItemsPerPage).limit(filter.ItemsPerPage)
+
     if filter.Name:
-        query = query.filter(Customer.Name == filter.Name)
+        query = query.filter(Customer.Name.like(f'%{filter.Name}%'))
     if filter.Email:
-        query = query.filter(Customer.Email == filter.Email)
+        query = query.filter(Customer.Email.like(f'%{filter.Email}%'))
     if filter.PhoneCode:
         query = query.filter(Customer.PhoneCode == filter.PhoneCode)
     if filter.Phone:
-        query = query.filter(Customer.Phone == filter.Phone)
+        query = query.filter(Customer.Phone.like(f'%{filter.Phone}%'))
     if filter.TaxNumber:
-        query = query.filter(Customer.TaxNumber == filter.TaxNumber)
+        query = query.filter(Customer.TaxNumber.like(f'%{filter.TaxNumber}%'))
     customers = query.all()
+
+    items = list(map(lambda x: x.__dict__, customers))
 
     results = CustomerSearchResults(
         TotalCount=len(customers),
         ItemsPerPage=filter.ItemsPerPage,
-        PageNumber=filter.PageNumber,
+        PageIndex=filter.PageIndex,
         OrderBy=filter.OrderBy,
         OrderByDescending=filter.OrderByDescending,
-        Items=customers
+        Items=items
     )
 
-    return results.__dict__
+    return results
 
 @trace_span("service: delete_customer")
 def delete_customer(session: Session, customer_id: str):
