@@ -23,6 +23,13 @@ router = APIRouter(
 async def create_merchant(model: MerchantCreateModel, db_session = Depends(get_db_session)):
     return  create_merchant_(model, db_session)
 
+@router.get("/search", status_code=status.HTTP_200_OK, response_model=ResponseModel[MerchantSearchResults|None])
+async def search_merchant(
+        query_params: MerchantSearchFilter = Depends(),
+        db_session = Depends(get_db_session)):
+    filter = MerchantSearchFilter(**query_params.dict())
+    return search_merchants_(filter, db_session)
+
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[MerchantResponseModel|None])
 async def get_merchant_by_id(id: str, db_session = Depends(get_db_session)):
     return get_merchant_by_id_(id, db_session)
@@ -35,9 +42,4 @@ async def update_merchant(id: str, model: MerchantUpdateModel, db_session = Depe
 async def delete_merchant(id: str, db_session = Depends(get_db_session)):
     return delete_merchant_(id, db_session)
 
-@router.get("/search", status_code=status.HTTP_200_OK, response_model=ResponseModel[MerchantSearchResults|None])
-async def search_merchants(
-        query_params: MerchantSearchFilter = Depends(),
-        db_session = Depends(get_db_session)):
-    filter = MerchantSearchFilter(**query_params.dict())
-    return search_merchants_(filter, db_session)
+

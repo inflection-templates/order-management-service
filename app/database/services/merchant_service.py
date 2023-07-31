@@ -6,7 +6,7 @@ from app.database.models.merchant import Merchant
 from app.domain_types.miscellaneous.exceptions import Conflict, NotFound
 from app.domain_types.schemas.merchant import MerchantCreateModel, MerchantUpdateModel, MerchantSearchFilter, MerchantResponseModel, MerchantSearchResults
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import asc, desc, func
 from app.telemetry.tracing import trace_span
 
 @trace_span("service: create_Merchant")
@@ -83,29 +83,46 @@ def delete_merchant(session: Session, merchant_id: str) -> MerchantResponseModel
     return merchant.__dict__
 
 @trace_span("service: search_merchants")
-def search_merchants(session: Session, filter) -> MerchantSearchResults:
+def search_merchants(session: Session, filter: MerchantSearchFilter) -> MerchantSearchResults:
 
     query = session.query(Merchant)
+
+    if filter.OrderBy == None:
+        filter.OrderBy = "CreatedAt"
+    else:
+        if not hasattr(Merchant, filter.OrderBy):
+            filter.OrderBy = "CreatedAt"
+    orderBy = getattr(Merchant, filter.OrderBy)
+
+    if filter.OrderByDescending:
+        query = query.order_by(desc(orderBy))
+    else:
+        query = query.order_by(asc(orderBy))
+
+    # query = query.offset(filter.PageIndex * filter.ItemsPerPage).limit(filter.ItemsPerPage)
+
     if filter.Name:
-        query = query.filter(Merchant.Name == filter.Name)
+        query = query.filter(Merchant.Name.like(f'%{filter.Name}%'))
     if filter.Email:
-        query = query.filter(Merchant.Email == filter.Email)
+        query = query.filter(Merchant.Email.like(f'%{filter.Email}%'))
     if filter.Phone:
-        query = query.filter(Merchant.Phone == filter.Phone)
+        query = query.filter(Merchant.Phone.like(f'%{filter.Phone}%'))
     if filter.TaxNumber:
-        query = query.filter(Merchant.TaxNumber == filter.TaxNumber)
+        query = query.filter(Merchant.TaxNumber.like(f'%{filter.TaxNumber}%'))
     merchants = query.all()
+
+    items = list(map(lambda x: x.__dict__, merchants))
 
     results = MerchantSearchResults(
         TotalCount=len(merchants),
         ItemsPerPage=filter.ItemsPerPage,
-        PageNumber=filter.PageNumber,
+        PageIndex=filter.PageIndex,
         OrderBy=filter.OrderBy,
         OrderByDescending=filter.OrderByDescending,
-        Items=merchants
+        Items=items
     )
 
-    return results.__dict__
+    return results
 
 @trace_span("service: delete_merchant")
 def delete_merchant(session: Session, merchant_id: str):

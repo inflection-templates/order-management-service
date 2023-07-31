@@ -48,4 +48,4 @@ class MerchantResponseModel(BaseModel):
     UpdatedAt                : datetime               = Field(description="Updated at")
 
 class MerchantSearchResults(BaseSearchResults):
-    results : List[MerchantCreateModel] = Field(description="List of customers")
+    Items : List[MerchantCreateModel] = Field(description="List of customers")
