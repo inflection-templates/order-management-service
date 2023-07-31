@@ -22,6 +22,13 @@ router = APIRouter(
 async def create_address(model: AddressCreateModel, db_session=Depends(get_db_session)):
     return create_address_(model, db_session)
 
+@router.get("/search", status_code=status.HTTP_200_OK, response_model=ResponseModel[AddressSearchResults|None])
+async def search_address(
+        query_params: AddressSearchFilter = Depends(),
+        db_session = Depends(get_db_session)):
+    filter = AddressSearchFilter(**query_params.dict())
+    return search_addresses_(filter, db_session)
+
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[AddressResponseModel] | None)
 async def get_address_by_id(id: str, db_session=Depends(get_db_session)):
     return get_address_by_id_(id, db_session)
@@ -34,9 +41,3 @@ async def update_address(id: str, model: AddressUpdateModel, db_session=Depends(
 async def delete_address(id: str, db_session=Depends(get_db_session)):
     return delete_address(id, db_session)
 
-@router.get("/search", status_code=status.HTTP_200_OK, response_model=ResponseModel[AddressSearchResults | None])
-async def search_customer(
-        query_params: AddressSearchFilter = Depends(),
-        db_session=Depends(get_db_session)):
-    filter = AddressSearchFilter(**query_params.dict())
-    return search_addresses_(filter, db_session)

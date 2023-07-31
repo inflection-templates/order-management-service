@@ -1,7 +1,7 @@
 from app.common.utils import validate_uuid4
 from app.database.services import address_service
 from app.domain_types.miscellaneous.response_model import ResponseModel
-from app.domain_types.schemas.address import AddressResponseModel
+from app.domain_types.schemas.address import AddressResponseModel, AddressSearchResults
 from app.telemetry.tracing import trace_span
 
 @trace_span("handler: create_address")
@@ -76,9 +76,7 @@ def search_addresses_(filter, db_session):
     try:
         addresses = address_service.search_addresses(db_session, filter)
         message = "Addresses retrieved successfully"
-        resp = ResponseModel[AddressResponseModel](
-            Message=message, Data=addresses)
-        # print_colorized_json(model)
+        resp = ResponseModel[AddressSearchResults](Message=message, Data=addresses)
         return resp
     except Exception as e:
         db_session.rollback()
@@ -86,3 +84,4 @@ def search_addresses_(filter, db_session):
         raise e
     finally:
         db_session.close()
+
