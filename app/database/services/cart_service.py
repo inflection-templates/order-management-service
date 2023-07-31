@@ -5,7 +5,7 @@ from app.database.models.cart import Cart
 from app.domain_types.miscellaneous.exceptions import Conflict, NotFound
 from app.domain_types.schemas.cart import CartCreateModel, CartResponseModel, CartUpdateModel, CartSearchFilter, CartSearchResults
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import func, desc, asc
 from app.telemetry.tracing import trace_span
 
 @trace_span("service: create_cart")
@@ -52,29 +52,53 @@ def delete_cart(session: Session, cart_id: str):
     return True
 
 @trace_span("service: search_carts")
-def search_carts(session: Session, filter) -> CartSearchResults:
+def search_carts(session: Session, filter:CartSearchFilter) -> CartSearchResults:
 
     query = session.query(Cart)
-    if filter.CustomerId :
+
+    if filter.CustomerId:
         query = query.filter(Cart.CustomerId == filter.CustomerId)
-    if filter.ProductId :
+    if filter.ProductId:
         query = query.filter(Cart.ProductId == filter.ProductId)
     if filter.TotalItemsCountGreaterThan:
-        query = query.filter(Cart.TotalItems > filter.TotalItemsCountGreaterThan)
+        query = query.filter(Cart.TotalItemsCount > filter.TotalItemsCountGreaterThan)
     if filter.TotalItemsCountLessThan:
-        query = query.filter(Cart.TotalItems < filter.TotalItemsCountLessThan)
+        query = query.filter(Cart.TotalItemsCount < filter.TotalItemsCountLessThan)
     if filter.TotalAmountGreaterThan:
-        query = query.filter(Cart.TotalAmount > filter.TotalAmountGreaterThan)
+       query = query.filter(Cart.TotalAmount > filter.TotalAmountGreaterThan)
     if filter.TotalAmountLessThan:
-        query = query.filter(Cart.TotalAmount < filter.TotalAmountLessThan)
+       query = query.filter(Cart.TotalAmount < filter.TotalAmountLessThan)
+    if filter.CreatedBefore:
+       query = query.filter(Cart.CreatedAt < filter.CreatedBefore)
+    if filter.CreatedAfter:
+       query = query.filter(Cart.CreatedAt > filter.CreatedAfter)
+
+    if filter.OrderBy == None:
+        filter.OrderBy = "CreatedAt"
+    else:
+        if not hasattr(Cart, filter.OrderBy):
+            filter.OrderBy = "CreatedAt"
+    orderBy = getattr(Cart, filter.OrderBy)
+
+    if filter.OrderByDescending:
+        query = query.order_by(desc(orderBy))
+    else:
+        query = query.order_by(asc(orderBy))
+
+    query = query.offset(filter.PageIndex * filter.ItemsPerPage).limit(filter.ItemsPerPage)
+
     carts = query.all()
+
+    items = list(map(lambda x: x.__dict__, carts))
 
     results = CartSearchResults(
         TotalCount=len(carts),
         ItemsPerPage=filter.ItemsPerPage,
-        PageNumber=filter.PageNumber,
+        PageIndex=filter.PageIndex,
         OrderBy=filter.OrderBy,
         OrderByDescending=filter.OrderByDescending,
-        Items=carts
+        Items=items
     )
+
+    return results
 

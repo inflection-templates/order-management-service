@@ -23,6 +23,13 @@ router = APIRouter(
 async def create_cart(model: CartCreateModel, db_session = Depends(get_db_session)):
     return create_cart_(model, db_session)
 
+@router.get("/search", status_code=status.HTTP_200_OK, response_model=ResponseModel[CartSearchResults|None])
+async def search_cart(
+        query_params: CartSearchFilter = Depends(),
+        db_session = Depends(get_db_session)):
+    filter = CartSearchFilter(**query_params.dict())
+    return search_carts_(filter, db_session)
+
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[CartResponseModel|None])
 async def get_cart_by_id(id: str, db_session = Depends(get_db_session)):
     return get_cart_by_id_(id, db_session)

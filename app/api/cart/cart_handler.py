@@ -1,7 +1,7 @@
 from app.common.utils import validate_uuid4
 from app.database.services import cart_service
 from app.domain_types.miscellaneous.response_model import ResponseModel
-from app.domain_types.schemas.cart import CartResponseModel
+from app.domain_types.schemas.cart import CartResponseModel, CartSearchResults
 from app.telemetry.tracing import trace_span
 
 @trace_span("handler: create_cart")
@@ -73,8 +73,7 @@ def search_carts_(filter, db_session):
     try:
         carts = cart_service.search_carts(db_session, filter)
         message = "Carts retrieved successfully"
-        resp = ResponseModel[CartResponseModel](Message=message, Data=carts)
-        # print_colorized_json(model)
+        resp = ResponseModel[CartSearchResults](Message=message, Data=carts)
         return resp
     except Exception as e:
         db_session.rollback()

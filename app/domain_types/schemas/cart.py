@@ -36,5 +36,5 @@ class CartResponseModel(BaseModel):
     UpdatedAt           : datetime
 
 class CartSearchResults(BaseSearchResults):
-    Carts: List[CartResponseModel] = []
+    Items: List[CartResponseModel] = []
 
