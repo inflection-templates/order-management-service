@@ -21,11 +21,12 @@ class AddressUpdateModel(BaseModel):
     ZipCode     : Optional[str] = Field(default=None, min_length=2, max_length=32)
 
 class AddressSearchFilter(BaseSearchFilter):
-    AddressLine : Optional[str] = Field(default=None, min_length=2, max_length=512)
-    City        : Optional[str] = Field(default=None, min_length=2, max_length=64)
-    State       : Optional[str] = Field(default=None, min_length=2, max_length=64)
-    Country     : Optional[str] = Field(default=None, min_length=2, max_length=32)
-    ZipCode     : Optional[str] = Field(default=None, min_length=2, max_length=32)
+    AddressLine1 : Optional[str] = Field(default=None, min_length=2, max_length=512)
+    AddressLine2 : Optional[str] = Field(default=None, min_length=2, max_length=512)
+    City         : Optional[str] = Field(default=None, min_length=2, max_length=64)
+    State        : Optional[str] = Field(default=None, min_length=2, max_length=64)
+    Country      : Optional[str] = Field(default=None, min_length=2, max_length=32)
+    ZipCode      : Optional[str] = Field(default=None, min_length=2, max_length=32)
 
 class AddressResponseModel(BaseModel):
     id          : UUID4
@@ -39,5 +40,5 @@ class AddressResponseModel(BaseModel):
     UpdatedAt   : datetime
 
 class AddressSearchResults(BaseSearchResults):
-    Addresses: List[AddressResponseModel] = []
+    Items: List[AddressResponseModel] = []
 
