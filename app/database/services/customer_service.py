@@ -85,6 +85,17 @@ def search_customers(session: Session, filter: CustomerSearchFilter) -> Customer
 
     query = session.query(Customer)
 
+    if filter.Name:
+        query = query.filter(Customer.Name.like(f'%{filter.Name}%'))
+    if filter.Email:
+        query = query.filter(Customer.Email.like(f'%{filter.Email}%'))
+    if filter.PhoneCode:
+        query = query.filter(Customer.PhoneCode == filter.PhoneCode)
+    if filter.Phone:
+        query = query.filter(Customer.Phone.like(f'%{filter.Phone}%'))
+    if filter.TaxNumber:
+        query = query.filter(Customer.TaxNumber.like(f'%{filter.TaxNumber}%'))
+
     if filter.OrderBy == None:
         filter.OrderBy = "CreatedAt"
     else:
@@ -99,16 +110,6 @@ def search_customers(session: Session, filter: CustomerSearchFilter) -> Customer
 
     query = query.offset(filter.PageIndex * filter.ItemsPerPage).limit(filter.ItemsPerPage)
 
-    if filter.Name:
-        query = query.filter(Customer.Name.like(f'%{filter.Name}%'))
-    if filter.Email:
-        query = query.filter(Customer.Email.like(f'%{filter.Email}%'))
-    if filter.PhoneCode:
-        query = query.filter(Customer.PhoneCode == filter.PhoneCode)
-    if filter.Phone:
-        query = query.filter(Customer.Phone.like(f'%{filter.Phone}%'))
-    if filter.TaxNumber:
-        query = query.filter(Customer.TaxNumber.like(f'%{filter.TaxNumber}%'))
     customers = query.all()
 
     items = list(map(lambda x: x.__dict__, customers))
