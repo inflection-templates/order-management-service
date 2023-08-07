@@ -1,7 +1,7 @@
 from app.common.utils import validate_uuid4
 from app.database.services import order_history_service
 from app.domain_types.miscellaneous.response_model import ResponseModel
-from app.domain_types.schemas.order_history import OrderHistoryResponseModel
+from app.domain_types.schemas.order_history import OrderHistoryResponseModel, OrderHistorySearchResults
 from app.telemetry.tracing import trace_span
 
 @trace_span("handler: create_order_history")
@@ -51,6 +51,21 @@ def update_order_history_(id, model, db_session):
     finally:
         db_session.close()
 
+@trace_span("handler: search_order_histories")
+def search_order_histories_(filter, db_session):
+    try:
+        order_histories = order_history_service.search_order_histories(db_session, filter)
+        message = "Order histories retrieved successfully"
+        resp = ResponseModel[OrderHistorySearchResults](Message=message, Data=order_histories)
+        # print_colorized_json(model)
+        return resp
+    except Exception as e:
+        db_session.rollback()
+        db_session.close()
+        raise e
+    finally:
+        db_session.close()
+
 @trace_span("handler: delete_order_history")
 def delete_order_history_(id, db_session):
     try:
@@ -67,17 +82,4 @@ def delete_order_history_(id, db_session):
     finally:
         db_session.close()
 
-@trace_span("handler: search_order_histories")
-def search_order_histories_(filter, db_session):
-    try:
-        order_histories = order_history_service.search_order_histories(db_session, filter)
-        message = "Order histories retrieved successfully"
-        resp = ResponseModel[OrderHistoryResponseModel](Message=message, Data=order_histories)
-        # print_colorized_json(model)
-        return resp
-    except Exception as e:
-        db_session.rollback()
-        db_session.close()
-        raise e
-    finally:
-        db_session.close()
+

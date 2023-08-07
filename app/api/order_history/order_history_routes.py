@@ -23,6 +23,13 @@ router = APIRouter(
 async def create_order_history(model: OrderHistoryCreateModel, db_session = Depends(get_db_session)):
     return  create_order_history_(model, db_session)
 
+@router.get("/search", status_code=status.HTTP_200_OK, response_model=ResponseModel[OrderHistorySearchResults|None])
+async def search_order_histories(
+        query_params: OrderHistorySearchFilter = Depends(),
+        db_session = Depends(get_db_session)):
+    filter = OrderHistorySearchFilter(**query_params.dict())
+    return search_order_histories_(filter, db_session)
+
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[OrderHistoryResponseModel|None])
 async def get_order_historyby_id(id: str, db_session = Depends(get_db_session)):
     return get_order_history_by_id_(id, db_session)
@@ -34,10 +41,3 @@ async def update_order_history(id: str, model: OrderHistoryUpdateModel, db_sessi
 @router.delete("/{id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[bool])
 async def delete_order_history(id: str, db_session = Depends(get_db_session)):
     return delete_order_history_(id, db_session)
-
-@router.get("/search", status_code=status.HTTP_200_OK, response_model=ResponseModel[OrderHistorySearchResults|None])
-async def search_order_histories(
-        query_params: OrderHistorySearchFilter = Depends(),
-        db_session = Depends(get_db_session)):
-    filter = OrderHistorySearchFilter(**query_params.dict())
-    return search_order_histories_(filter, db_session)
