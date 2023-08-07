@@ -23,6 +23,13 @@ router = APIRouter(
 async def create_order_line_item(model: OrderLineItemCreateModel, db_session = Depends(get_db_session)):
     return  create_order_line_item_(model, db_session)
 
+@router.get("/search", status_code=status.HTTP_200_OK, response_model=ResponseModel[OrderLineItemSearchResults|None])
+async def search_order_line_items(
+        query_params: OrderLineItemSearchFilter = Depends(),
+        db_session = Depends(get_db_session)):
+    filter = OrderLineItemSearchFilter(**query_params.dict())
+    return search_order_line_items_(filter, db_session)
+
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[OrderLineItemResponseModel|None])
 async def get_order_line_item_by_id(id: str, db_session = Depends(get_db_session)):
     return get_order_line_item_by_id_(id, db_session)
@@ -35,9 +42,3 @@ async def update_order_line_item(id: str, model: OrderLineItemUpdateModel, db_se
 async def delete_order_line_item(id: str, db_session = Depends(get_db_session)):
     return delete_order_line_item_(id, db_session)
 
-@router.get("/search", status_code=status.HTTP_200_OK, response_model=ResponseModel[OrderLineItemSearchResults|None])
-async def search_order_line_items(
-        query_params: OrderLineItemSearchFilter = Depends(),
-        db_session = Depends(get_db_session)):
-    filter = OrderLineItemSearchFilter(**query_params.dict())
-    return search_order_line_items_(filter, db_session)

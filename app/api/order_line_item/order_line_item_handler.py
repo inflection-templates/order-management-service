@@ -1,7 +1,7 @@
 from app.common.utils import validate_uuid4
 from app.database.services import order_line_item_service
 from app.domain_types.miscellaneous.response_model import ResponseModel
-from app.domain_types.schemas.order_line_item import OrderLineItemResponseModel
+from app.domain_types.schemas.order_line_item import OrderLineItemResponseModel, OrderLineItemSearchResults
 from app.telemetry.tracing import trace_span
 
 @trace_span("handler: create_order_line_item")
@@ -72,7 +72,7 @@ def search_order_line_items_(filter, db_session):
     try:
         order_line_items = order_line_item_service.search_order_line_items(db_session, filter)
         message = "Order line items retrieved successfully"
-        resp = ResponseModel[OrderLineItemResponseModel](Message=message, Data=order_line_items)
+        resp = ResponseModel[OrderLineItemSearchResults](Message=message, Data=order_line_items)
         # print_colorized_json(model)
         return resp
     except Exception as e:

@@ -6,7 +6,7 @@ from app.database.models.order_line_item import OrderLineItem
 from app.domain_types.miscellaneous.exceptions import NotFound
 from app.domain_types.schemas.order_line_item import OrderLineItemCreateModel, OrderLineItemResponseModel, OrderLineItemUpdateModel,OrderLineItemSearchFilter,OrderLineItemSearchResults
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import func, asc, desc
 from app.telemetry.tracing import trace_span
 
 @trace_span("service: create_order_line_item")
@@ -53,34 +53,52 @@ def delete_order_line_item(session: Session, order_line_item_id: str):
     return True
 
 @trace_span("service: search_order_line_items")
-def search_order_line_items(session: Session, filter) -> OrderLineItemSearchResults:
+def search_order_line_items(session: Session, filter: OrderLineItemSearchFilter) -> OrderLineItemSearchResults:
 
     query = session.query(OrderLineItem)
+
     if filter.Name:
-        query = query.filter(OrderLineItem.Name == filter.Name)
+        query = query.filter(OrderLineItem.Name.like(f'%{filter.Name}%'))
     if filter.CatalogId:
-        query = query.filter(OrderLineItem.CatalogId == filter.CatalogId)
+        query = query.filter(OrderLineItem.CatalogId.like(f'%{filter.CatalogId}%'))
     if filter.DiscountSchemeId:
-        query = query.filter(OrderLineItem.DiscountSchemeId == filter.DiscountSchemeId)
+        query = query.filter(OrderLineItem.DiscountSchemeId.like(f'%{filter.DiscountSchemeId}%'))
     if filter.OrderId:
-        query = query.filter(OrderLineItem.OrderId == filter.OrderId)
+        query = query.filter(OrderLineItem.OrderId.like(f'%{filter.OrderId}%'))
     if filter.CartId:
-        query = query.filter(OrderLineItem.CartId == filter.CartId)
+        query = query.filter(OrderLineItem.CartId.like(f'%{filter.CartId}%'))
     if filter.ItemSubTotal:
         query = query.filter(OrderLineItem.ItemSubTotal == filter.ItemSubTotal)
     if filter.CreatedBefore:
         query = query.filter(OrderLineItem.CreatedAt < filter.CreatedBefore)
     if filter.CreatedAfter:
         query = query.filter(OrderLineItem.CreatedAt > filter.CreatedAfter)
-    order_line_items = query.all()
+
+    if filter.OrderBy == None:
+        filter.OrderBy = "CreatedAt"
+    else:
+        if not hasattr(OrderLineItem, filter.OrderBy):
+            filter.OrderBy = "CreatedAt"
+    orderBy = getattr(OrderLineItem, filter.OrderBy)
+
+    if filter.OrderByDescending:
+        query = query.order_by(desc(orderBy))
+    else:
+        query = query.order_by(asc(orderBy))
+
+    query = query.offset(filter.PageIndex * filter.ItemsPerPage).limit(filter.ItemsPerPage)
+
+    orderLineItems = query.all()
+
+    items = list(map(lambda x: x.__dict__, orderLineItems))
 
     results = OrderLineItemSearchResults(
-        TotalCount=len(order_line_items),
+        TotalCount=len(orderLineItems),
         ItemsPerPage=filter.ItemsPerPage,
-        PageNumber=filter.PageNumber,
+        PageIndex=filter.PageIndex,
         OrderBy=filter.OrderBy,
         OrderByDescending=filter.OrderByDescending,
-        Items=order_line_items
+        Items=items
     )
 
-    return results.__dict__
+    return results
