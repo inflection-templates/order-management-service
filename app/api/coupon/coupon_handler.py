@@ -1,7 +1,7 @@
 from app.common.utils import validate_uuid4
 from app.database.services import coupon_service
 from app.domain_types.miscellaneous.response_model import ResponseModel
-from app.domain_types.schemas.coupon import CouponResponseModel
+from app.domain_types.schemas.coupon import CouponResponseModel, CouponSearchResults
 from app.telemetry.tracing import trace_span
 
 @trace_span("handler: create_coupon")
@@ -74,7 +74,7 @@ def search_coupons_(filter, db_session):
     try:
         coupons = coupon_service.search_coupons(db_session, filter)
         message = "Coupons retrieved successfully"
-        resp = ResponseModel[CouponResponseModel](Message=message, Data=coupons)
+        resp = ResponseModel[CouponSearchResults](Message=message, Data=coupons)
         # print_colorized_json(model)
         return resp
     except Exception as e:

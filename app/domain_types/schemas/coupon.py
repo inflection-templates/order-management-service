@@ -75,5 +75,5 @@ class CouponResponseModel(BaseModel):
     UpdatedAt          : datetime      = Field(description="Updated at")
 
 class CouponSearchResults(BaseSearchResults):
-    results : List[CouponResponseModel] = Field(description="List of coupons")
+    Items : List[CouponResponseModel] = Field(description="List of coupons")
 

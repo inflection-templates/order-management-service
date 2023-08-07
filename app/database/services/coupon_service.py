@@ -6,7 +6,7 @@ from app.database.models.coupon import Coupon
 from app.domain_types.miscellaneous.exceptions import Conflict, NotFound
 from app.domain_types.schemas.coupon import CouponCreateModel, CouponResponseModel, CouponUpdateModel, CouponSearchFilter, CouponSearchResults
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import func, desc, asc
 from app.telemetry.tracing import trace_span
 
 @trace_span("service: create_coupon")
@@ -43,6 +43,56 @@ def update_coupon(session: Session, coupon_id: str, model: CouponUpdateModel) ->
     session.refresh(coupon)
     return coupon.__dict__
 
+@trace_span("service: search_coupons")
+def search_coupons(session: Session, filter: CouponSearchFilter) -> CouponSearchResults:
+
+    query = session.query(Coupon)
+    if filter.Name:
+        query = query.filter(Coupon.Name.like(f'%{filter.Name}%'))
+    if filter.CouponCode:
+        query = query.filter(Coupon.CouponCode.like(f'%{filter.CouponCode}%'))
+    if filter.DiscountType:
+        query = query.filter(Coupon.DiscountType.like(f'%{filter.DiscountType}%'))
+    if filter.Discount:
+        query = query.filter(Coupon.Discount == filter.Discount)
+    if filter.DiscountPercentage:
+        query = query.filter(Coupon.DiscountPercentage == filter.DiscountPercentage)
+    if filter.MinOrderAmount:
+        query = query.filter(Coupon.MinOrderAmount == filter.MinOrderAmount)
+    if filter.IsActive:
+        query = query.filter(Coupon.IsActive == filter.IsActive)
+    if filter.StartDate:
+        query = query.filter(Coupon.StartDate == filter.StartDate)
+
+    if filter.OrderBy == None:
+        filter.OrderBy = "CreatedAt"
+    else:
+        if not hasattr(Coupon, filter.OrderBy):
+            filter.OrderBy = "CreatedAt"
+    orderBy = getattr(Coupon, filter.OrderBy)
+
+    if filter.OrderByDescending:
+        query = query.order_by(desc(orderBy))
+    else:
+        query = query.order_by(asc(orderBy))
+
+    query = query.offset(filter.PageIndex * filter.ItemsPerPage).limit(filter.ItemsPerPage)
+
+    coupons = query.all()
+
+    items = list(map(lambda x: x.__dict__, coupons))
+
+    results = CouponSearchResults(
+        TotalCount=len(coupons),
+        ItemsPerPage=filter.ItemsPerPage,
+        PageIndex=filter.PageIndex,
+        OrderBy=filter.OrderBy,
+        OrderByDescending=filter.OrderByDescending,
+        Items=items
+    )
+
+    return results
+
 @trace_span("service: delete_coupon")
 def delete_coupon(session: Session, coupon_id: str):
     coupon = session.query(Coupon).filter(Coupon.id == coupon_id).first()
@@ -52,35 +102,3 @@ def delete_coupon(session: Session, coupon_id: str):
     session.commit()
     return True
 
-@trace_span("service: search_coupons")
-def search_coupons(session: Session, filter) -> CouponSearchResults:
-
-    query = session.query(Coupon)
-    if filter.Name:
-        query = query.filter(Coupon.Name == filter.Name)
-    if filter.CouponCode:
-        query = query.filter(Coupon.EmailCouponCode == filter.CouponCode)
-    if filter.Discount:
-        query = query.filter(Coupon.Discount == filter.Discount)
-    if filter.DiscountType:
-        query = query.filter(Coupon.DiscountType == filter.DiscountType)
-    if filter.DiscountPercentage:
-        query = query.filter(Coupon.DiscountPercentage == filter.DiscountPercentage)
-    if filter.IsActive:
-        query = query.filter(Coupon.IsActive == filter.IsActive)
-    if filter.StartDate:
-        query = query.filter(Coupon.CreatedAt == filter.StartDate)
-    if filter.MinOrderAmount:
-        query = query.filter(Coupon.MinOrderAmount == filter.MinOrderAmount)
-    coupons = query.all()
-
-    results = CouponSearchResults(
-        TotalCount=len(coupons),
-        ItemsPerPage=filter.ItemsPerPage,
-        PageNumber=filter.PageNumber,
-        OrderBy=filter.OrderBy,
-        OrderByDescending=filter.OrderByDescending,
-        Items=coupons
-    )
-
-    return results.__dict__

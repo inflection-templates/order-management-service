@@ -23,6 +23,13 @@ router = APIRouter(
 async def create_coupon(model: CouponCreateModel, db_session = Depends(get_db_session)):
     return create_coupon_(model, db_session)
 
+@router.get("/search", status_code=status.HTTP_200_OK, response_model=ResponseModel[CouponSearchResults|None])
+async def search_coupons(
+        query_params: CouponSearchFilter = Depends(),
+        db_session = Depends(get_db_session)):
+    filter = CouponSearchFilter(**query_params.dict())
+    return search_coupons_(filter, db_session)
+
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[CouponResponseModel|None])
 async def get_coupon_by_id(id: str, db_session = Depends(get_db_session)):
     return get_coupon_by_id_(id, db_session)
@@ -35,9 +42,3 @@ async def update_coupon(id: str, model: CouponUpdateModel, db_session = Depends(
 async def delete_coupon(id: str, db_session = Depends(get_db_session)):
     return delete_coupon_(id, db_session)
 
-@router.get("/search", status_code=status.HTTP_200_OK, response_model=ResponseModel[CouponSearchResults|None])
-async def search_coupons(
-        query_params: CouponSearchFilter = Depends(),
-        db_session = Depends(get_db_session)):
-    filter = CouponSearchFilter(**query_params.dict())
-    return search_coupons_(filter, db_session)
