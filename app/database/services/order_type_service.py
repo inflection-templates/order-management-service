@@ -6,7 +6,7 @@ from app.database.models.order_type import OrderType
 from app.domain_types.miscellaneous.exceptions import NotFound
 from app.domain_types.schemas.order_type import OrderTypeCreateModel, OrderTypeResponseModel, OrderTypeUpdateModel, OrderTypeSearchFilter, OrderTypeSearchResults
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import func, asc, desc
 from app.telemetry.tracing import trace_span
 
 @trace_span("service: create_order_type")
@@ -53,22 +53,40 @@ def delete_order_type(session: Session, order_type_id: str):
     return True
 
 @trace_span("service: search_order_types")
-def search_order_types(session: Session, filter) -> OrderTypeSearchResults:
+def search_order_types(session: Session, filter: OrderTypeSearchFilter) -> OrderTypeSearchResults:
 
     query = session.query(OrderType)
+
     if filter.Name:
-        query = query.filter(OrderType.Name == filter.Name)
+        query = query.filter(OrderType.Name.like(f'%{filter.Name}%'))
     if filter.Description:
-        query = query.filter(OrderType.Description == filter.Description)
-    order_types = query.all()
+        query = query.filter(OrderType.Description.like(f'%{filter.Description}%'))
+
+    if filter.OrderBy == None:
+        filter.OrderBy = "CreatedAt"
+    else:
+        if not hasattr(OrderType, filter.OrderBy):
+            filter.OrderBy = "CreatedAt"
+    orderBy = getattr(OrderType, filter.OrderBy)
+
+    if filter.OrderByDescending:
+        query = query.order_by(desc(orderBy))
+    else:
+        query = query.order_by(asc(orderBy))
+
+    query = query.offset(filter.PageIndex * filter.ItemsPerPage).limit(filter.ItemsPerPage)
+
+    orderTypes = query.all()
+
+    items = list(map(lambda x: x.__dict__, orderTypes))
 
     results = OrderTypeSearchResults(
-        TotalCount=len(order_types),
+        TotalCount=len(orderTypes),
         ItemsPerPage=filter.ItemsPerPage,
-        PageNumber=filter.PageNumber,
+        PageIndex=filter.PageIndex,
         OrderBy=filter.OrderBy,
         OrderByDescending=filter.OrderByDescending,
-        Items=order_types
+        Items=items
     )
 
-    return results.__dict__
+    return results

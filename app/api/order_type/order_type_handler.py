@@ -1,7 +1,7 @@
 from app.common.utils import validate_uuid4
 from app.database.services import order_type_service
 from app.domain_types.miscellaneous.response_model import ResponseModel
-from app.domain_types.schemas.order_type import OrderTypeResponseModel
+from app.domain_types.schemas.order_type import OrderTypeResponseModel, OrderTypeSearchResults
 from app.telemetry.tracing import trace_span
 
 @trace_span("handler: create_order_type")
@@ -72,7 +72,7 @@ def search_order_types_(filter, db_session):
     try:
         order_types = order_type_service.search_order_types(db_session, filter)
         message = "Order types retrieved successfully"
-        resp = ResponseModel[OrderTypeResponseModel](Message=message, Data=order_types)
+        resp = ResponseModel[OrderTypeSearchResults](Message=message, Data=order_types)
         # print_colorized_json(model)
         return resp
     except Exception as e:
@@ -81,6 +81,7 @@ def search_order_types_(filter, db_session):
         raise e
     finally:
         db_session.close()
+
 
 
 

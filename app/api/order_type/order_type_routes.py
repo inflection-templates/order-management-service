@@ -23,6 +23,13 @@ router = APIRouter(
 async def create_order_type(model: OrderTypeCreateModel, db_session = Depends(get_db_session)):
     return  create_order_type_(model, db_session)
 
+@router.get("/search", status_code=status.HTTP_200_OK, response_model=ResponseModel[OrderTypeSearchResults|None])
+async def search_order_types(
+        query_params: OrderTypeSearchFilter = Depends(),
+        db_session = Depends(get_db_session)):
+    filter = OrderTypeSearchFilter(**query_params.dict())
+    return search_order_types_(filter, db_session)
+
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[OrderTypeResponseModel|None])
 async def get_order_type_by_id(id: str, db_session = Depends(get_db_session)):
     return get_order_type_by_id_(id, db_session)
@@ -34,10 +41,3 @@ async def update_order_type(id: str, model: OrderTypeUpdateModel, db_session = D
 @router.delete("/{id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[bool])
 async def delete_order_type(id: str, db_session = Depends(get_db_session)):
     return delete_order_type_(id, db_session)
-
-@router.get("/search", status_code=status.HTTP_200_OK, response_model=ResponseModel[OrderTypeSearchResults|None])
-async def search_order_types(
-        query_params: OrderTypeSearchFilter = Depends(),
-        db_session = Depends(get_db_session)):
-    filter = OrderTypeSearchFilter(**query_params.dict())
-    return search_order_types_(filter, db_session)
