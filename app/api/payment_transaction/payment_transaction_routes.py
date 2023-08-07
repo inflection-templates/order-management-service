@@ -23,6 +23,13 @@ router = APIRouter(
 async def create_payment_transaction(model: PaymentTransactionCreateModel, db_session = Depends(get_db_session)):
     return create_payment_transaction_(model, db_session)
 
+@router.get("/search", status_code=status.HTTP_200_OK, response_model=ResponseModel[PaymentTransactionSearchResults|None])
+async def search_payment_transactions(
+        query_params: PaymentTransactionSearchFilter = Depends(),
+        db_session = Depends(get_db_session)):
+    filter = PaymentTransactionSearchFilter(**query_params.dict())
+    return search_payment_transactions_(filter, db_session)
+
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[PaymentTransactionResponseModel|None])
 async def get_payment_transaction_by_id(id: str, db_session = Depends(get_db_session)):
     return get_payment_transaction_by_id_(id, db_session)
@@ -31,11 +38,5 @@ async def get_payment_transaction_by_id(id: str, db_session = Depends(get_db_ses
 async def delete_payment_transaction(id: str, db_session = Depends(get_db_session)):
     return delete_payment_transaction_(id, db_session)
 
-@router.get("/search", status_code=status.HTTP_200_OK, response_model=ResponseModel[PaymentTransactionSearchResults|None])
-async def search_payment_transactions(
-        query_params: PaymentTransactionSearchFilter = Depends(),
-        db_session = Depends(get_db_session)):
-    filter = PaymentTransactionSearchFilter(**query_params.dict())
-    return search_payment_transactions_(filter, db_session)
 
 

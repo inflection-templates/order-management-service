@@ -55,5 +55,5 @@ class PaymentTransactionResponseModel(BaseModel):
     UpdatedAt                   : Optional[datetime]   = Field(default=None, description="Order last updated date")
 
 class PaymentTransactionSearchResults(BaseSearchResults):
-    results : List[PaymentTransactionResponseModel] = Field(description="List of payment transactions")
+    Items : List[PaymentTransactionResponseModel] = Field(description="List of payment transactions")
 

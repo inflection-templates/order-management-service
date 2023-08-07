@@ -1,7 +1,7 @@
 from app.common.utils import validate_uuid4
 from app.database.services import payment_transaction_service
 from app.domain_types.miscellaneous.response_model import ResponseModel
-from app.domain_types.schemas.payment_transaction import PaymentTransactionResponseModel
+from app.domain_types.schemas.payment_transaction import PaymentTransactionResponseModel, PaymentTransactionSearchResults
 from app.telemetry.tracing import trace_span
 
 @trace_span("handler: create_payment_transaction")
@@ -57,7 +57,7 @@ def search_payment_transactions_(filter, db_session):
     try:
         payment_transactions = payment_transaction_service.search_payment_transactions(db_session, filter)
         message = "Payment transactions retrieved successfully"
-        resp = ResponseModel[PaymentTransactionResponseModel](Message=message, Data=payment_transactions)
+        resp = ResponseModel[PaymentTransactionSearchResults](Message=message, Data=payment_transactions)
         # print_colorized_json(model)
         return resp
     except Exception as e:
