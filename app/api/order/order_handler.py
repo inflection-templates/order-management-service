@@ -1,7 +1,7 @@
 from app.common.utils import validate_uuid4
 from app.database.services import order_service
 from app.domain_types.miscellaneous.response_model import ResponseModel
-from app.domain_types.schemas.order import OrderResponseModel
+from app.domain_types.schemas.order import OrderResponseModel, OrderSearchResults
 from app.telemetry.tracing import trace_span
 
 
@@ -73,8 +73,7 @@ def search_orders_(filter, db_session):
     try:
         orders = order_service.search_orders(db_session, filter)
         message = "Orders retrieved successfully"
-        resp = ResponseModel[OrderResponseModel](Message=message, Data=orders)
-        # print_colorized_json(model)
+        resp = ResponseModel[OrderSearchResults](Message=message, Data=orders)
         return resp
     except Exception as e:
         db_session.rollback()

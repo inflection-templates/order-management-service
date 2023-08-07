@@ -57,7 +57,7 @@ def search_carts(session: Session, filter:CartSearchFilter) -> CartSearchResults
     query = session.query(Cart)
 
     if filter.CustomerId:
-        query = query.filter(Cart.CustomerId == filter.CustomerId)
+        query = query.filter(Cart.CustomerId .like(f'%{filter.CustomerId}%'))
     if filter.ProductId:
         query = query.filter(Cart.ProductId == filter.ProductId)
     if filter.TotalItemsCountGreaterThan:

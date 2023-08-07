@@ -6,7 +6,11 @@ from app.domain_types.schemas.base_search_types import BaseSearchFilter, BaseSea
 
 class CartCreateModel(BaseModel):
     CustomerId: UUID4 = Field(...)
-    CartLineItems: Optional[list] = Field(default=[])
+    # CartLineItems: Optional[list] = Field(default=[])
+    AssociatedOrderId   : Optional[str] = Field(...)
+    CartToOrderTimestamp: Optional[datetime] = Field(...)
+    TotalItemsCount     : Optional[int] = Field(...)
+    TotalAmount         : Optional[float] = Field(...)
 
 class CartUpdateModel(BaseModel):
     pass
@@ -24,14 +28,14 @@ class CartSearchFilter(BaseSearchFilter):
 class CartResponseModel(BaseModel):
     id                  : UUID4
     CustomerId          : UUID4
-    CartLineItems       : list
-    Discount            : float
-    TotalTax            : float
-    TotalDiscount       : float
-    TotalItemsCount     : int
-    TotalAmount         : float
+    # CartLineItems       : list
+    Discount            : float | None
+    TotalTax            : float | None
+    TotalDiscount       : float | None
+    TotalItemsCount     : int | None
+    TotalAmount         : float | None
     AssociatedOrderId   : UUID4
-    CartToOrderTimestamp: datetime
+    CartToOrderTimestamp: datetime | None
     CreatedAt           : datetime
     UpdatedAt           : datetime
 

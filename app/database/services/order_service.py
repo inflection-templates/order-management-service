@@ -6,9 +6,11 @@ from app.database.models.order import Order, OrderStatusMachine
 from app.domain_types.miscellaneous.exceptions import NotFound, HTTPError
 from app.domain_types.schemas.order import OrderCreateModel, OrderResponseModel, OrderUpdateModel, OrderSearchFilter, OrderSearchResults
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import cast, func, asc, desc
 from app.telemetry.tracing import trace_span
 from app.domain_types.enums.order_status_types import OrderStatusTypes
+from datetime import timedelta
+
 
 @trace_span("service: create_order")
 def create_order(session: Session, model: OrderCreateModel) -> OrderResponseModel:
@@ -51,6 +53,74 @@ def delete_order(session: Session, order_id: str) -> OrderResponseModel:
     session.delete(order)
     session.commit()
     return True
+
+@trace_span("service: search_orders")
+def search_orders(session: Session, filter: OrderSearchFilter) -> OrderSearchResults:
+
+    query = session.query(Order)
+
+    if filter.CustomerId:
+        query = query.filter(Order.CustomerId .like(f'%{filter.CustomerId}%'))
+    if filter.AssociatedCartId:
+        query = query.filter(Order.AssociatedCartId.like(f'%{filter.AssociatedCartId}%'))
+    if filter.TotalItemsCountGreaterThan:
+        query = query.filter(Order.TotalItemsCount > filter.TotalItemsCountGreaterThan)
+    if filter.TotalItemsCountLessThan:
+        query = query.filter(Order.TotalItemsCount < filter.TotalItemsCountLessThan)
+    if filter.OrderDiscountGreaterThan:
+        query = query.filter(Order.OrderDiscount > filter.OrderDiscountGreaterThan)
+    if filter.OrderDiscountLessThan:
+        query = query.filter(Order.OrderDiscount < filter.OrderDiscountLessThan)
+    if filter.TotalAmountGreaterThan:
+        query = query.filter(Order.TotalAmount > filter.TotalAmountGreaterThan)
+    if filter.TotalAmountLessThan:
+        query = query.filter(Order.TotalAmount < filter.TotalAmountLessThan)
+    if filter.OrderStatus:
+        query = query.filter(Order.OrderStatus == filter.OrderStatus)
+    if filter.OrderType:
+        query = query.filter(Order.OrderType.like(f'%{filter.OrderType}%'))
+    if filter.CreatedBefore:
+        query = query.filter(Order.CreatedAt.date() < filter.CreatedBefore)
+    if filter.CreatedAfter:
+        query = query.filter(Order.CreatedAt.date() > filter.CreatedAfter)
+    if filter.PastMonths:
+        query = searchByPastMonths(filter.PastMonths)
+
+    if filter.OrderBy == None:
+        filter.OrderBy = "CreatedAt"
+    else:
+        if not hasattr(Order, filter.OrderBy):
+            filter.OrderBy = "CreatedAt"
+    orderBy = getattr(Order, filter.OrderBy)
+
+    if filter.OrderByDescending:
+        query = query.order_by(desc(orderBy))
+    else:
+        query = query.order_by(asc(orderBy))
+
+    query = query.offset(filter.PageIndex * filter.ItemsPerPage).limit(filter.ItemsPerPage)
+
+    orders = query.all()
+
+    items = list(map(lambda x: x.__dict__, orders))
+
+    results = OrderSearchResults(
+        TotalCount=len(orders),
+        ItemsPerPage=filter.ItemsPerPage,
+        PageIndex=filter.PageIndex,
+        OrderBy=filter.OrderBy,
+        OrderByDescending=filter.OrderByDescending,
+        Items=items
+    )
+
+    return results
+
+def searchByPastMonths(pastMonths):
+   date = dt.date.today()
+   past_date = date - timedelta(days=pastMonths * 30)
+   order_date = str(Order.CreatedAt.date())
+   if order_date >= past_date:
+     return Order
 
 @trace_span("service: update_order_status")
 def update_order_status(session: Session, order_id: str, status: OrderStatusTypes) -> OrderResponseModel:
