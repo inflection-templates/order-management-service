@@ -21,7 +21,6 @@ def create_order(session: Session, model: OrderCreateModel) -> OrderResponseMode
     session.commit()
     temp = session.refresh(db_model)
     order = db_model
-
     return order.__dict__
 
 @trace_span("service: get_order_by_id")
@@ -80,9 +79,9 @@ def search_orders(session: Session, filter: OrderSearchFilter) -> OrderSearchRes
     if filter.OrderType:
         query = query.filter(Order.OrderType.like(f'%{filter.OrderType}%'))
     if filter.CreatedBefore:
-        query = query.filter(Order.CreatedAt.date() < filter.CreatedBefore)
+        query = query.filter(Order.CreatedAt < filter.CreatedBefore)
     if filter.CreatedAfter:
-        query = query.filter(Order.CreatedAt.date() > filter.CreatedAfter)
+        query = query.filter(Order.CreatedAt > filter.CreatedAfter)
     if filter.PastMonths:
         query = searchByPastMonths(filter.PastMonths)
 
