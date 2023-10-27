@@ -8,6 +8,7 @@ from fastapi.responses import JSONResponse, PlainTextResponse
 from fastapi.exceptions import RequestValidationError
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.exc import SQLAlchemyError
+import traceback2 as traceback
 
 #################################################################
 
@@ -18,6 +19,7 @@ async def api_error_handler(request: Request, exc: HTTPError):
 
     # Handle telemetry and logging here...
     logger.error(f"API Error: {exc.message}")
+    traceback.print_exception(type(exc), exc, exc.__traceback__)
 
     return JSONResponse(
         status_code=exc.status_code,
