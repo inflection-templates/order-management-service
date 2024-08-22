@@ -1,15 +1,15 @@
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 from functools import lru_cache
 
 class Settings(BaseSettings):
 
     # App
     ENVIRONMENT: str = "development"
-    SERVICE_NAME="Order-Management-Service"
-    BASE_URL: str = "http://localhost:12345"
-    USER_ACCESS_TOKEN_SECRET="secret"
-    CIPHER_SALT="salt"
-    SERVICE_IDENTIFIER=f"{SERVICE_NAME}-{ENVIRONMENT}"
+    SERVICE_NAME:str ="Order-Management-Service"
+    BASE_URL:str = "http://localhost:12345"
+    USER_ACCESS_TOKEN_SECRET:str="secret"
+    CIPHER_SALT:str="salt"
+    SERVICE_IDENTIFIER:str =f"{SERVICE_NAME}-{ENVIRONMENT}"
 
     #Database
     DB_USER_NAME: str = "dbuser"
@@ -34,6 +34,7 @@ class Settings(BaseSettings):
 
     class Config:
         env_file = ".env"
+        extra = "allow"
 
 @lru_cache()
 def get_settings():
