@@ -1,4 +1,5 @@
 import json
+from numbers import Number
 import uuid
 from sqlalchemy import Column, DateTime, String, Float
 from sqlalchemy.orm import relationship
@@ -10,7 +11,7 @@ class Role(Base):
 
     __tablename__ = "roles"
 
-    id           = Column(uuid, primary_key=True, index=True, default=generate_uuid4)
+    id           = Column(Number, primary_key=True, index=True)
     RoleName     = Column(String(128), nullable=False)
     Description  = Column(String(128), nullable=True)
     CreatedAt    = Column(DateTime(timezone=True), server_default=func.now())
