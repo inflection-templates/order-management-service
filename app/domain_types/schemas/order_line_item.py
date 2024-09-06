@@ -15,6 +15,8 @@ class OrderLineItemCreateModel(BaseModel):
     OrderId           : str       = Field(description="Id of order the items belong to")
     CartId            : str       = Field(description="Id of cart the items belong to")
 
+OrderLineItemCreateModel.model_rebuild()
+
 class OrderLineItemUpdateModel(BaseModel):
     Name              : Optional[str]       = Field(description="Name of Item")
     Quantity          : Optional[int]       = Field(description="Quantity of Items")
@@ -26,6 +28,8 @@ class OrderLineItemUpdateModel(BaseModel):
     OrderId           : Optional[str]       = Field(description="Id of order the items belong to")
     CartId            : Optional[str]       = Field(description="Id of cart the items belong to")
 
+OrderLineItemUpdateModel.model_rebuild()
+
 class OrderLineItemSearchFilter(BaseSearchFilter):
     Name              : Optional[str]       = Field(description="Search by Name of Item")
     CatalogId         : Optional[str]       = Field(description="Search by Catalogue Id of Item")
@@ -35,6 +39,8 @@ class OrderLineItemSearchFilter(BaseSearchFilter):
     CartId            : Optional[str]       = Field(description="Search by cart id")
     CreatedBefore     : Optional[datetime]  = Field(description="Search order line items created before the given date")
     CreatedAfter      : Optional[datetime]  = Field(description="Search order line items created after the given date")
+
+OrderLineItemSearchFilter.model_rebuild()
 
 class OrderLineItemResponseModel(BaseModel):
     id                : UUID4     = Field(description="Id of Item")
@@ -50,6 +56,8 @@ class OrderLineItemResponseModel(BaseModel):
     CartId            : str       = Field(description="Id of cart the items belong to")
     CreatedAt         : datetime  = Field(default=datetime.now(), description="Order creation date")
     UpdatedAt         : datetime  = Field(default=datetime.now(), description="Order last updated date")
+
+OrderLineItemResponseModel.model_rebuild()
 
 class OrderLineItemSearchResults(BaseSearchResults):
     Items: List[OrderLineItemResponseModel] = Field(default=[])

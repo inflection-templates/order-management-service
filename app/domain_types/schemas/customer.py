@@ -15,6 +15,8 @@ class CustomerCreateModel(BaseModel):
     DefaultShippingAddressId : Optional[UUID4 | None] = Field(default=None, description="Shipping address Id of the customer")
     DefaultBillingAddressId  : Optional[UUID4 | None] = Field(default=None, description="Billing address Id of the customer")
 
+CustomerCreateModel.model_rebuild()
+
 class CustomerUpdateModel(BaseModel):
     Name           : Optional[str] = Field(min_length=2, max_length=128, description="Name of the customer")
     Email          : Optional[str] = Field(min_length=5, max_length=512, description="Email of the customer")
@@ -22,6 +24,8 @@ class CustomerUpdateModel(BaseModel):
     Phone          : Optional[str] = Field(min_length=2, max_length=12, description="Phone number of the customer")
     ProfilePicture : Optional[str] = Field(min_length=5, max_length=512, description="Profile picture URL of the customer")
     TaxNumber      : Optional[str] = Field(min_length=2, max_length=64, description="Tax number/code of the customer")
+
+CustomerUpdateModel.model_rebuild()
 
 class CustomerSearchFilter(BaseSearchFilter):
     Name           : Optional[str] = Field(description="Search by the name of the customer")
@@ -32,6 +36,8 @@ class CustomerSearchFilter(BaseSearchFilter):
     CreatedBefore  : Optional[datetime] = Field(description="Search customers created before the given date")
     CreatedAfter   : Optional[datetime] = Field(description="Search customers created after the given date")
     PastMonths     : Optional[int] = Field(ge=0, le=12, description="Search customers created in the past given number of months")
+
+CustomerSearchFilter.model_rebuild()
 
 class CustomerResponseModel(BaseModel):
     id                       : UUID4                  = Field(description="Id of the customer")
@@ -48,6 +54,8 @@ class CustomerResponseModel(BaseModel):
     DefaultBillingAddress    : Optional[dict | None]   = Field(default=None, description="Billing address of the customer")
     CreatedAt                : datetime               = Field(description="Created at")
     UpdatedAt                : datetime               = Field(description="Updated at")
+
+CustomerResponseModel.model_rebuild()
 
 class CustomerSearchResults(BaseSearchResults):
     Items : List[CustomerResponseModel] = Field(description="List of customers")

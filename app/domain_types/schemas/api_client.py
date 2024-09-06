@@ -17,7 +17,9 @@ class ApiClientCreateModel(BaseModel):
     ApiKey                : Optional[str | None] = Field(default=None, description="Api key of the client")
     ValidFrom             : Optional[datetime] = Field(default=None, description="The date and time from which api client is valid.")
     ValidTill             : Optional[datetime] = Field(default=None, description="The date and time until which api client is valid.")
-    
+   
+ApiClientCreateModel.model_rebuild() 
+
 class ApiClientUpdateModel(BaseModel):
     ClientName            : Optional[str | None] = Field(description="Name of the client")
     FirstName             : Optional[str | None] = Field(description="First name of the client")
@@ -33,6 +35,8 @@ class ApiClientUpdateModel(BaseModel):
     ValidFrom             : Optional[datetime] = Field(description="The date and time from which api client is valid.")
     ValidTill             : Optional[datetime] = Field(description="The date and time until which api client is valid.")
 
+ApiClientUpdateModel.model_rebuild()
+
 class ApiClientsSearchFilter(BaseSearchFilter):
     ClientName     : Optional[str | None] = Field(description="Search by the name of the api client")
     Email          : Optional[str | None] = Field(description="Search by the email of the api client")
@@ -41,6 +45,8 @@ class ApiClientsSearchFilter(BaseSearchFilter):
     CreatedBefore  : Optional[datetime] = Field(description="Search api clients created before the given date")
     CreatedAfter   : Optional[datetime] = Field(description="Search api clients created after the given date")
     PastMonths     : Optional[int] = Field(ge=0, le=12, description="Search api clients created in the past given number of months")
+
+ApiClientsSearchFilter.model_rebuild()
 
 class ApiClientResponseModel(BaseModel):
     id                    : UUID4 = Field(description="Id of the ApiClient")
@@ -58,6 +64,8 @@ class ApiClientResponseModel(BaseModel):
     ValidTill             : Optional[datetime]= Field(description="The date and time until which api client is valid.")
     CreatedAt             : datetime = Field(description="Created at")
     UpdatedAt             : datetime = Field(description="Updated at")
+
+ApiClientResponseModel.model_rebuild()
 
 class ApiClientSearchResults(BaseSearchResults):
     Items : List[ApiClientResponseModel] = Field(description="List of clients")

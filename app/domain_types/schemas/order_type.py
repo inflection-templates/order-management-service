@@ -6,14 +6,20 @@ from app.domain_types.schemas.base_search_types import BaseSearchFilter, BaseSea
 class OrderTypeCreateModel(BaseModel):
     Name         : str
     Description  : str | None
+    
+OrderTypeCreateModel.model_rebuild()
 
 class OrderTypeUpdateModel(BaseModel):
     Name         : Optional[str]
     Description  : Optional[str | None]
 
+OrderTypeUpdateModel.model_rebuild()
+
 class OrderTypeSearchFilter(BaseSearchFilter):
     Name         : Optional[str]
     Description  : Optional[str | None]
+
+OrderTypeSearchFilter.model_rebuild()
 
 class OrderTypeResponseModel(BaseModel):
     id          : UUID4          = Field(description="Id of order type")
@@ -21,6 +27,8 @@ class OrderTypeResponseModel(BaseModel):
     Description : str            = Field(description="Description of order type")
     CreatedAt   : datetime       = Field(default=datetime.now())
     UpdatedAt   : datetime       = Field(default=datetime.now())
+
+OrderTypeResponseModel.model_rebuild()
 
 class OrderTypeSearchResults(BaseSearchResults):
     Items: List[OrderTypeResponseModel] = Field(default=[])

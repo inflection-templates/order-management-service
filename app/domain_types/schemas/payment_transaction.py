@@ -22,6 +22,8 @@ class PaymentTransactionCreateModel(BaseModel):
     OrderId                     : UUID4                = Field(description="Id of order for which payment is done")
     IsRefund                    : bool                 = Field(default=False, description="Whether the transaction is refund or not")
 
+PaymentTransactionCreateModel.model_rebuild()
+
 class PaymentTransactionSearchFilter(BaseSearchFilter):
     DisplayCode                 : Optional[str]        = Field(description="Search by display code")
     InvoiceNumber               : Optional[str]        = Field(...)
@@ -32,6 +34,8 @@ class PaymentTransactionSearchFilter(BaseSearchFilter):
     PaymentMode                 : Optional[str]        = Field(description="Search by mode of payment")
     PaymentAmount               : Optional[float]      = Field(description="Search by payment amount")
     IsRefund                    : Optional[bool]       = Field(default=False, description="Whether the transaction is refund or not")
+
+PaymentTransactionSearchFilter.model_rebuild()
 
 class PaymentTransactionResponseModel(BaseModel):
     id                          : UUID4                = Field(description="Id of payment transaction")
@@ -53,6 +57,8 @@ class PaymentTransactionResponseModel(BaseModel):
     IsRefund                    : bool                 = Field(default=False, description="Whether the transaction is refund or not")
     CreatedAt                   : Optional[datetime]   = Field(default=None, description="Order creation date")
     UpdatedAt                   : Optional[datetime]   = Field(default=None, description="Order last updated date")
+
+PaymentTransactionResponseModel.model_rebuild()
 
 class PaymentTransactionSearchResults(BaseSearchResults):
     Items : List[PaymentTransactionResponseModel] = Field(description="List of payment transactions")

@@ -11,12 +11,16 @@ class OrderHistoryCreateModel(BaseModel):
     UpdatedByUserId : str                                        = Field(description="Id of user")
     Timestamp       = datetime                                   = Field(description="Date and time of order")
 
+OrderHistoryCreateModel.model_rebuild()
+
 class OrderHistoryUpdateModel(BaseModel):
     OrderId         : Optional[str]                              = Field(description="Id of order")
     PreviousStatus  : Optional[OrderStatusTypes]                 = Field(description="Previous status of order")
     Status          : Optional[OrderStatusTypes]                 = Field(description="Current status of order")
     UpdatedByUserId : Optional[str]                              = Field(description="Id of user")
     Timestamp       : Optional[datetime]                         = Field(description="Date and time of order")
+
+OrderHistoryUpdateModel.model_rebuild()
 
 class OrderHistorySearchFilter(BaseSearchFilter):
     OrderId         : Optional[str]                              = Field(description="Id of order")
@@ -25,6 +29,8 @@ class OrderHistorySearchFilter(BaseSearchFilter):
     UpdatedByUserId : Optional[str]                              = Field(description="Id of user")
     Timestamp       : Optional[datetime]                         = Field(description="Date and time of order")
 
+OrderHistorySearchFilter.model_rebuild()
+
 class OrderHistoryResponseModel(BaseModel):
     id              : UUID4                                      = Field(description="Id of order history")
     OrderId         : str                                        = Field(description="Id of order")
@@ -32,6 +38,8 @@ class OrderHistoryResponseModel(BaseModel):
     Status          : Optional[OrderStatusTypes | None]          = Field(description="Current status of order")
     UpdatedByUserId : Optional[str]                              = Field(description="Id of user")
     Timestamp       : Optional[datetime]                         = Field(description="Date and time of order")
+
+OrderHistoryResponseModel.model_rebuild()
 
 class OrderHistorySearchResults(BaseSearchResults):
     Items: List[OrderHistoryResponseModel] = Field(default=[])

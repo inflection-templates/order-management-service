@@ -24,6 +24,8 @@ class CouponCreateModel(BaseModel):
     IsDeleted          : bool          = Field(default=False)
     CreatedBy          : UUID4         = Field(default=None)
 
+CouponCreateModel.model_rebuild()
+
 class CouponUpdateModel(BaseModel):
     Name               : Optional[str]           = Field(..., min_length=2, max_length=64)
     Description        : Optional[str]           = Field(..., min_length=2, max_length=1024)
@@ -42,6 +44,8 @@ class CouponUpdateModel(BaseModel):
     IsActive           : Optional[bool]          = Field(default=True)
     IsDeleted          : Optional[bool]          = Field(default=False)
 
+CouponUpdateModel.model_rebuild()
+
 class CouponSearchFilter(BaseSearchFilter):
     Name               : Optional[str]           = Field(description="Search coupon by name")
     CouponCode         : Optional[str]           = Field(description="Search coupon by coupon code")
@@ -51,6 +55,8 @@ class CouponSearchFilter(BaseSearchFilter):
     DiscountPercentage : Optional[float]         = Field(description="Search coupon by discount percentage")
     MinOrderAmount     : Optional[float]         = Field(description="Search coupon by minimum order amount")
     IsActive           : Optional[bool]          = Field(description="Search coupon by its state")
+
+CouponSearchFilter.model_rebuild()
 
 class CouponResponseModel(BaseModel):
     id
@@ -73,6 +79,8 @@ class CouponResponseModel(BaseModel):
     CreatedBy          : UUID4         = Field(default=None, description="Id of coupon creator")
     CreatedAt          : datetime      = Field(description="Created at")
     UpdatedAt          : datetime      = Field(description="Updated at")
+
+CouponResponseModel.model_rebuild()
 
 class CouponSearchResults(BaseSearchResults):
     Items : List[CouponResponseModel] = Field(description="List of coupons")

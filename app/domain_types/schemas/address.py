@@ -12,6 +12,8 @@ class AddressCreateModel(BaseModel):
     ZipCode      : Optional[str]   = Field(default=None, min_length=2, max_length=32)
     CreatedBy    : Optional[UUID4] = Field(default=None)
 
+AddressCreateModel.model_rebuild()
+
 class AddressUpdateModel(BaseModel):
     AddressLine1: Optional[str] = Field(default=None, min_length=2, max_length=512)
     AddressLine2: Optional[str] = Field(default=None, min_length=2, max_length=512)
@@ -20,6 +22,8 @@ class AddressUpdateModel(BaseModel):
     Country     : Optional[str] = Field(default=None, min_length=2, max_length=32)
     ZipCode     : Optional[str] = Field(default=None, min_length=2, max_length=32)
 
+AddressUpdateModel.model_rebuild()
+
 class AddressSearchFilter(BaseSearchFilter):
     AddressLine1 : Optional[str] = Field(default=None, min_length=2, max_length=512)
     AddressLine2 : Optional[str] = Field(default=None, min_length=2, max_length=512)
@@ -27,6 +31,8 @@ class AddressSearchFilter(BaseSearchFilter):
     State        : Optional[str] = Field(default=None, min_length=2, max_length=64)
     Country      : Optional[str] = Field(default=None, min_length=2, max_length=32)
     ZipCode      : Optional[str] = Field(default=None, min_length=2, max_length=32)
+
+AddressSearchFilter.model_rebuild()
 
 class AddressResponseModel(BaseModel):
     id          : UUID4
@@ -38,6 +44,8 @@ class AddressResponseModel(BaseModel):
     ZipCode     : str
     CreatedAt   : datetime
     UpdatedAt   : datetime
+
+AddressResponseModel.model_rebuild()
 
 class AddressSearchResults(BaseSearchResults):
     Items: List[AddressResponseModel] = []

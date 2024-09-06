@@ -15,6 +15,8 @@ class MerchantCreateModel(BaseModel):
     GSTNumber                : Optional[str | None]   = Field(default=None, min_length=2, max_length=64, description="GST number/code of the merchant")
     AddressId                : Optional[UUID4 | None] = Field(default=None, description="Address Id of the merchant")
 
+MerchantCreateModel.model_rebuild()
+
 class MerchantUpdateModel(BaseModel):
     Name           : Optional[str]   = Field(min_length=5, max_length=512, description="Name of the merchant")
     Email          : Optional[str]   = Field(min_length=5, max_length=512, description="Email of the merchant")
@@ -24,6 +26,8 @@ class MerchantUpdateModel(BaseModel):
     GSTNumber      : Optional[str]   = Field(default=None, min_length=2, max_length=64, description="GST number/code of the merchant")
     AddressId      : Optional[UUID4] = Field(default=None, description="Address Id of the merchant")
 
+MerchantUpdateModel.model_rebuild()
+
 class MerchantSearchFilter(BaseSearchFilter):
     Name           : Optional[str] = Field(description="Search by the name of the merchant")
     Email          : Optional[str] = Field(description="Search by the email of the merchant")
@@ -32,6 +36,8 @@ class MerchantSearchFilter(BaseSearchFilter):
     CreatedBefore  : Optional[datetime] = Field(description="Search merchants created before the given date")
     CreatedAfter   : Optional[datetime] = Field(description="Search merchants created after the given date")
     PastMonths     : Optional[int] = Field(ge=0, le=12, description="Search merchants created in the past given number of months")
+
+MerchantSearchFilter.model_rebuild()
 
 class MerchantResponseModel(BaseModel):
     id                       : UUID4                  = Field(description="Id of the merchant")
@@ -46,6 +52,8 @@ class MerchantResponseModel(BaseModel):
     AddressId                : Optional[UUID4 | None] = Field(default=None, description="Address Id of the merchant")
     CreatedAt                : datetime               = Field(description="Created at")
     UpdatedAt                : datetime               = Field(description="Updated at")
+
+MerchantResponseModel.model_rebuild()
 
 class MerchantSearchResults(BaseSearchResults):
     Items : List[MerchantCreateModel] = Field(description="List of customers")

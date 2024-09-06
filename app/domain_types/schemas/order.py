@@ -12,6 +12,8 @@ class OrderCreateModel(BaseModel):
       Notes             : Optional[str | None]   = Field(default=None, min_length=5, max_length=1024, description="Notes for the delivery")
     #   OrderLineItems    : Optional[list]         = Field(default=[], description="List of order line items")
 
+OrderCreateModel.model_rebuild()
+
 # Please note that -
 # CustomerId, OrderLineItems, OrderStatus cannot be updated through regular update API.
 # CustomerId is set when the order is created.
@@ -26,6 +28,7 @@ class OrderUpdateModel(BaseModel):
     TipAmount            : Optional[float] = Field(ge=0.0, description="Tip amount")
     Notes                : Optional[str]   = Field(min_length=5, max_length=1024, description="Notes for the delivery")
 
+OrderUpdateModel.model_rebuild()
 
 class OrderSearchFilter(BaseSearchFilter):
     CustomerId                 : Optional[UUID4]            = Field(description="Search by the Id of the customer")
@@ -44,6 +47,8 @@ class OrderSearchFilter(BaseSearchFilter):
     CreatedBefore              : Optional[datetime]         = Field(description="Search orders created before the given date")
     CreatedAfter               : Optional[datetime]         = Field(description="Search orders created after the given date")
     PastMonths                 : Optional[int]              = Field(ge=0, le=12, description="Search orders created in the past given number of months")
+
+OrderSearchFilter.model_rebuild()
 
 class OrderResponseModel(BaseModel):
     id                  : UUID4                       = Field(description="Id of the order")
@@ -65,6 +70,7 @@ class OrderResponseModel(BaseModel):
     CreatedAt           : Optional[datetime]          = Field(default=None, description="Order creation date")
     UpdatedAt           : Optional[datetime]          = Field(default=None, description="Order last updated date")
 
+OrderResponseModel.model_rebuild()
 
 class OrderSearchResults(BaseSearchResults):
     Items: List[OrderResponseModel] = Field(default=[])

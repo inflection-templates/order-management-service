@@ -7,3 +7,5 @@ class CustomerAddressCreateModel(BaseModel):
     AddressId   : UUID4                  = Field(description="Id of the address")
     AddressType : Optional[AddressTypes] = Field(default=AddressTypes.SHIPPING.value, description="Type of address")
     IsFavorite  : Optional[bool]         = Field(default=False, description="Is this favorite address")
+
+CustomerAddressCreateModel.model_rebuild()

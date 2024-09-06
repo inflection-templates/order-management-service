@@ -12,6 +12,8 @@ class CartCreateModel(BaseModel):
     TotalItemsCount     : Optional[int] = Field(...)
     TotalAmount         : Optional[float] = Field(...)
 
+CartCreateModel.model_rebuild()
+
 class CartUpdateModel(BaseModel):
     pass
 
@@ -24,6 +26,8 @@ class CartSearchFilter(BaseSearchFilter):
     TotalAmountLessThan       : Optional[float] = Field(ge=0.0)
     CreatedBefore             : Optional[datetime]
     CreatedAfter              : Optional[datetime]
+
+CartSearchFilter.model_rebuild()
 
 class CartResponseModel(BaseModel):
     id                  : UUID4
@@ -38,6 +42,8 @@ class CartResponseModel(BaseModel):
     CartToOrderTimestamp: datetime | None
     CreatedAt           : datetime
     UpdatedAt           : datetime
+
+CartResponseModel.model_rebuild()
 
 class CartSearchResults(BaseSearchResults):
     Items: List[CartResponseModel] = []
