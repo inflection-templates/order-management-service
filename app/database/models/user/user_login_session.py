@@ -1,19 +1,18 @@
 import json
-import uuid
 from sqlalchemy import Boolean, Column, Date, DateTime, ForeignKey, String, Float
 from sqlalchemy.orm import relationship
 from app.common.utils import generate_uuid4
 from app.database.base import Base
 from sqlalchemy.sql import func
-from app.database.models.person.person_model import Person
-from app.database.models.role.role_model import Role
+from app.database.models.person.person import Person
+from app.database.models.role import Role
 
 class UserLoginSession(Base):
 
     __tablename__ = "user_login_sessions"
 
     id              = Column(String(36), primary_key=True, index=True, default=generate_uuid4)
-    UserId          = Column(uuid, ForeignKey("users.id"), nullable=True)
+    UserId          = Column(String(36), ForeignKey("users.id"), nullable=True)
     IsActive        = Column(Boolean, default=True)
     StartedAt       = Column(Date, nullable=True)
     ValidTill       = Column(Date, nullable=False)

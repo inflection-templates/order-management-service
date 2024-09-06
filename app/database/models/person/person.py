@@ -1,5 +1,4 @@
 import json
-import uuid
 from sqlalchemy import Column, Date, DateTime, String, Float
 from sqlalchemy.orm import relationship
 from app.common.utils import generate_uuid4
@@ -10,7 +9,7 @@ class Person(Base):
 
     __tablename__ = "persons"
 
-    id               = Column(uuid, primary_key=True, index=True, default=generate_uuid4)
+    id               = Column(String(36), primary_key=True, index=True, default=generate_uuid4)
     Prefix           = Column(String(16), nullable=True)
     FirstName        = Column(String(70), nullable=True)
     MiddleName       = Column(String(70), nullable=True)
@@ -21,14 +20,14 @@ class Person(Base):
     Gender           = Column(String(28), nullable=True)
     BirthDate        = Column(Date, nullable=True)
     Age              = Column(String(28), nullable=True)
-    ImageResourceId  = Column(uuid, nullable=True)
+    ImageResourceId  = Column(String(36), nullable=True)
     NationalId       = Column(String(28), nullable=True)
     NationalIdType   = Column(String(28), nullable=True)
     CreatedAt        = Column(DateTime(timezone=True), server_default=func.now())
     UpdatedAt        = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     DeletedAt        = Column(DateTime(timezone=True))
 
-    roles = relationship('PersonRole', back_populates='person')
+    # roles = relationship('PersonRole', back_populates='person')
     
     def __repr__(self):
         jsonStr = json.dumps(self.__dict__)
