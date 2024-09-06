@@ -8,3 +8,4 @@ class RolePrivilegeResponseModel(BaseModel):
     Scope     : str
     Enabled   : bool
 
+RolePrivilegeResponseModel.model_rebuild()

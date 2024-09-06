@@ -9,9 +9,12 @@ class UserLoginSessionCreateModel(BaseModel):
     StartedAt : Optional[datetime] = Field(default=None, description="Timestamp when the session started")
     ValidTill : Optional[datetime] = Field(default=None, description="Timestamp until when the session is valid")
 
+UserLoginSessionCreateModel.model_rebuild()
 class UserLoginSessionResponseModel(BaseModel):
     id        : UUID4
     UserId    : UUID4
     IsActive  : bool
     StartedAt : Optional[datetime] = None
     ValidTill : Optional[datetime] = None
+    
+UserLoginSessionResponseModel.model_rebuild()

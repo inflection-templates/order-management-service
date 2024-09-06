@@ -18,6 +18,8 @@ class PersonCreateModel(BaseModel):
     ImageResourceId    : Optional[UUID4] = Field(description="Id of the image resource")
     AddressIds         : Optional[List[str]] = Field(description="List of address IDs associated with the person"
     )
+    
+PersonCreateModel.model_rebuild()
  
 class PersonUpdateModel(BaseModel):
     Prefix              : Optional[str | None] = Field(default=None)
@@ -32,6 +34,8 @@ class PersonUpdateModel(BaseModel):
     ImageResourceId     : Optional[UUID4] = Field(description="Id of the image resource")
     AddressIds          : Optional[List[str]] = Field(description="List of address IDs associated with the person")
    
+PersonUpdateModel.model_rebuild()
+ 
 class PersonsSearchFilter(BaseSearchFilter):
     Email          : Optional[str | None] = Field(description="Search by the email of the person")
     Phone          : Optional[str | None] = Field(description="Search by the phone number of the person")
@@ -39,6 +43,7 @@ class PersonsSearchFilter(BaseSearchFilter):
     CreatedAfter   : Optional[datetime] = Field(description="Search persons created after the given date")
     PastMonths     : Optional[int] = Field(ge=0, le=12, description="Search persons created in the past given number of months")
 
+PersonsSearchFilter.model_rebuild()
 class PersonResponseModel(BaseModel):
     id               : UUID4
     FirstName        : str
@@ -51,7 +56,8 @@ class PersonResponseModel(BaseModel):
     Addresses        : Optional[List[AddressResponseModel]]
     CreatedAt        : datetime
     UpdatedAt        : datetime
-    
+  
+PersonResponseModel.model_rebuild()  
 class PersonSearchResults(BaseSearchResults):
     Items : List[PersonResponseModel] = Field(description="List of persons")
 

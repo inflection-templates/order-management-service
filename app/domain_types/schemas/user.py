@@ -10,7 +10,7 @@ class UserCreateModel(BaseModel):
     Phone                 : str = Field (max_length=10, description="Phone of the user")
     Email                 : str = Field(min_length=5, max_length=512, description="Email of the user")
     Password              : str = Field(min_length=5, max_length=512, description="Password of the user")
-    UserName            : Optional[str | None] = Field(default=None, description="Name of the user")
+    UserName              : Optional[str | None] = Field(default=None, description="Name of the user")
     
 class UserUpdateModel(BaseModel):
     FirstName           : Optional[str | None] = Field(description="First name of the user")
@@ -37,7 +37,7 @@ class UserResponseModel(BaseModel):
     CountryCode           : str = Field( min_length=2, max_length=64, description="Country code of the user")
     Phone                 : str = Field (max_length=10, description="Phone of the user")
     Email                 : str = Field(min_length=5, max_length=512, description="Email of the user")
-    UserName            : Optional[str | None] = Field(default=None, description="Name of the user")
+    UserName              : Optional[str | None] = Field(default=None, description="Name of the user")
     CreatedAt             : datetime = Field(description="Created at")
     UpdatedAt             : datetime = Field(description="Updated at")
 
