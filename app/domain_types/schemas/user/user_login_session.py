@@ -10,6 +10,7 @@ class UserLoginSessionCreateModel(BaseModel):
     ValidTill : Optional[datetime]  = Field(default=None, description="Timestamp until when the session is valid")
 
 UserLoginSessionCreateModel.model_rebuild()
+
 class UserLoginSessionResponseModel(BaseModel):
     id        : UUID4
     UserId    : UUID4
