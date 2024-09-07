@@ -8,9 +8,9 @@ from app.api.user.user_handler import (
 )
 from app.database.database_accessor import get_db_session
 from app.domain_types.miscellaneous.response_model import ResponseModel
-from app.domain_types.schemas.user import UserCreateModel, UsersSearchFilter, UserSearchResults, UserUpdateModel, UserResponseModel
+from app.domain_types.schemas.user import UserCreateModel, UserSearchFilters, UserSearchResults, UserUpdateModel, UserResponseModel
 
-###############################################################################
+########################################################################################################################
 
 router = APIRouter(
     prefix="/users",
@@ -30,9 +30,9 @@ async def create_user(model: UserCreateModel, db_session = Depends(get_db_sessio
 
 @router.get("/search", status_code=status.HTTP_200_OK, response_model=ResponseModel[UserSearchResults|None])
 async def search_users(
-        query_params: UsersSearchFilter = Depends(),
+        query_params: UserSearchFilters = Depends(),
         db_session = Depends(get_db_session)):
-    filter = UsersSearchFilter(**query_params.dict())
+    filter = UserSearchFilters(**query_params.dict())
     return search_users_(filter, db_session)
 
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[UserResponseModel|None])

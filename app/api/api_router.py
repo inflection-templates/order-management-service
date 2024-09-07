@@ -15,6 +15,7 @@ router = APIRouter(prefix=API_PREFIX)
 
 def add_routes():
     router.include_router(role_router)
+    router.include_router(user_router)
     router.include_router(order_router)
     router.include_router(customer_router)
     router.include_router(address_router)
@@ -23,7 +24,6 @@ def add_routes():
     router.include_router(coupon_router)
     router.include_router(payment_transaction_router)
     router.include_router(api_client_router)
-    router.include_router(user_router)
     # Add other routes here
 
 add_routes()

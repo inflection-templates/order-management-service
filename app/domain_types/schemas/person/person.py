@@ -13,10 +13,10 @@ class PersonCreateModel(BaseModel):
     CountryCode        : str                    = Field( min_length=2, max_length=64)
     Phone              : str                    = Field (max_length=10)
     Email              : str                    = Field(min_length=5, max_length=512)
-    Gender             : Optional[str | None]   = Field(min_length=5, max_length=512)
-    BirthDate          : Optional[str | None]   = Field(min_length=5, max_length=512)
-    ImageResourceId    : Optional[UUID4]        = Field(description="Id of the image resource")
-    AddressIds         : Optional[List[str]]    = Field(description="List of address IDs associated with the person"
+    Gender             : Optional[str | None]   = Field(default=None, min_length=5, max_length=512)
+    BirthDate          : Optional[str | None]   = Field(default=None, min_length=5, max_length=512)
+    ImageResourceId    : Optional[UUID4]        = Field(default=None, description="Id of the image resource")
+    AddressIds         : Optional[List[str]]    = Field(default=None, description="List of address IDs associated with the person"
     )
     
 PersonCreateModel.model_rebuild()

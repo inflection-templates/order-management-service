@@ -1,27 +1,24 @@
 import datetime as dt
-import uuid
 # from fastapi import HTTPException, Query, Body
 from app.common.utils import print_colorized_json
 from app.database.models.user import User
 from app.domain_types.miscellaneous.exceptions import Conflict, NotFound
-from app.domain_types.schemas.user import UserCreateModel, UserUpdateModel, UserResponseModel, UsersSearchFilter, UserSearchResults
+from app.domain_types.schemas.user import UserCreateModel, UserSearchFilters, UserUpdateModel, UserResponseModel, UserSearchResults
 from sqlalchemy.orm import Session
 from sqlalchemy import asc, desc, func
 from app.telemetry.tracing import trace_span
-import secrets
 
 @trace_span("service: create_user")
 def create_user(session: Session, model: UserCreateModel) -> UserResponseModel:
-    client = None
  
     if model.Email != None and model.Email != "":
-        existing_client = session.query(User).filter(func.lower(User.Email) == func.lower(model.Email)).first()
-        if existing_client:
-            raise Conflict(f"Client with email {model.Email} already exists!")
+        existing_user = session.query(User).filter(func.lower(User.Email) == func.lower(model.Email)).first()
+        if existing_user:
+            raise Conflict(f"User with email {model.Email} already exists!")
 
     if model.Phone != None and model.Phone != "":
-        existing_client = session.query(User).filter(User.Phone == model.Phone).first()
-        if existing_client:
+        existing_user = session.query(User).filter(User.Phone == model.Phone).first()
+        if existing_user:
             raise Conflict(f"User with phone {model.Phone} already exists!")
           
     model.Password = hash_password(model.Password)
@@ -31,8 +28,8 @@ def create_user(session: Session, model: UserCreateModel) -> UserResponseModel:
     session.add(db_model)
     session.commit()
     temp = session.refresh(db_model)
-    client = db_model
-    return client.__dict__
+    user = db_model
+    return user.__dict__
 
 @trace_span("service: get_user_by_id")
 def get_user_by_id(session: Session, user_id: str) -> UserResponseModel:
@@ -46,28 +43,27 @@ def update_user(session: Session, user_id: str, model: UserUpdateModel) -> UserR
     user = session.query(User).filter(User.id == user_id).first()
     if not user:
         raise NotFound(f"User with id {user_id} not found")
-
     update_data = model.dict(exclude_unset=True)
     update_data["UpdatedAt"] = dt.datetime.now()
     session.query(User).filter(User.id == user_id).update(
         update_data, synchronize_session="auto")
-
     session.commit()
     session.refresh(user)
     return user.__dict__
 
 @trace_span("service: search_users")
-def search_users(session: Session, filter: UsersSearchFilter) -> UserSearchResults:
+def search_users(session: Session, filter: UserSearchFilters) -> UserSearchResults:
 
     query = session.query(User)
-
-    if filter.FirstName:
-        query = query.filter(User.FirstName.like(f'%{filter.FirstName}%'))
+    
+    if filter.RoleId:
+        query = query.filter(User.RoleId)   
+    if filter.UserName:
+        query = query.filter(User.UserName.like(f'%{filter.UserName}%'))
     if filter.Email:
         query = query.filter(User.Email.like(f'%{filter.Email}%'))
     if filter.Phone:
         query = query.filter(User.Phone.like(f'%{filter.Phone}%'))
-
     if filter.OrderBy == None:
         filter.OrderBy = "CreatedAt"
     else:
