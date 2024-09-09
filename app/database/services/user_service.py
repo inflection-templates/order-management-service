@@ -2,6 +2,7 @@ import datetime as dt
 # from fastapi import HTTPException, Query, Body
 from app.common.utils import print_colorized_json
 from app.database.models.user import User
+from app.database.models.user_role import UserRole
 from app.domain_types.miscellaneous.exceptions import Conflict, NotFound
 from app.domain_types.schemas.user import UserCreateModel, UserSearchFilters, UserUpdateModel, UserResponseModel, UserSearchResults
 from sqlalchemy.orm import Session
@@ -23,10 +24,17 @@ def create_user(session: Session, model: UserCreateModel) -> UserResponseModel:
           
     model.Password = hash_password(model.Password)
     model_dict = model.dict()
+    model_dict.pop('RoleId', None)
     db_model = User(**model_dict)
     db_model.UpdatedAt = dt.datetime.now()
     session.add(db_model)
     session.commit()
+    
+    user_role = UserRole(UserId=db_model.id, RoleId=model.RoleId)
+    db_model.UpdatedAt = dt.datetime.now()
+    session.add(user_role)
+    session.commit()
+    
     temp = session.refresh(db_model)
     user = db_model
     return user.__dict__

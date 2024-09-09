@@ -12,6 +12,7 @@ from .payment_transaction import PaymentTransaction
 from .api_client import ApiClient
 from .user import User
 from .role import Role
+from .user_role import UserRole
 # from .role.role_permissions import RolePermission
 # from .role.role_privileges import RolePrivilege
 from .person.person import Person

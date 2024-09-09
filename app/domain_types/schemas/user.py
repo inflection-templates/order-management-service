@@ -20,7 +20,8 @@ class UserCreateModel(BaseModel):
     UserName           : Optional[str]          = Field(default=None, description="The username of the user for login purposes")
     Password           : str                    = Field(default=None, description="The password for the user account")
     RoleId             : int                    = Field(default=None, description="The role identifier assigned to the user")
-    
+    # RoleIds            : Optional[List[int]]    = Field(default=None, description="List of Role IDs associated with the user"
+    # ) 
 UserCreateModel.model_rebuild()
 
 class UserUpdateModel(BaseModel):
@@ -36,7 +37,7 @@ class UserUpdateModel(BaseModel):
     ImageResourceId    : Optional[UUID4]        = Field(default=None, description="Id of the image resource")
     UserName           : Optional[str | None]   = Field(default=None, description="The username of the user for login purposes")
     Password           : Optional[str | None]   = Field(default=None, description="The password for the user account")
-    RoleId             : Optional[int | None]   = Field(default=None, description="The password for the user account") 
+    RoleId             : Optional[int | None]   = Field(default=None, description="The Role id of user") 
     
 UserUpdateModel.model_rebuild()
 
@@ -47,9 +48,10 @@ class UserSearchFilters(BaseSearchFilter):
   UserName  : Optional[str | None]  = Field(default=None, description="Username of the user")
 
 UserSearchFilters.model_rebuild()
+
 class UserResponseModel(BaseModel):
-    id                 : UUID4
-    RoleId             : int
+    id                 : UUID4         
+    # RoleId             : Optional[int | None]   = Field(default=None)  
     Prefix             : Optional[str | None]   = Field(default=None)
     FirstName          : Optional[str | None]   = Field(default=None)
     MiddleName         : Optional[str | None]   = Field(default=None)
@@ -61,10 +63,17 @@ class UserResponseModel(BaseModel):
     BirthDate          : Optional[str | None]   = Field(default=None, min_length=5, max_length=512)
     ImageResourceId    : Optional[UUID4]        = Field(default=None, description="Id of the image resource")
     UserName           : Optional[str]          = Field(default=None, description="The username of the user for login purposes")
-    CreatedAt          : datetime               = Field(description="Updated at")
+    CreatedAt          : datetime               = Field(description="Created at")
     UpdatedAt          : datetime               = Field(description="Updated at")
-
 
 UserResponseModel.model_rebuild()
 class UserSearchResults(BaseSearchResults):
     Items : List[UserResponseModel] = Field(description="List of users")
+    
+class UserLoginModel(BaseModel):
+    Phone              : Optional[str | None]   = Field (default=None, max_length=10)
+    Email              : Optional[str | None]   = Field(default=None, min_length=5, max_length=512)
+    UserName           : Optional[str | None]   = Field(default=None, description="The username of the user for login purposes")
+    Password           : Optional[str | None]   = Field(default=None, description="The password for the user account")
+    
+UserLoginModel.model_rebuild()
