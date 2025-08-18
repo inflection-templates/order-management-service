@@ -9,5 +9,6 @@ from .cart import Cart
 from .coupon import Coupon
 from .merchant import Merchant
 from .payment_transaction import PaymentTransaction
-
+from .users import User
+from .auth import Auth
 

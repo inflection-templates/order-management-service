@@ -7,7 +7,8 @@ from .merchant.merchant_routes import router as merchant_router
 from .cart.cart_routes import router as cart_router
 from .coupon.coupon_routes import router as coupon_router
 from .payment_transaction.payment_transaction_routes import router as payment_transaction_router
-
+from .users.users_routes import router as users_router
+from .auth.auth_routes import router as auth_router
 
 router = APIRouter(prefix=API_PREFIX)
 
@@ -19,6 +20,8 @@ def add_routes():
     router.include_router(cart_router)
     router.include_router(coupon_router)
     router.include_router(payment_transaction_router)
+    router.include_router(users_router)
+    router.include_router(auth_router)
 
     # Add other routes here
 
