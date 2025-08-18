@@ -83,14 +83,14 @@ class ExternalAuthHandler:
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail="Invalid or expired state parameter"
                 )
-            
+
             # Verify provider matches
             if state_data.get("additional_data", {}).get("provider") != model.provider:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail="Provider mismatch in state parameter"
                 )
-            
+
             # Use tenant from state if not provided
             if not model.tenant_id:
                 model.tenant_id = state_data.get("tenant_id")

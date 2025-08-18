@@ -80,7 +80,7 @@ class UserFlowService:
             inviter = session.query(User).filter(User.id == invited_by_user_id).first()
             if inviter:
                 inviter_name = f"{inviter.FirstName} {inviter.LastName}".strip()
-        
+
         EmailService.send_invitation_email(email, invitation_link, inviter_name)
         logger.info(f"Invitation email sent to {email}")
 
