@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from app.config.constants import API_PREFIX
+from .auth.auth_routes import router as auth_router
 from .order.order_routes import router as order_router
 from .customer.customer_routes import router as customer_router
 from .address.address_routes import router as address_router
@@ -14,6 +15,7 @@ from .role.role_routes import router as role_router
 router = APIRouter(prefix=API_PREFIX)
 
 def add_routes():
+    router.include_router(auth_router)
     router.include_router(role_router)
     router.include_router(user_router)
     router.include_router(order_router)

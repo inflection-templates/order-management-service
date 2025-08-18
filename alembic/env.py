@@ -5,6 +5,9 @@ from sqlalchemy import pool
 
 from alembic import context
 from app.database.models import Address, Cart, Coupon, Customer, Merchant, Order, OrderCoupon, OrderLineItem, OrderType, OrderHistory, PaymentTransaction, customer_address
+from app.database.models.tenant import Tenant
+from app.database.models.auth_token import AuthToken
+from app.database.models.user_external_auth import UserExternalAuth
 from app.database.base import Base
 
 # this is the Alembic Config object, which provides
