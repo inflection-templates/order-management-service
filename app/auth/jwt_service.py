@@ -1,64 +1,40 @@
-from datetime import datetime, timedelta
-from typing import Optional, Dict, Any
-import uuid
+"""
+JWT Service - Compatibility layer for the restructured JWT system
+
+This file maintains backward compatibility while delegating to the new
+restructured JWT services.
+"""
+
+from datetime import timedelta
+from typing import Optional, Dict, Any, List
 from sqlalchemy.orm import Session
 
-# Use PyJWT as primary, fallback to python-jose if available
-try:
-    import jwt
-    from jwt.exceptions import InvalidTokenError as JWTError
-
-    # Adapter for PyJWT to provide consistent interface
-    class JWTAdapter:
-        @staticmethod
-        def encode(payload: dict, key: str, algorithm: str = "HS256") -> str:
-            return jwt.encode(payload, key, algorithm=algorithm)
-
-        @staticmethod
-        def decode(token: str, key: str, algorithms: list = None) -> dict:
-            if algorithms is None:
-                algorithms = ["HS256"]
-            return jwt.decode(token, key, algorithms=algorithms)
-
-    jwt_handler = JWTAdapter()
-
-except ImportError:
-    try:
-        from jose import JWTError, jwt as jwt_handler
-    except ImportError:
-        raise ImportError("Either PyJWT or python-jose must be installed for JWT functionality")
-
-from app.config.config import get_settings
-from app.database.models.auth_token import AuthToken
-from app.database.models.user import User
-
-settings = get_settings()
+# Import the new restructured services
+from .jwt_token_service import JWTTokenService
+from .jwt_handler import JWTHandler
 
 class JWTService:
+    """
+    Compatibility layer that delegates to the new JWT services.
+
+    This maintains backward compatibility for existing code while using
+    the new restructured JWT system under the hood.
+    """
 
     @staticmethod
     def create_access_token(
         user_id: str,
         tenant_id: str,
-        roles: list = None,
+        roles: Optional[List[str]] = None,
         expires_delta: Optional[timedelta] = None
     ) -> str:
         """Create JWT access token"""
-        if expires_delta:
-            expire = datetime.utcnow() + expires_delta
-        else:
-            expire = datetime.utcnow() + timedelta(minutes=settings.JWT_ACCESS_TOKEN_EXPIRE_MINUTES)
-
-        to_encode = {
-            "sub": user_id,
-            "tenant_id": tenant_id,
-            "roles": roles or [],
-            "exp": expire,
-            "iat": datetime.utcnow(),
-            "type": "access"
-        }
-
-        return jwt_handler.encode(to_encode, settings.JWT_SECRET_KEY, settings.JWT_ALGORITHM)
+        return JWTTokenService.create_access_token(
+            user_id=user_id,
+            tenant_id=tenant_id,
+            roles=roles,
+            expires_delta=expires_delta
+        )
 
     @staticmethod
     def create_refresh_token(
@@ -68,47 +44,22 @@ class JWTService:
         expires_delta: Optional[timedelta] = None
     ) -> str:
         """Create JWT refresh token and store in database"""
-        if expires_delta:
-            expire = datetime.utcnow() + expires_delta
-        else:
-            expire = datetime.utcnow() + timedelta(days=settings.JWT_REFRESH_TOKEN_EXPIRE_DAYS)
-
-        token_id = str(uuid.uuid4())
-        to_encode = {
-            "sub": user_id,
-            "tenant_id": tenant_id,
-            "exp": expire,
-            "iat": datetime.utcnow(),
-            "type": "refresh",
-            "jti": token_id
-        }
-
-        token = jwt_handler.encode(to_encode, settings.JWT_SECRET_KEY, settings.JWT_ALGORITHM)
-
-        # Store refresh token in database
-        db_token = AuthToken(
-            UserId=user_id,
-            TokenType="refresh",
-            Token=token,
-            ExpiresAt=expire
+        return JWTTokenService.create_refresh_token(
+            user_id=user_id,
+            tenant_id=tenant_id,
+            session=session,
+            expires_delta=expires_delta
         )
-        session.add(db_token)
-        session.commit()
-
-        return token
 
     @staticmethod
     def verify_token(token: str, token_type: str = "access") -> Optional[Dict[str, Any]]:
         """Verify JWT token and return payload"""
-        try:
-            payload = jwt_handler.decode(token, settings.JWT_SECRET_KEY, [settings.JWT_ALGORITHM])
-
-            if payload.get("type") != token_type:
-                return None
-
-            return payload
-        except JWTError:
-            return None
+        if token_type == "access":
+            return JWTTokenService.verify_access_token(token)
+        else:
+            # For other token types, we need a session to check revocation
+            # This is a limitation of the compatibility layer
+            return JWTHandler.verify_token(token, expected_type=token_type)
 
     @staticmethod
     def create_special_token(
@@ -117,92 +68,78 @@ class JWTService:
         token_type: str,
         session: Session,
         expires_hours: int = 24,
-        additional_claims: Dict[str, Any] = None
+        additional_claims: Optional[Dict[str, Any]] = None
     ) -> str:
         """Create special tokens for password reset, email verification, etc."""
-        expire = datetime.utcnow() + timedelta(hours=expires_hours)
-        token_id = str(uuid.uuid4())
+        if token_type == "reset_password":
+            return JWTTokenService.create_password_reset_token(
+                user_id=user_id,
+                tenant_id=tenant_id,
+                session=session,
+                expires_hours=expires_hours
+            )
+        elif token_type == "verify_email":
+            email = additional_claims.get("email", "") if additional_claims else ""
+            return JWTTokenService.create_email_verification_token(
+                user_id=user_id,
+                tenant_id=tenant_id,
+                email=email,
+                session=session,
+                expires_hours=expires_hours
+            )
+        elif token_type == "invitation":
+            email = additional_claims.get("email", "") if additional_claims else ""
+            invited_by = additional_claims.get("invited_by", "") if additional_claims else ""
+            return JWTTokenService.create_invitation_token(
+                user_id=user_id,
+                tenant_id=tenant_id,
+                email=email,
+                invited_by=invited_by,
+                session=session,
+                expires_hours=expires_hours
+            )
+        else:
+            # For custom token types, use the handler directly
+            from datetime import datetime
+            payload = {
+                "sub": user_id,
+                "tenant_id": tenant_id
+            }
+            if additional_claims:
+                payload.update(additional_claims)
 
-        to_encode = {
-            "sub": user_id,
-            "tenant_id": tenant_id,
-            "exp": expire,
-            "iat": datetime.utcnow(),
-            "type": token_type,
-            "jti": token_id
-        }
+            expires_delta = timedelta(hours=expires_hours)
+            token = JWTHandler.create_token(
+                payload=payload,
+                expires_delta=expires_delta,
+                token_type=token_type
+            )
 
-        if additional_claims:
-            to_encode.update(additional_claims)
+            # Store in database using token manager
+            from .token_manager import TokenManager
+            expires_at = datetime.utcnow() + expires_delta
+            TokenManager.store_special_token(
+                user_id=user_id,
+                token=token,
+                token_type=token_type,
+                expires_at=expires_at,
+                session=session
+            )
 
-        token = jwt_handler.encode(to_encode, settings.JWT_SECRET_KEY, settings.JWT_ALGORITHM)
-
-        # Store token in database
-        db_token = AuthToken(
-            UserId=user_id,
-            TokenType=token_type,
-            Token=token,
-            ExpiresAt=expire
-        )
-        session.add(db_token)
-        session.commit()
-
-        return token
+            return token
 
     @staticmethod
     def revoke_token(token: str, session: Session) -> bool:
         """Revoke a token"""
-        try:
-            payload = jwt_handler.decode(token, settings.JWT_SECRET_KEY, [settings.JWT_ALGORITHM])
-            jti = payload.get("jti")
-
-            if jti:
-                db_token = session.query(AuthToken).filter(
-                    AuthToken.Token == token,
-                    AuthToken.IsRevoked == False
-                ).first()
-
-                if db_token:
-                    db_token.IsRevoked = True
-                    session.commit()
-                    return True
-        except JWTError:
-            pass
-
-        return False
+        return JWTTokenService.revoke_token(token, session)
 
     @staticmethod
     def is_token_revoked(token: str, session: Session) -> bool:
         """Check if token is revoked"""
-        try:
-            payload = jwt_handler.decode(token, settings.JWT_SECRET_KEY, [settings.JWT_ALGORITHM])
-
-            # For access tokens, we don't store them in DB, so they're not revoked
-            if payload.get("type") == "access":
-                return False
-
-            # For other tokens, check database
-            db_token = session.query(AuthToken).filter(
-                AuthToken.Token == token
-            ).first()
-
-            return db_token.IsRevoked if db_token else True
-        except JWTError:
-            return True
+        from .token_manager import TokenManager
+        return TokenManager.is_token_revoked(token, session)
 
     @staticmethod
-    def revoke_all_user_tokens(user_id: str, session: Session, token_type: str = None):
+    def revoke_all_user_tokens(user_id: str, session: Session, token_type: Optional[str] = None):
         """Revoke all tokens for a user"""
-        query = session.query(AuthToken).filter(
-            AuthToken.UserId == user_id,
-            AuthToken.IsRevoked == False
-        )
-
-        if token_type:
-            query = query.filter(AuthToken.TokenType == token_type)
-
-        tokens = query.all()
-        for token in tokens:
-            token.IsRevoked = True
-
-        session.commit()
+        return JWTTokenService.revoke_user_tokens(user_id, session, token_type)

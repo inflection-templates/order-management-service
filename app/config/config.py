@@ -1,4 +1,9 @@
-from pydantic_settings import BaseSettings
+try:
+    # Preferred for Pydantic v2 setups
+    from pydantic_settings import BaseSettings
+except ImportError:  # Fallback for minimal/v1 environments
+    # Pydantic v1 exposes BaseSettings directly from pydantic
+    from pydantic import BaseSettings
 from functools import lru_cache
 
 class Settings(BaseSettings):

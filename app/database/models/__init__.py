@@ -19,3 +19,8 @@ from .person.person import Person
 from .person.person_role import PersonRole
 from .person.person_addresses import PersonAddresses
 
+# Authentication models
+from .tenant import Tenant
+from .auth_token import AuthToken
+from .user_external_auth import UserExternalAuth
+
