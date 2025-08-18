@@ -1,129 +1,108 @@
-## Local Setup
+# Order Management Service - Setup Guide
 
-You can setup FastAPI project in the following ways.
+> **📁 This file has been reorganized into comprehensive setup guides!**
 
-1. Using venv
-2. Using pipenv
-3. Using pipx and poetry
+## 🚀 Quick Setup Options
 
-### Setup using venv
+Choose your preferred development environment:
 
-1. Create virtual environment.
-`$ python3 -m venv env`
+| Setup Method | Best For | Time Required | Guide |
+|-------------|----------|---------------|-------|
+| **🐳 Docker** | Quick start, team consistency | 5 minutes | [Docker Setup](setup/docker-setup.md) |
+| **🐍 Python venv** | Simple Python development | 10 minutes | [venv Setup](setup/venv-setup.md) |
+| **📦 Pipenv** | Modern dependency management | 15 minutes | [Pipenv Setup](setup/pipenv-setup.md) |
+| **🎭 Poetry** | Advanced project management | 20 minutes | [Poetry Setup](setup/poetry-setup.md) |
+| **💻 VS Code** | Full IDE development | 30 minutes | [VS Code Setup](setup/vscode-setup.md) |
 
-2. Activate virtual environment.
-`$ source env/bin/activate`
+## 🎯 Recommended Quick Start
 
-3. Install dependencies.
-`$ pip install -r requirements.txt `
+### For Beginners
+```bash
+# Docker setup (fastest)
+git clone <repo-url>
+cd order-management-service
+cp .env.example .env
+docker-compose up --build
+```
+📖 **Full Guide**: [Docker Setup](setup/docker-setup.md)
 
-4. To freeze the dependecnies to requirement.txt.
-`$ pip freeze > requirement.txt`
+### For Python Developers
+```bash
+# venv setup (traditional)
+python -m venv env
+source env/bin/activate  # Windows: env\Scripts\activate
+pip install -r requirements.txt
+uvicorn main:app --port 12345 --reload
+```
+📖 **Full Guide**: [venv Setup](setup/venv-setup.md)
 
-### Setup using pipenv
-1. Install pipenv.
-`$ pip3 install pipenv`
+### For Advanced Users
+```bash
+# Poetry setup (modern)
+poetry install
+poetry shell
+uvicorn main:app --port 12345 --reload
+```
+📖 **Full Guide**: [Poetry Setup](setup/poetry-setup.md)
 
-2. Create pipenv shell.
-`$ pipenv shell`
-This will create a virtual environment in your C:\Users\<user-name>\.virtualenvs\ folder.
-For example, - ```Virtualenv location: C:\Users\Admin\.virtualenvs\fastapi-exp-2-Foeb76tt```. This will create
+## 📚 Comprehensive Setup Documentation
 
-3. Install fastapi.
-`$ pipenv install fastapi`
+### **[📋 Setup Overview](setup/README.md)**
+Complete comparison of all setup methods with recommendations based on your needs.
 
-4. Install uvicorn.
-`$ pipenv install uvicorn`
+### **[🐳 Docker Setup](setup/docker-setup.md)**
+- Containerized development environment
+- Includes database and all dependencies
+- Production-ready deployment configuration
+- Best for: Quick start, team consistency, deployment
 
-5. To install dev dependencies.
-`$ pipenv install pytest --dev`
+### **[🐍 venv Setup](setup/venv-setup.md)**
+- Traditional Python virtual environment
+- Simple and widely supported
+- Manual dependency management
+- Best for: Python developers, simple setups
 
-6. To lock environment for dependencies.
-`$ pipenv lock`
+### **[📦 Pipenv Setup](setup/pipenv-setup.md)**
+- Modern dependency management
+- Automatic virtual environment handling
+- Pipfile and lock file for reproducibility
+- Best for: Development workflows, collaboration
 
-7. To install from dependencies from lock file.
-`$ pipenv install --ignore-pipfile`
+### **[🎭 Poetry Setup](setup/poetry-setup.md)**
+- Advanced Python project management
+- Modern dependency resolution
+- Built-in build and publish tools
+- Best for: Library development, advanced users
 
-8. Start uvicorn server.
-`$ uvicorn main:app --reload`
+### **[💻 VS Code Setup](setup/vscode-setup.md)**
+- Complete IDE development environment
+- Debugging, testing, and development tools
+- API testing and database management
+- Best for: Full development experience
 
-9. In case you want to remove the created virtual environment, run the following
-`$ pipenv --rm`
+## ⚡ Current Project Status
 
-For further pipenv information, please refer to https://realpython.com/pipenv-guide/.
+**✅ Authentication System**: Fully implemented with JWT, multi-tenant support, and multiple auth methods
+**✅ Database Models**: Complete with migrations ready
+**✅ API Endpoints**: All CRUD operations with authentication
+**✅ Documentation**: Comprehensive guides and examples
 
-### Setup using pipx and poetry
+## 🔧 After Setup
 
-1. Install pipx (On windows). For other operating systems, please visit https://pypa.github.io/pipx/.
-`$ pip install --user pipx`
+Once you've completed setup, you'll have:
 
-2. Install poetry.
-`$ pipx install poetry`
-Check the installation using `$ poetry --version`.
-You can update the poetry version using poetry itself like `$ poetry self update` or using pip as `$ pip install --upgrade poetry`.
+1. **🌐 API Server**: Running at `http://localhost:12345`
+2. **📖 API Docs**: Available at `http://localhost:12345/docs`
+3. **🔐 Authentication**: Full auth system with JWT tokens
+4. **🏢 Multi-tenant**: Support for multiple tenants
+5. **📊 Database**: With all required tables and relationships
 
-3. Update PATH variables.
-   Go to `C:\Users\<Username>\.local\bin` and run `pipx ensurepath`. Close the terminal and open again.
+## 🆘 Need Help?
 
-4. Initialize a new project with poetry as below.
-   `$ poetry new <project-name>`
-   Or if the project folder already exists, generate the pyproject.toml interactively using poetry using `$ poetry init`.
-   Specify the dependencies during the whole process.
+- **🚀 Quick Start**: Use [Docker Setup](setup/docker-setup.md) for fastest results
+- **🐛 Issues**: Check individual setup guides for troubleshooting
+- **💬 Questions**: Create GitHub issue with your setup method and error details
 
-5. To add a new package, run
-   `$ poetry add <package-name>`
+---
 
-6. To add a new package as a dev dependency, run
-   `$ poetry add <package-name> --dev`
-
-7. To remove a package, run
-   `$ poetry remove <package-name>`
-
-8. To update poetry.lock from project.toml, run
-   `$ poetry update`
-   This will update/create poetry.lock
-
-9.  To install from poetry.lock, run
-   `$ poetry install`
-
-10. To list all installed packages, run
-    `$ poetry list`
-
-11. To export poetry packages to requirements.txt from poetry.lock, run
-    `$ poetry export --output requirements.txt`
-
-### PLEASE NOTE
-We are using poetry to setup order management service.
-For any new package installation, please use
-`$ poetry add <package-name>`
-
-### Run Server from Command Line
-
-`$ uvicorn main:app --port 12345`
-
-### Run server in debug mode in VSCode
-
-1. Select debugging button on the left most toolbar.
-2. Select 'Launch Server' from drop down menu.
-3. Click on 'Start Debugging' button or press F5.
-4. Add breakpoints in code wherever needed.
-
-### Run Tests from command line
-
-To run the tests from command line, run the following
-`$ pytest`
-
-### Run the tests from VSCode's Test Explorer Extension
-
-1. Select 'Test' button on the left most toolbar.
-2. All the tests in the code will be hierarchically displayed.
-3. Run all the tests in 'Run' Mode or in 'Debug' mode. In debug mode, you can add breakpoints in server-code or in test-code.
-4. Test results will be displayed in the adjacent panel.
-
-### Setup Environment Variables
-
-1. Create a file named `.env` in the root directory of the project.
-2. Copy the content of `.env.example` to `.env` file.
-3. Make modifications to the values of the variables as per your need.
-4. For MySQL database, please install pymysl using `$ pip install pymysql`.
-5. For PostgreSQL database, please install psycopg2 using `$ pip install psycopg2`.
+**📍 Current Recommendation**: We're currently using **Poetry** for dependency management, but all setup methods are supported and maintained.
