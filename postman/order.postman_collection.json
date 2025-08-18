@@ -1,0 +1,4797 @@
+{
+	"info": {
+		"_postman_id": "f92414c6-08fc-4eea-9e32-d7f89783784a",
+		"name": "order",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18989262",
+		"_collection_link": "https://blue-resonance-338823.postman.co/workspace/deft-testing~dd247659-9075-4e15-b2ec-cb0b6bf5753c/collection/18989262-f92414c6-08fc-4eea-9e32-d7f89783784a?action=share&source=collection_link&creator=18989262"
+	},
+	"item": [
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"try {",
+									"    var respData = pm.response.json();",
+									"    pm.environment.set(\"PATIENT_ID\", respData.Data.id);",
+									"}",
+									"catch (error) {",
+									"    console.log(error.message);",
+									"}",
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Patient created successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');",
+									"    pm.expect(jsonRes.Data.Name).to.eql(\"Essie Gorczany\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"FirstName\": \"John\",\r\n  \"LastName\": \"Doe\", \r\n  \"UserName\": \"admin\",\r\n  \"Email\": \"admin@example.com\",\r\n  \"CountryCode\": \"{{COUNTRY_CODE}}\",\r\n  \"PhoneNumber\": \"{{PHONE}}\",\r\n  \"Password\": \"{{PASSWORD}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/users",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Patient retreived successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');",
+									"    pm.expect(jsonRes.Data.Name).to.eql(\"Essie Gorczany\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/users/{{USER_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users",
+								"{{USER_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Patient records retrieved successfully', function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('Items');",
+									"    pm.expect(jsonRes.Data.Items.length).to.be.at.least(0);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/users/search?name=Ut rerum eveniet.",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users",
+								"search"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Ut rerum eveniet."
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Patient updated successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');",
+									"    pm.expect(jsonRes.Data.Name).to.eql(\"Fredrick Metz\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"FirstName\": \"Fredrick\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/patients/{{PATIENT_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"patients",
+								"{{PATIENT_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Patient deleted successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"    pm.expect(jsonRes.Data).to.have.property('deleted', true);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/patients/{{USER_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"patients",
+								"{{USER_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"try {",
+									"    var respData = pm.response.json();",
+									"    pm.environment.set(\"PATIENT_ID\", respData.Data.id);",
+									"}",
+									"catch (error) {",
+									"    console.log(error.message);",
+									"}",
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Patient created successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');",
+									"    pm.expect(jsonRes.Data.Name).to.eql(\"Essie Gorczany\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"FirstName\": \"John\",\r\n  \"LastName\": \"Doe\", \r\n  \"UserName\": \"user\",\r\n  \"Email\": \"user@example.com\",\r\n  \"CountryCode\": \"{{COUNTRY_CODE}}\",\r\n  \"PhoneNumber\": \"{{PHONE}}\",\r\n  \"Password\": \"{{PASSWORD}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/users",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Patient retreived successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');\n    pm.expect(jsonRes.Data.Name).to.eql(\"Essie Gorczany\");",
+									"});",
+									"\n"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/patients/{{PATIENT_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"patients",
+								"{{PATIENT_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Patient records retrieved successfully', function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('Items');",
+									"    pm.expect(jsonRes.Data.Items.length).to.be.at.least(0);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/patients/search?name=Ut rerum eveniet.",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"patients",
+								"search"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Ut rerum eveniet."
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Patient updated successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');\n    pm.expect(jsonRes.Data.Name).to.eql(\"Fredrick Metz\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Name\": \"Fredrick Metz\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/patients/{{PATIENT_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"patients",
+								"{{PATIENT_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Patient deleted successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"    pm.expect(jsonRes.Data).to.have.property('deleted', true);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/patients/{{PATIENT_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"patients",
+								"{{PATIENT_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "login",
+			"item": [
+				{
+					"name": "admin login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"try {",
+									"    var respData = pm.response.json();",
+									"    pm.environment.set(\"PATIENT_ID\", respData.Data.id);",
+									"}",
+									"catch (error) {",
+									"    console.log(error.message);",
+									"}",
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Patient created successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');",
+									"    pm.expect(jsonRes.Data.Name).to.eql(\"Essie Gorczany\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Email\": \"admin@example.com\",\r\n  \"Password\": \"{{PASSWORD}}\",\r\n  \"Role\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"try {",
+									"    var respData = pm.response.json();",
+									"    pm.environment.set(\"PATIENT_ID\", respData.Data.id);",
+									"}",
+									"catch (error) {",
+									"    console.log(error.message);",
+									"}",
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Patient created successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');",
+									"    pm.expect(jsonRes.Data.Name).to.eql(\"Essie Gorczany\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Email\": \"user@example.com\",\r\n  \"Password\": \"{{PASSWORD}}\",\r\n  \"Role\": \"user\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Patient retreived successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');\n    pm.expect(jsonRes.Data.Name).to.eql(\"Essie Gorczany\");",
+									"});",
+									"\n"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/patients/{{PATIENT_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"patients",
+								"{{PATIENT_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Patient records retrieved successfully', function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('Items');",
+									"    pm.expect(jsonRes.Data.Items.length).to.be.at.least(0);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/patients/search?name=Ut rerum eveniet.",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"patients",
+								"search"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Ut rerum eveniet."
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Patient updated successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');\n    pm.expect(jsonRes.Data.Name).to.eql(\"Fredrick Metz\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Name\": \"Fredrick Metz\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/patients/{{PATIENT_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"patients",
+								"{{PATIENT_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Patient deleted successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"    pm.expect(jsonRes.Data).to.have.property('deleted', true);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/patients/{{PATIENT_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"patients",
+								"{{PATIENT_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Merchant",
+			"item": [
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"try {",
+									"    var respData = pm.response.json();",
+									"    pm.environment.set(\"MERCHANT_ID\", respData.Data.id);",
+									"}",
+									"catch (error) {",
+									"    console.log(error.message);",
+									"}",
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Merchant created successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');",
+									"    pm.expect(jsonRes.Data.Name).to.eql(\"Jared Hilll\");",
+									"    pm.expect(jsonRes.Data).to.have.property('Email');",
+									"    pm.expect(jsonRes.Data.Email).to.eql(\"Maryam57@gmail.com\");",
+									"    pm.expect(jsonRes.Data).to.have.property('Phone');",
+									"    pm.expect(jsonRes.Data.Phone).to.eql(\"0805590617\");",
+									"    pm.expect(jsonRes.Data).to.have.property('Logo');",
+									"    pm.expect(jsonRes.Data.Logo).to.eql(\"Et in facilis.\");",
+									"    pm.expect(jsonRes.Data).to.have.property('WebsiteUrl');",
+									"    pm.expect(jsonRes.Data.WebsiteUrl).to.eql(\"http://reinhold.biz\");",
+									"    pm.expect(jsonRes.Data).to.have.property('TaxNumber');",
+									"    pm.expect(jsonRes.Data.TaxNumber).to.eql(\"Exercitationem cupiditate temporibus.\");",
+									"    pm.expect(jsonRes.Data).to.have.property('GstNumber');",
+									"    pm.expect(jsonRes.Data.GstNumber).to.eql(\"Et est eaque.\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"ReferenceId\": \"{{REFERENCE_ID}}\",\r\n  \"Name\": \"Jared Hilll\",\r\n  \"Email\": \"Maryam57@gmail.com\",\r\n  \"Phone\": \"0805590617\",\r\n  \"Logo\": \"Et in facilis.\",\r\n  \"WebsiteUrl\": \"http://reinhold.biz\",\r\n  \"TaxNumber\": \"Exercitationem cupiditate temporibus.\",\r\n  \"GstNumber\": \"Et est eaque.\"\r\n//   \"AddressId\": \"{{ADDRESS_ID}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/merchants",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"merchants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Merchant retreived successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');\n    pm.expect(jsonRes.Data.Name).to.eql(\"Jared Hilll\");\n    pm.expect(jsonRes.Data).to.have.property('Email');\n    pm.expect(jsonRes.Data.Email).to.eql(\"Maryam57@gmail.com\");\n    pm.expect(jsonRes.Data).to.have.property('Phone');\n    pm.expect(jsonRes.Data.Phone).to.eql(\"0805590617\");\n    pm.expect(jsonRes.Data).to.have.property('Logo');\n    pm.expect(jsonRes.Data.Logo).to.eql(\"Et in facilis.\");\n    pm.expect(jsonRes.Data).to.have.property('WebsiteUrl');\n    pm.expect(jsonRes.Data.WebsiteUrl).to.eql(\"http://reinhold.biz\");\n    pm.expect(jsonRes.Data).to.have.property('TaxNumber');\n    pm.expect(jsonRes.Data.TaxNumber).to.eql(\"Exercitationem cupiditate temporibus.\");\n    pm.expect(jsonRes.Data).to.have.property('GstNumber');\n    pm.expect(jsonRes.Data.GstNumber).to.eql(\"Et est eaque.\");",
+									"});",
+									"\n"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/merchants/{{MERCHANT_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"merchants",
+								"{{MERCHANT_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Merchant records retrieved successfully', function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('Items');",
+									"    pm.expect(jsonRes.Data.Items.length).to.be.at.least(0);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/merchants/search?",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"merchants",
+								"search"
+							],
+							"query": [
+								{
+									"key": null,
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Merchant updated successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');\n    pm.expect(jsonRes.Data.Name).to.eql(\"Kim Kautzer\");\n    pm.expect(jsonRes.Data).to.have.property('Email');\n    pm.expect(jsonRes.Data.Email).to.eql(\"Larissa.Kassulke95@yahoo.com\");\n    pm.expect(jsonRes.Data).to.have.property('Phone');\n    pm.expect(jsonRes.Data.Phone).to.eql(\"8456148880\");\n    pm.expect(jsonRes.Data).to.have.property('Logo');\n    pm.expect(jsonRes.Data.Logo).to.eql(\"Blanditiis illum saepe.\");\n    pm.expect(jsonRes.Data).to.have.property('WebsiteUrl');\n    pm.expect(jsonRes.Data.WebsiteUrl).to.eql(\"https://alfonzo.biz\");\n    pm.expect(jsonRes.Data).to.have.property('TaxNumber');\n    pm.expect(jsonRes.Data.TaxNumber).to.eql(\"Necessitatibus officiis non.\");\n    pm.expect(jsonRes.Data).to.have.property('GstNumber');\n    pm.expect(jsonRes.Data.GstNumber).to.eql(\"Deserunt aut excepturi.\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"ReferenceId\": \"{{REFERENCE_ID}}\",\r\n  \"Name\": \"Kim Kautzer\",\r\n  \"Email\": \"Larissa.Kassulke95@yahoo.com\",\r\n  \"Phone\": \"8456148880\",\r\n  \"Logo\": \"Blanditiis illum saepe.\",\r\n  \"WebsiteUrl\": \"https://alfonzo.biz\",\r\n  \"TaxNumber\": \"Necessitatibus officiis non.\",\r\n  \"GstNumber\": \"Deserunt aut excepturi.\",\r\n  \"AddressId\": \"{{ADDRESS_ID}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/merchants/{{MERCHANT_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"merchants",
+								"{{MERCHANT_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Merchant deleted successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"    pm.expect(jsonRes.Data).to.have.property('deleted', true);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/merchants/{{MERCHANT_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"merchants",
+								"{{MERCHANT_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Address",
+			"item": [
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"try {",
+									"    var respData = pm.response.json();",
+									"    pm.environment.set(\"ADDRESS_ID\", respData.Data.id);",
+									"}",
+									"catch (error) {",
+									"    console.log(error.message);",
+									"}",
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Address created successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('AddressLine1');",
+									"    pm.expect(jsonRes.Data.AddressLine1).to.eql(\"9795 Brandyn Inlet, New Gage, Falkland Islands (Malvinas)\");",
+									"    pm.expect(jsonRes.Data).to.have.property('AddressLine2');",
+									"    pm.expect(jsonRes.Data.AddressLine2).to.eql(\"9533 Jaskolski Rapid, East Nya, San Marino\");",
+									"    pm.expect(jsonRes.Data).to.have.property('City');",
+									"    pm.expect(jsonRes.Data.City).to.eql(\"New Gillian\");",
+									"    pm.expect(jsonRes.Data).to.have.property('State');",
+									"    pm.expect(jsonRes.Data.State).to.eql(\"Arkansas\");",
+									"    pm.expect(jsonRes.Data).to.have.property('Country');",
+									"    pm.expect(jsonRes.Data.Country).to.eql(\"Iceland\");",
+									"    pm.expect(jsonRes.Data).to.have.property('ZipCode');",
+									"    pm.expect(jsonRes.Data.ZipCode).to.eql(\"016149\");",
+									"    pm.expect(jsonRes.Data).to.have.property('CreatedBy');",
+									"    pm.expect(jsonRes.Data.CreatedBy).to.eql(\"Nostrum doloribus provident.\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"AddressLine1\": \"9795 Brandyn Inlet, New Gage, Falkland Islands (Malvinas)\",\r\n  \"AddressLine2\": \"9533 Jaskolski Rapid, East Nya, San Marino\",\r\n  \"City\": \"New Gillian\",\r\n  \"State\": \"Arkansas\",\r\n  \"Country\": \"Iceland\",\r\n  \"ZipCode\": \"016149\"\r\n//   \"MerchantId\": \"{{MERCHANT_ID}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/addresses",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"addresses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Address retreived successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('AddressLine1');",
+									"    pm.expect(jsonRes.Data.AddressLine1).to.eql(\"9795 Brandyn Inlet, New Gage, Falkland Islands (Malvinas)\");",
+									"    pm.expect(jsonRes.Data).to.have.property('AddressLine2');",
+									"    pm.expect(jsonRes.Data.AddressLine2).to.eql(\"9533 Jaskolski Rapid, East Nya, San Marino\");",
+									"    pm.expect(jsonRes.Data).to.have.property('City');",
+									"    pm.expect(jsonRes.Data.City).to.eql(\"New Gillian\");",
+									"    pm.expect(jsonRes.Data).to.have.property('State');",
+									"    pm.expect(jsonRes.Data.State).to.eql(\"Arkansas\");",
+									"    pm.expect(jsonRes.Data).to.have.property('Country');",
+									"    pm.expect(jsonRes.Data.Country).to.eql(\"Iceland\");",
+									"    pm.expect(jsonRes.Data).to.have.property('ZipCode');",
+									"    pm.expect(jsonRes.Data.ZipCode).to.eql(\"016149\");",
+									"    pm.expect(jsonRes.Data).to.have.property('CreatedBy');",
+									"    pm.expect(jsonRes.Data.CreatedBy).to.eql(\"Nostrum doloribus provident.\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/addresses/{{ADDRESS_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"addresses",
+								"{{ADDRESS_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Address records retrieved successfully', function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('Items');",
+									"    pm.expect(jsonRes.Data.Items.length).to.be.at.least(0);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/addresses/search?",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"addresses",
+								"search"
+							],
+							"query": [
+								{
+									"key": null,
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Address updated successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('AddressLine1');\n    pm.expect(jsonRes.Data.AddressLine1).to.eql(\"89284 Reed Meadow, Carterside, Sierra Leone\");\n    pm.expect(jsonRes.Data).to.have.property('AddressLine2');\n    pm.expect(jsonRes.Data.AddressLine2).to.eql(\"815 Marcos Stravenue, Port Lilianaland, Bhutan\");\n    pm.expect(jsonRes.Data).to.have.property('City');\n    pm.expect(jsonRes.Data.City).to.eql(\"Earlinebury\");\n    pm.expect(jsonRes.Data).to.have.property('State');\n    pm.expect(jsonRes.Data.State).to.eql(\"Maryland\");\n    pm.expect(jsonRes.Data).to.have.property('Country');\n    pm.expect(jsonRes.Data.Country).to.eql(\"Saudi Arabia\");\n    pm.expect(jsonRes.Data).to.have.property('ZipCode');\n    pm.expect(jsonRes.Data.ZipCode).to.eql(\"986563\");\n    pm.expect(jsonRes.Data).to.have.property('CreatedBy');\n    pm.expect(jsonRes.Data.CreatedBy).to.eql(\"Provident occaecati eligendi.\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"AddressLine1\": \"89284 Reed Meadow, Carterside, Sierra Leone\",\r\n  \"AddressLine2\": \"815 Marcos Stravenue, Port Lilianaland, Bhutan\",\r\n  \"City\": \"Earlinebury\",\r\n  \"State\": \"Maryland\",\r\n  \"Country\": \"Saudi Arabia\",\r\n  \"ZipCode\": \"986563\",\r\n  \"MerchantId\": \"{{MERCHANT_ID}}\",\r\n  \"CreatedBy\": \"Provident occaecati eligendi.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/addresses/{{ADDRESS_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"addresses",
+								"{{ADDRESS_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Address deleted successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"    pm.expect(jsonRes.Data).to.have.property('deleted', true);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/addresses/{{ADDRESS_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"addresses",
+								"{{ADDRESS_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"try {",
+									"    var respData = pm.response.json();",
+									"    pm.environment.set(\"CART_ID\", respData.Data.id);",
+									"}",
+									"catch (error) {",
+									"    console.log(error.message);",
+									"}",
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Cart created successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('TotalItemsCount');\n    pm.expect(jsonRes.Data.TotalItemsCount).to.eql(8494);\n    pm.expect(jsonRes.Data).to.have.property('TotalTax');\n    pm.expect(jsonRes.Data.TotalTax).to.eql(6266.4662547812295);\n    pm.expect(jsonRes.Data).to.have.property('TotalDiscount');\n    pm.expect(jsonRes.Data.TotalDiscount).to.eql(2505.3489572825088);\n    pm.expect(jsonRes.Data).to.have.property('TotalAmount');\n    pm.expect(jsonRes.Data.TotalAmount).to.eql(5501.744339853959);\n    pm.expect(jsonRes.Data).to.have.property('CartToOrderTimestamp');\n    pm.expect(jsonRes.Data.CartToOrderTimestamp).to.eql(\"2025-07-03T23:44:03\");",
+									"});",
+									"\n"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"CustomerId\": \"{{CUSTOMER_ID}}\",\r\n  \"TotalItemsCount\": 8494,\r\n  \"TotalTax\": 6266.4662547812295,\r\n  \"TotalDiscount\": 2505.3489572825088,\r\n  \"TotalAmount\": 5501.744339853959,\r\n  \"CartToOrderTimestamp\": \"2025-07-03T23:44:03\",\r\n  \"AssociatedOrderId\": \"{{ASSOCIATED_ORDER_ID}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/carts",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"carts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Cart retreived successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('TotalItemsCount');\n    pm.expect(jsonRes.Data.TotalItemsCount).to.eql(8494);\n    pm.expect(jsonRes.Data).to.have.property('TotalTax');\n    pm.expect(jsonRes.Data.TotalTax).to.eql(6266.4662547812295);\n    pm.expect(jsonRes.Data).to.have.property('TotalDiscount');\n    pm.expect(jsonRes.Data.TotalDiscount).to.eql(2505.3489572825088);\n    pm.expect(jsonRes.Data).to.have.property('TotalAmount');\n    pm.expect(jsonRes.Data.TotalAmount).to.eql(5501.744339853959);\n    pm.expect(jsonRes.Data).to.have.property('CartToOrderTimestamp');\n    pm.expect(jsonRes.Data.CartToOrderTimestamp).to.eql(\"2025-07-03T23:44:03\");",
+									"});",
+									"\n"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/carts/{{CART_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"carts",
+								"{{CART_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Cart records retrieved successfully', function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('Items');",
+									"    pm.expect(jsonRes.Data.Items.length).to.be.at.least(0);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/carts/search?",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"carts",
+								"search"
+							],
+							"query": [
+								{
+									"key": null,
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Cart updated successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('TotalItemsCount');\n    pm.expect(jsonRes.Data.TotalItemsCount).to.eql(5855);\n    pm.expect(jsonRes.Data).to.have.property('TotalTax');\n    pm.expect(jsonRes.Data.TotalTax).to.eql(7414.845107727529);\n    pm.expect(jsonRes.Data).to.have.property('TotalDiscount');\n    pm.expect(jsonRes.Data.TotalDiscount).to.eql(419.12851256418867);\n    pm.expect(jsonRes.Data).to.have.property('TotalAmount');\n    pm.expect(jsonRes.Data.TotalAmount).to.eql(2424.496939856236);\n    pm.expect(jsonRes.Data).to.have.property('CartToOrderTimestamp');\n    pm.expect(jsonRes.Data.CartToOrderTimestamp).to.eql(\"2024-12-11T22:43:18\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"CustomerId\": \"{{CUSTOMER_ID}}\",\r\n  \"TotalItemsCount\": 5855,\r\n  \"TotalTax\": 7414.845107727529,\r\n  \"TotalDiscount\": 419.12851256418867,\r\n  \"TotalAmount\": 2424.496939856236,\r\n  \"CartToOrderTimestamp\": \"2024-12-11T22:43:18\",\r\n  \"AssociatedOrderId\": \"{{ASSOCIATED_ORDER_ID}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/carts/{{CART_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"carts",
+								"{{CART_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Cart deleted successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"    pm.expect(jsonRes.Data).to.have.property('deleted', true);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/carts/{{CART_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"carts",
+								"{{CART_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Coupon",
+			"item": [
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"try {",
+									"    var respData = pm.response.json();",
+									"    pm.environment.set(\"COUPON_ID\", respData.Data.id);",
+									"}",
+									"catch (error) {",
+									"    console.log(error.message);",
+									"}",
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Coupon created successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');",
+									"    pm.expect(jsonRes.Data.Name).to.eql(\"Marco Stehr\");",
+									"    pm.expect(jsonRes.Data).to.have.property('Description');",
+									"    pm.expect(jsonRes.Data.Description).to.eql(\"sint ea\");",
+									"    pm.expect(jsonRes.Data).to.have.property('CouponCode');",
+									"    pm.expect(jsonRes.Data.CouponCode).to.eql(\"Consequatur eligendi provident.\");",
+									"    pm.expect(jsonRes.Data).to.have.property('CouponType');",
+									"    pm.expect(jsonRes.Data.CouponType).to.eql(\"Cupiditate voluptas dolorem.\");",
+									"    pm.expect(jsonRes.Data).to.have.property('Discount');",
+									"    pm.expect(jsonRes.Data.Discount).to.eql(7613.055823777762);",
+									"    pm.expect(jsonRes.Data).to.have.property('DiscountType');",
+									"    pm.expect(jsonRes.Data.DiscountType).to.eql(\"Necessitatibus ea ut.\");",
+									"    pm.expect(jsonRes.Data).to.have.property('DiscountPercentage');",
+									"    pm.expect(jsonRes.Data.DiscountPercentage).to.eql(7994.074298956295);",
+									"    pm.expect(jsonRes.Data).to.have.property('DiscountMaxAmount');",
+									"    pm.expect(jsonRes.Data.DiscountMaxAmount).to.eql(4521.362967139535);",
+									"    pm.expect(jsonRes.Data).to.have.property('StartDate');",
+									"    pm.expect(jsonRes.Data.StartDate).to.eql(\"2025-08-15\");",
+									"    pm.expect(jsonRes.Data).to.have.property('EndDate');",
+									"    pm.expect(jsonRes.Data.EndDate).to.eql(\"2025-08-31\");",
+									"    pm.expect(jsonRes.Data).to.have.property('MaxUsage');",
+									"    pm.expect(jsonRes.Data.MaxUsage).to.eql(8057);",
+									"    pm.expect(jsonRes.Data).to.have.property('MaxUsagePerUser');",
+									"    pm.expect(jsonRes.Data.MaxUsagePerUser).to.eql(8345);",
+									"    pm.expect(jsonRes.Data).to.have.property('MaxUsagePerOrder');",
+									"    pm.expect(jsonRes.Data.MaxUsagePerOrder).to.eql(819);",
+									"    pm.expect(jsonRes.Data).to.have.property('MinOrderAmount');",
+									"    pm.expect(jsonRes.Data.MinOrderAmount).to.eql(3396.935284087011);",
+									"    pm.expect(jsonRes.Data).to.have.property('Code');",
+									"    pm.expect(jsonRes.Data.Code).to.eql(\"Consequuntur harum ipsam.\");",
+									"    pm.expect(jsonRes.Data).to.have.property('DiscountValue');",
+									"    pm.expect(jsonRes.Data.DiscountValue).to.eql(6138.606328959014);",
+									"    pm.expect(jsonRes.Data).to.have.property('Applied');",
+									"    pm.expect(jsonRes.Data.Applied).to.eql(true);",
+									"    pm.expect(jsonRes.Data).to.have.property('AppliedAt');",
+									"    pm.expect(jsonRes.Data.AppliedAt).to.eql(\"2024-12-30T12:39:42\");",
+									"    pm.expect(jsonRes.Data).to.have.property('IsActive');",
+									"    pm.expect(jsonRes.Data.IsActive).to.eql(false);",
+									"    pm.expect(jsonRes.Data).to.have.property('IsDeleted');",
+									"    pm.expect(jsonRes.Data.IsDeleted).to.eql(true);",
+									"    pm.expect(jsonRes.Data).to.have.property('CreatedBy');",
+									"    pm.expect(jsonRes.Data.CreatedBy).to.eql(\"Illo voluptatem nulla.\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Name\": \"Marco Stehr\",\r\n  \"Description\": \"sint ea\",\r\n  \"CouponCode\": \"X7G9D2K1PQ\",\r\n  \"CouponType\": \"Cupiditate dolorem.\",\r\n  \"Discount\": 7613.055823777762,\r\n  \"DiscountType\": \"Flat\",\r\n  \"DiscountPercentage\": 1.1,\r\n  \"DiscountMaxAmount\": 4521.362967139535,\r\n  \"StartDate\": \"2025-08-18T07:42:15Z\",\r\n  \"EndDate\": \"2025-08-20T07:42:15Z\",\r\n  \"MaxUsage\": 8057,\r\n  \"MaxUsagePerUser\": 10,\r\n  \"MaxUsagePerOrder\": 5,\r\n  \"MinOrderAmount\": 3396.935284087011,\r\n  \"Code\": \"harum ipsam.\",\r\n  \"DiscountValue\": 6138.606328959014,\r\n  \"Applied\": true,\r\n  \"AppliedAt\": \"2024-12-30T12:39:42Z\",\r\n  \"IsActive\": false,\r\n  \"IsDeleted\": true,\r\n  \"CreatedBy\": \"550e8400-e29b-41d4-a716-446655440007\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/coupons",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"coupons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Coupon retreived successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');\n    pm.expect(jsonRes.Data.Name).to.eql(\"Marco Stehr\");\n    pm.expect(jsonRes.Data).to.have.property('Description');\n    pm.expect(jsonRes.Data.Description).to.eql(\"sint ea\");\n    pm.expect(jsonRes.Data).to.have.property('CouponCode');\n    pm.expect(jsonRes.Data.CouponCode).to.eql(\"Consequatur eligendi provident.\");\n    pm.expect(jsonRes.Data).to.have.property('CouponType');\n    pm.expect(jsonRes.Data.CouponType).to.eql(\"Cupiditate voluptas dolorem.\");\n    pm.expect(jsonRes.Data).to.have.property('Discount');\n    pm.expect(jsonRes.Data.Discount).to.eql(7613.055823777762);\n    pm.expect(jsonRes.Data).to.have.property('DiscountType');\n    pm.expect(jsonRes.Data.DiscountType).to.eql(\"Necessitatibus ea ut.\");\n    pm.expect(jsonRes.Data).to.have.property('DiscountPercentage');\n    pm.expect(jsonRes.Data.DiscountPercentage).to.eql(7994.074298956295);\n    pm.expect(jsonRes.Data).to.have.property('DiscountMaxAmount');\n    pm.expect(jsonRes.Data.DiscountMaxAmount).to.eql(4521.362967139535);\n    pm.expect(jsonRes.Data).to.have.property('StartDate');\n    pm.expect(jsonRes.Data.StartDate).to.eql(\"2025-08-15\");\n    pm.expect(jsonRes.Data).to.have.property('EndDate');\n    pm.expect(jsonRes.Data.EndDate).to.eql(\"2025-08-31\");\n    pm.expect(jsonRes.Data).to.have.property('MaxUsage');\n    pm.expect(jsonRes.Data.MaxUsage).to.eql(8057);\n    pm.expect(jsonRes.Data).to.have.property('MaxUsagePerUser');\n    pm.expect(jsonRes.Data.MaxUsagePerUser).to.eql(8345);\n    pm.expect(jsonRes.Data).to.have.property('MaxUsagePerOrder');\n    pm.expect(jsonRes.Data.MaxUsagePerOrder).to.eql(819);\n    pm.expect(jsonRes.Data).to.have.property('MinOrderAmount');\n    pm.expect(jsonRes.Data.MinOrderAmount).to.eql(3396.935284087011);\n    pm.expect(jsonRes.Data).to.have.property('Code');\n    pm.expect(jsonRes.Data.Code).to.eql(\"Consequuntur harum ipsam.\");\n    pm.expect(jsonRes.Data).to.have.property('DiscountValue');\n    pm.expect(jsonRes.Data.DiscountValue).to.eql(6138.606328959014);\n    pm.expect(jsonRes.Data).to.have.property('Applied');\n    pm.expect(jsonRes.Data.Applied).to.eql(true);\n    pm.expect(jsonRes.Data).to.have.property('AppliedAt');\n    pm.expect(jsonRes.Data.AppliedAt).to.eql(\"2024-12-30T12:39:42\");\n    pm.expect(jsonRes.Data).to.have.property('IsActive');\n    pm.expect(jsonRes.Data.IsActive).to.eql(false);\n    pm.expect(jsonRes.Data).to.have.property('IsDeleted');\n    pm.expect(jsonRes.Data.IsDeleted).to.eql(true);\n    pm.expect(jsonRes.Data).to.have.property('CreatedBy');\n    pm.expect(jsonRes.Data.CreatedBy).to.eql(\"Illo voluptatem nulla.\");",
+									"});",
+									"\n"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/coupons/{{COUPON_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"coupons",
+								"{{COUPON_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Coupon records retrieved successfully', function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('Items');",
+									"    pm.expect(jsonRes.Data.Items.length).to.be.at.least(0);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/coupons/search?",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"coupons",
+								"search"
+							],
+							"query": [
+								{
+									"key": null,
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Coupon updated successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');\n    pm.expect(jsonRes.Data.Name).to.eql(\"Christie Conn\");\n    pm.expect(jsonRes.Data).to.have.property('Description');\n    pm.expect(jsonRes.Data.Description).to.eql(\"et hic\");\n    pm.expect(jsonRes.Data).to.have.property('CouponCode');\n    pm.expect(jsonRes.Data.CouponCode).to.eql(\"Esse ex et.\");\n    pm.expect(jsonRes.Data).to.have.property('CouponType');\n    pm.expect(jsonRes.Data.CouponType).to.eql(\"Aspernatur non repellat.\");\n    pm.expect(jsonRes.Data).to.have.property('Discount');\n    pm.expect(jsonRes.Data.Discount).to.eql(9944.897074078028);\n    pm.expect(jsonRes.Data).to.have.property('DiscountType');\n    pm.expect(jsonRes.Data.DiscountType).to.eql(\"Et eos quis.\");\n    pm.expect(jsonRes.Data).to.have.property('DiscountPercentage');\n    pm.expect(jsonRes.Data.DiscountPercentage).to.eql(2743.607996191714);\n    pm.expect(jsonRes.Data).to.have.property('DiscountMaxAmount');\n    pm.expect(jsonRes.Data.DiscountMaxAmount).to.eql(1216.7774055965256);\n    pm.expect(jsonRes.Data).to.have.property('StartDate');\n    pm.expect(jsonRes.Data.StartDate).to.eql(\"2025-08-09\");\n    pm.expect(jsonRes.Data).to.have.property('EndDate');\n    pm.expect(jsonRes.Data.EndDate).to.eql(\"2025-08-10\");\n    pm.expect(jsonRes.Data).to.have.property('MaxUsage');\n    pm.expect(jsonRes.Data.MaxUsage).to.eql(653);\n    pm.expect(jsonRes.Data).to.have.property('MaxUsagePerUser');\n    pm.expect(jsonRes.Data.MaxUsagePerUser).to.eql(3007);\n    pm.expect(jsonRes.Data).to.have.property('MaxUsagePerOrder');\n    pm.expect(jsonRes.Data.MaxUsagePerOrder).to.eql(1740);\n    pm.expect(jsonRes.Data).to.have.property('MinOrderAmount');\n    pm.expect(jsonRes.Data.MinOrderAmount).to.eql(8197.849207253868);\n    pm.expect(jsonRes.Data).to.have.property('Code');\n    pm.expect(jsonRes.Data.Code).to.eql(\"Illo culpa aspernatur.\");\n    pm.expect(jsonRes.Data).to.have.property('DiscountValue');\n    pm.expect(jsonRes.Data.DiscountValue).to.eql(8083.117495856318);\n    pm.expect(jsonRes.Data).to.have.property('Applied');\n    pm.expect(jsonRes.Data.Applied).to.eql(false);\n    pm.expect(jsonRes.Data).to.have.property('AppliedAt');\n    pm.expect(jsonRes.Data.AppliedAt).to.eql(\"2025-03-10T05:53:03\");\n    pm.expect(jsonRes.Data).to.have.property('IsActive');\n    pm.expect(jsonRes.Data.IsActive).to.eql(true);\n    pm.expect(jsonRes.Data).to.have.property('IsDeleted');\n    pm.expect(jsonRes.Data.IsDeleted).to.eql(true);\n    pm.expect(jsonRes.Data).to.have.property('CreatedBy');\n    pm.expect(jsonRes.Data.CreatedBy).to.eql(\"Ipsum doloribus ut.\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Name\": \"Christie Conn\",\r\n  \"Description\": \"et hic\",\r\n  \"CouponCode\": \"Esse ex et.\",\r\n  \"CouponType\": \"Aspernatur non repellat.\",\r\n  \"Discount\": 9944.897074078028,\r\n  \"DiscountType\": \"Et eos quis.\",\r\n  \"DiscountPercentage\": 2743.607996191714,\r\n  \"DiscountMaxAmount\": 1216.7774055965256,\r\n  \"StartDate\": \"2025-08-09\",\r\n  \"EndDate\": \"2025-08-10\",\r\n  \"MaxUsage\": 653,\r\n  \"MaxUsagePerUser\": 3007,\r\n  \"MaxUsagePerOrder\": 1740,\r\n  \"MinOrderAmount\": 8197.849207253868,\r\n  \"Code\": \"Illo culpa aspernatur.\",\r\n  \"DiscountValue\": 8083.117495856318,\r\n  \"Applied\": false,\r\n  \"AppliedAt\": \"2025-03-10T05:53:03\",\r\n  \"IsActive\": true,\r\n  \"IsDeleted\": true,\r\n  \"CreatedBy\": \"Ipsum doloribus ut.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/coupons/{{COUPON_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"coupons",
+								"{{COUPON_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Coupon deleted successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"    pm.expect(jsonRes.Data).to.have.property('deleted', true);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/coupons/{{COUPON_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"coupons",
+								"{{COUPON_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customer",
+			"item": [
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"try {",
+									"    var respData = pm.response.json();",
+									"    pm.environment.set(\"CUSTOMER_ID\", respData.Data.id);",
+									"}",
+									"catch (error) {",
+									"    console.log(error.message);",
+									"}",
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Customer created successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');\n    pm.expect(jsonRes.Data.Name).to.eql(\"Annie Green\");\n    pm.expect(jsonRes.Data).to.have.property('Email');\n    pm.expect(jsonRes.Data.Email).to.eql(\"Dandre.Thompson58@hotmail.com\");\n    pm.expect(jsonRes.Data).to.have.property('PhoneCode');\n    pm.expect(jsonRes.Data.PhoneCode).to.eql(\"8389977844\");\n    pm.expect(jsonRes.Data).to.have.property('Phone');\n    pm.expect(jsonRes.Data.Phone).to.eql(\"2306018602\");\n    pm.expect(jsonRes.Data).to.have.property('ProfilePicture');\n    pm.expect(jsonRes.Data.ProfilePicture).to.eql(\"Occaecati nemo nihil.\");\n    pm.expect(jsonRes.Data).to.have.property('TaxNumber');\n    pm.expect(jsonRes.Data.TaxNumber).to.eql(\"Odio quia modi.\");",
+									"});",
+									"\n"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"ReferenceId\": \"{{REFERENCE_ID}}\",\r\n  \"Name\": \"Annie Green\",\r\n  \"Email\": \"Dandre.Thompson58@hotmail.com\",\r\n  \"PhoneCode\": \"8389977844\",\r\n  \"Phone\": \"2306018602\",\r\n  \"ProfilePicture\": \"Occaecati nemo nihil.\",\r\n  \"TaxNumber\": \"Odio quia modi.\",\r\n  \"DefaultShippingAddressId\": \"{{DEFAULT_SHIPPING_ADDRESS_ID}}\",\r\n  \"DefaultBillingAddressId\": \"{{DEFAULT_BILLING_ADDRESS_ID}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/customers",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Customer retreived successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');\n    pm.expect(jsonRes.Data.Name).to.eql(\"Annie Green\");\n    pm.expect(jsonRes.Data).to.have.property('Email');\n    pm.expect(jsonRes.Data.Email).to.eql(\"Dandre.Thompson58@hotmail.com\");\n    pm.expect(jsonRes.Data).to.have.property('PhoneCode');\n    pm.expect(jsonRes.Data.PhoneCode).to.eql(\"8389977844\");\n    pm.expect(jsonRes.Data).to.have.property('Phone');\n    pm.expect(jsonRes.Data.Phone).to.eql(\"2306018602\");\n    pm.expect(jsonRes.Data).to.have.property('ProfilePicture');\n    pm.expect(jsonRes.Data.ProfilePicture).to.eql(\"Occaecati nemo nihil.\");\n    pm.expect(jsonRes.Data).to.have.property('TaxNumber');\n    pm.expect(jsonRes.Data.TaxNumber).to.eql(\"Odio quia modi.\");",
+									"});",
+									"\n"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/customers/{{CUSTOMER_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"customers",
+								"{{CUSTOMER_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Customer records retrieved successfully', function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('Items');",
+									"    pm.expect(jsonRes.Data.Items.length).to.be.at.least(0);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/customers/search?",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"customers",
+								"search"
+							],
+							"query": [
+								{
+									"key": null,
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Customer updated successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');\n    pm.expect(jsonRes.Data.Name).to.eql(\"Elaine Franecki\");\n    pm.expect(jsonRes.Data).to.have.property('Email');\n    pm.expect(jsonRes.Data.Email).to.eql(\"Dwight90@gmail.com\");\n    pm.expect(jsonRes.Data).to.have.property('PhoneCode');\n    pm.expect(jsonRes.Data.PhoneCode).to.eql(\"0024755430\");\n    pm.expect(jsonRes.Data).to.have.property('Phone');\n    pm.expect(jsonRes.Data.Phone).to.eql(\"4856270944\");\n    pm.expect(jsonRes.Data).to.have.property('ProfilePicture');\n    pm.expect(jsonRes.Data.ProfilePicture).to.eql(\"Delectus rem veritatis.\");\n    pm.expect(jsonRes.Data).to.have.property('TaxNumber');\n    pm.expect(jsonRes.Data.TaxNumber).to.eql(\"Voluptatem sequi voluptatibus.\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"ReferenceId\": \"{{REFERENCE_ID}}\",\r\n  \"Name\": \"Elaine Franecki\",\r\n  \"Email\": \"Dwight90@gmail.com\",\r\n  \"PhoneCode\": \"0024755430\",\r\n  \"Phone\": \"4856270944\",\r\n  \"ProfilePicture\": \"Delectus rem veritatis.\",\r\n  \"TaxNumber\": \"Voluptatem sequi voluptatibus.\",\r\n  \"DefaultShippingAddressId\": \"{{DEFAULT_SHIPPING_ADDRESS_ID}}\",\r\n  \"DefaultBillingAddressId\": \"{{DEFAULT_BILLING_ADDRESS_ID}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/customers/{{CUSTOMER_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"customers",
+								"{{CUSTOMER_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Customer deleted successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"    pm.expect(jsonRes.Data).to.have.property('deleted', true);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/customers/{{CUSTOMER_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"customers",
+								"{{CUSTOMER_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "OrderHistory",
+			"item": [
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"try {",
+									"    var respData = pm.response.json();",
+									"    pm.environment.set(\"ORDER_HISTORY_ID\", respData.Data.id);",
+									"}",
+									"catch (error) {",
+									"    console.log(error.message);",
+									"}",
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Order History created successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('PreviousStatus');\n    pm.expect(jsonRes.Data.PreviousStatus).to.eql(\"Voluptas recusandae nisi.\");\n    pm.expect(jsonRes.Data).to.have.property('Status');\n    pm.expect(jsonRes.Data.Status).to.eql(\"Neque fuga magnam.\");\n    pm.expect(jsonRes.Data).to.have.property('DeletedAt');\n    pm.expect(jsonRes.Data.DeletedAt).to.eql(\"2025-05-18T10:24:00\");\n    pm.expect(jsonRes.Data).to.have.property('Timestamp');\n    pm.expect(jsonRes.Data.Timestamp).to.eql(\"2025-04-27T01:53:07\");",
+									"});",
+									"\n"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"OrderId\": \"{{ORDER_ID}}\",\r\n  \"PreviousStatus\": \"Voluptas recusandae nisi.\",\r\n  \"Status\": \"Neque fuga magnam.\",\r\n  \"UpdatedByUserId\": \"{{UPDATED_BY_USER_ID}}\",\r\n  \"DeletedAt\": \"2025-05-18T10:24:00\",\r\n  \"Timestamp\": \"2025-04-27T01:53:07\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/order_histories",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order_histories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Order History retreived successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('PreviousStatus');\n    pm.expect(jsonRes.Data.PreviousStatus).to.eql(\"Voluptas recusandae nisi.\");\n    pm.expect(jsonRes.Data).to.have.property('Status');\n    pm.expect(jsonRes.Data.Status).to.eql(\"Neque fuga magnam.\");\n    pm.expect(jsonRes.Data).to.have.property('DeletedAt');\n    pm.expect(jsonRes.Data.DeletedAt).to.eql(\"2025-05-18T10:24:00\");\n    pm.expect(jsonRes.Data).to.have.property('Timestamp');\n    pm.expect(jsonRes.Data.Timestamp).to.eql(\"2025-04-27T01:53:07\");",
+									"});",
+									"\n"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order_histories/{{ORDER_HISTORY_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order_histories",
+								"{{ORDER_HISTORY_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Order History records retrieved successfully', function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('Items');",
+									"    pm.expect(jsonRes.Data.Items.length).to.be.at.least(0);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order_histories/search?",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order_histories",
+								"search"
+							],
+							"query": [
+								{
+									"key": null,
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Order History updated successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('PreviousStatus');\n    pm.expect(jsonRes.Data.PreviousStatus).to.eql(\"Quia similique eveniet.\");\n    pm.expect(jsonRes.Data).to.have.property('Status');\n    pm.expect(jsonRes.Data.Status).to.eql(\"Earum velit dolores.\");\n    pm.expect(jsonRes.Data).to.have.property('DeletedAt');\n    pm.expect(jsonRes.Data.DeletedAt).to.eql(\"2025-03-26T14:00:16\");\n    pm.expect(jsonRes.Data).to.have.property('Timestamp');\n    pm.expect(jsonRes.Data.Timestamp).to.eql(\"2025-05-11T23:59:13\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"OrderId\": \"{{ORDER_ID}}\",\r\n  \"PreviousStatus\": \"Quia similique eveniet.\",\r\n  \"Status\": \"Earum velit dolores.\",\r\n  \"UpdatedByUserId\": \"{{UPDATED_BY_USER_ID}}\",\r\n  \"DeletedAt\": \"2025-03-26T14:00:16\",\r\n  \"Timestamp\": \"2025-05-11T23:59:13\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/order_histories/{{ORDER_HISTORY_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order_histories",
+								"{{ORDER_HISTORY_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Order History deleted successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"    pm.expect(jsonRes.Data).to.have.property('deleted', true);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order_histories/{{ORDER_HISTORY_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order_histories",
+								"{{ORDER_HISTORY_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "OrderLineItem",
+			"item": [
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"try {",
+									"    var respData = pm.response.json();",
+									"    pm.environment.set(\"ORDER_LINE_ITEM_ID\", respData.Data.id);",
+									"}",
+									"catch (error) {",
+									"    console.log(error.message);",
+									"}",
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Order Line Item created successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');\n    pm.expect(jsonRes.Data.Name).to.eql(\"Bernadette Gaylord\");\n    pm.expect(jsonRes.Data).to.have.property('Quantity');\n    pm.expect(jsonRes.Data.Quantity).to.eql(2204);\n    pm.expect(jsonRes.Data).to.have.property('UnitPrice');\n    pm.expect(jsonRes.Data.UnitPrice).to.eql(3584.8794603066067);\n    pm.expect(jsonRes.Data).to.have.property('Discount');\n    pm.expect(jsonRes.Data.Discount).to.eql(3982.8345);\n    pm.expect(jsonRes.Data).to.have.property('Taxs');\n    pm.expect(jsonRes.Data.Taxs).to.eql(8054.158833834304);\n    pm.expect(jsonRes.Data).to.have.property('ItemSubTotal');\n    pm.expect(jsonRes.Data.ItemSubTotal).to.eql(7342.157294751197);",
+									"});",
+									"\n"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Name\": \"Bernadette Gaylord\",\r\n  \"CatalogId\": \"{{CATALOG_ID}}\",\r\n  \"Quantity\": 2204,\r\n  \"UnitPrice\": 3584.8794603066067,\r\n  \"Discount\": 3982.8345,\r\n  \"DiscountSchemeId\": \"{{DISCOUNT_SCHEME_ID}}\",\r\n  \"Taxs\": 8054.158833834304,\r\n  \"ItemSubTotal\": 7342.157294751197,\r\n  \"OrderId\": \"{{ORDER_ID}}\",\r\n  \"CartId\": \"{{CART_ID}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/order_line_items",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order_line_items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Order Line Item retreived successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');\n    pm.expect(jsonRes.Data.Name).to.eql(\"Bernadette Gaylord\");\n    pm.expect(jsonRes.Data).to.have.property('Quantity');\n    pm.expect(jsonRes.Data.Quantity).to.eql(2204);\n    pm.expect(jsonRes.Data).to.have.property('UnitPrice');\n    pm.expect(jsonRes.Data.UnitPrice).to.eql(3584.8794603066067);\n    pm.expect(jsonRes.Data).to.have.property('Discount');\n    pm.expect(jsonRes.Data.Discount).to.eql(3982.8345);\n    pm.expect(jsonRes.Data).to.have.property('Taxs');\n    pm.expect(jsonRes.Data.Taxs).to.eql(8054.158833834304);\n    pm.expect(jsonRes.Data).to.have.property('ItemSubTotal');\n    pm.expect(jsonRes.Data.ItemSubTotal).to.eql(7342.157294751197);",
+									"});",
+									"\n"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order_line_items/{{ORDER_LINE_ITEM_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order_line_items",
+								"{{ORDER_LINE_ITEM_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Order Line Item records retrieved successfully', function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('Items');",
+									"    pm.expect(jsonRes.Data.Items.length).to.be.at.least(0);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order_line_items/search?",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order_line_items",
+								"search"
+							],
+							"query": [
+								{
+									"key": null,
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Order Line Item updated successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');\n    pm.expect(jsonRes.Data.Name).to.eql(\"Clifford Heaney\");\n    pm.expect(jsonRes.Data).to.have.property('Quantity');\n    pm.expect(jsonRes.Data.Quantity).to.eql(7737);\n    pm.expect(jsonRes.Data).to.have.property('UnitPrice');\n    pm.expect(jsonRes.Data.UnitPrice).to.eql(8941.90356056836);\n    pm.expect(jsonRes.Data).to.have.property('Discount');\n    pm.expect(jsonRes.Data.Discount).to.eql(3064.5356);\n    pm.expect(jsonRes.Data).to.have.property('Taxs');\n    pm.expect(jsonRes.Data.Taxs).to.eql(8034.169259715291);\n    pm.expect(jsonRes.Data).to.have.property('ItemSubTotal');\n    pm.expect(jsonRes.Data.ItemSubTotal).to.eql(3526.3460843414928);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Name\": \"Clifford Heaney\",\r\n  \"CatalogId\": \"{{CATALOG_ID}}\",\r\n  \"Quantity\": 7737,\r\n  \"UnitPrice\": 8941.90356056836,\r\n  \"Discount\": 3064.5356,\r\n  \"DiscountSchemeId\": \"{{DISCOUNT_SCHEME_ID}}\",\r\n  \"Taxs\": 8034.169259715291,\r\n  \"ItemSubTotal\": 3526.3460843414928,\r\n  \"OrderId\": \"{{ORDER_ID}}\",\r\n  \"CartId\": \"{{CART_ID}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/order_line_items/{{ORDER_LINE_ITEM_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order_line_items",
+								"{{ORDER_LINE_ITEM_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Order Line Item deleted successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"    pm.expect(jsonRes.Data).to.have.property('deleted', true);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order_line_items/{{ORDER_LINE_ITEM_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order_line_items",
+								"{{ORDER_LINE_ITEM_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"try {",
+									"    var respData = pm.response.json();",
+									"    pm.environment.set(\"ORDER_ID\", respData.Data.id);",
+									"}",
+									"catch (error) {",
+									"    console.log(error.message);",
+									"}",
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Order created successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('DisplayCode');\n    pm.expect(jsonRes.Data.DisplayCode).to.eql(\"Corporis libero commodi.\");\n    pm.expect(jsonRes.Data).to.have.property('OrderStatus');\n    pm.expect(jsonRes.Data.OrderStatus).to.eql(\"Enim consequatur asperiores.\");\n    pm.expect(jsonRes.Data).to.have.property('InvoiceNumber');\n    pm.expect(jsonRes.Data.InvoiceNumber).to.eql(\"Nemo sit minima.\");\n    pm.expect(jsonRes.Data).to.have.property('TotalItemsCount');\n    pm.expect(jsonRes.Data.TotalItemsCount).to.eql(604);\n    pm.expect(jsonRes.Data).to.have.property('OrderDiscount');\n    pm.expect(jsonRes.Data.OrderDiscount).to.eql(9170.334522251149);\n    pm.expect(jsonRes.Data).to.have.property('TipApplicable');\n    pm.expect(jsonRes.Data.TipApplicable).to.eql(true);\n    pm.expect(jsonRes.Data).to.have.property('TipAmount');\n    pm.expect(jsonRes.Data.TipAmount).to.eql(6528.770190932408);\n    pm.expect(jsonRes.Data).to.have.property('TotalTax');\n    pm.expect(jsonRes.Data.TotalTax).to.eql(4594.3602777902);\n    pm.expect(jsonRes.Data).to.have.property('TotalDiscount');\n    pm.expect(jsonRes.Data.TotalDiscount).to.eql(5683.3276);\n    pm.expect(jsonRes.Data).to.have.property('TotalAmount');\n    pm.expect(jsonRes.Data.TotalAmount).to.eql(1026.2747455978983);\n    pm.expect(jsonRes.Data).to.have.property('Notes');\n    pm.expect(jsonRes.Data.Notes).to.eql(\"Animi earum qui.\");",
+									"});",
+									"\n"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"DisplayCode\": \"Corporis libero commodi.\",\r\n  \"OrderStatus\": \"Enim consequatur asperiores.\",\r\n  \"InvoiceNumber\": \"Nemo sit minima.\",\r\n  \"AssociatedCartId\": \"{{ASSOCIATED_CART_ID}}\",\r\n  \"TotalItemsCount\": 604,\r\n  \"OrderDiscount\": 9170.334522251149,\r\n  \"TipApplicable\": true,\r\n  \"TipAmount\": 6528.770190932408,\r\n  \"TotalTax\": 4594.3602777902,\r\n  \"TotalDiscount\": 5683.3276,\r\n  \"TotalAmount\": 1026.2747455978983,\r\n  \"Notes\": \"Animi earum qui.\",\r\n  \"CustomerId\": \"{{CUSTOMER_ID}}\",\r\n  \"ShippingAddressId\": \"{{SHIPPING_ADDRESS_ID}}\",\r\n  \"BillingAddressId\": \"{{BILLING_ADDRESS_ID}}\",\r\n  \"OrderTypeId\": \"{{ORDER_TYPE_ID}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/orders",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Order retreived successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('DisplayCode');\n    pm.expect(jsonRes.Data.DisplayCode).to.eql(\"Corporis libero commodi.\");\n    pm.expect(jsonRes.Data).to.have.property('OrderStatus');\n    pm.expect(jsonRes.Data.OrderStatus).to.eql(\"Enim consequatur asperiores.\");\n    pm.expect(jsonRes.Data).to.have.property('InvoiceNumber');\n    pm.expect(jsonRes.Data.InvoiceNumber).to.eql(\"Nemo sit minima.\");\n    pm.expect(jsonRes.Data).to.have.property('TotalItemsCount');\n    pm.expect(jsonRes.Data.TotalItemsCount).to.eql(604);\n    pm.expect(jsonRes.Data).to.have.property('OrderDiscount');\n    pm.expect(jsonRes.Data.OrderDiscount).to.eql(9170.334522251149);\n    pm.expect(jsonRes.Data).to.have.property('TipApplicable');\n    pm.expect(jsonRes.Data.TipApplicable).to.eql(true);\n    pm.expect(jsonRes.Data).to.have.property('TipAmount');\n    pm.expect(jsonRes.Data.TipAmount).to.eql(6528.770190932408);\n    pm.expect(jsonRes.Data).to.have.property('TotalTax');\n    pm.expect(jsonRes.Data.TotalTax).to.eql(4594.3602777902);\n    pm.expect(jsonRes.Data).to.have.property('TotalDiscount');\n    pm.expect(jsonRes.Data.TotalDiscount).to.eql(5683.3276);\n    pm.expect(jsonRes.Data).to.have.property('TotalAmount');\n    pm.expect(jsonRes.Data.TotalAmount).to.eql(1026.2747455978983);\n    pm.expect(jsonRes.Data).to.have.property('Notes');\n    pm.expect(jsonRes.Data.Notes).to.eql(\"Animi earum qui.\");",
+									"});",
+									"\n"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/orders/{{ORDER_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"orders",
+								"{{ORDER_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Order records retrieved successfully', function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('Items');",
+									"    pm.expect(jsonRes.Data.Items.length).to.be.at.least(0);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/orders/search?",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"orders",
+								"search"
+							],
+							"query": [
+								{
+									"key": null,
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Order updated successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('DisplayCode');\n    pm.expect(jsonRes.Data.DisplayCode).to.eql(\"Doloremque laudantium quod.\");\n    pm.expect(jsonRes.Data).to.have.property('OrderStatus');\n    pm.expect(jsonRes.Data.OrderStatus).to.eql(\"Sed optio molestias.\");\n    pm.expect(jsonRes.Data).to.have.property('InvoiceNumber');\n    pm.expect(jsonRes.Data.InvoiceNumber).to.eql(\"Officiis modi veniam.\");\n    pm.expect(jsonRes.Data).to.have.property('TotalItemsCount');\n    pm.expect(jsonRes.Data.TotalItemsCount).to.eql(4772);\n    pm.expect(jsonRes.Data).to.have.property('OrderDiscount');\n    pm.expect(jsonRes.Data.OrderDiscount).to.eql(9748.08901103691);\n    pm.expect(jsonRes.Data).to.have.property('TipApplicable');\n    pm.expect(jsonRes.Data.TipApplicable).to.eql(false);\n    pm.expect(jsonRes.Data).to.have.property('TipAmount');\n    pm.expect(jsonRes.Data.TipAmount).to.eql(4416.497742634622);\n    pm.expect(jsonRes.Data).to.have.property('TotalTax');\n    pm.expect(jsonRes.Data.TotalTax).to.eql(1742.5880359183864);\n    pm.expect(jsonRes.Data).to.have.property('TotalDiscount');\n    pm.expect(jsonRes.Data.TotalDiscount).to.eql(7829.2163);\n    pm.expect(jsonRes.Data).to.have.property('TotalAmount');\n    pm.expect(jsonRes.Data.TotalAmount).to.eql(9816.727344421592);\n    pm.expect(jsonRes.Data).to.have.property('Notes');\n    pm.expect(jsonRes.Data.Notes).to.eql(\"Soluta et id.\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"DisplayCode\": \"Doloremque laudantium quod.\",\r\n  \"OrderStatus\": \"Sed optio molestias.\",\r\n  \"InvoiceNumber\": \"Officiis modi veniam.\",\r\n  \"AssociatedCartId\": \"{{ASSOCIATED_CART_ID}}\",\r\n  \"TotalItemsCount\": 4772,\r\n  \"OrderDiscount\": 9748.08901103691,\r\n  \"TipApplicable\": false,\r\n  \"TipAmount\": 4416.497742634622,\r\n  \"TotalTax\": 1742.5880359183864,\r\n  \"TotalDiscount\": 7829.2163,\r\n  \"TotalAmount\": 9816.727344421592,\r\n  \"Notes\": \"Soluta et id.\",\r\n  \"CustomerId\": \"{{CUSTOMER_ID}}\",\r\n  \"ShippingAddressId\": \"{{SHIPPING_ADDRESS_ID}}\",\r\n  \"BillingAddressId\": \"{{BILLING_ADDRESS_ID}}\",\r\n  \"OrderTypeId\": \"{{ORDER_TYPE_ID}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/orders/{{ORDER_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"orders",
+								"{{ORDER_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Order deleted successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"    pm.expect(jsonRes.Data).to.have.property('deleted', true);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/orders/{{ORDER_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"orders",
+								"{{ORDER_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "OrderType",
+			"item": [
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"try {",
+									"    var respData = pm.response.json();",
+									"    pm.environment.set(\"ORDER_TYPE_ID\", respData.Data.id);",
+									"}",
+									"catch (error) {",
+									"    console.log(error.message);",
+									"}",
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Order Type created successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');\n    pm.expect(jsonRes.Data.Name).to.eql(\"Claire Beier\");\n    pm.expect(jsonRes.Data).to.have.property('Description');\n    pm.expect(jsonRes.Data.Description).to.eql(\"vitae omnis\");",
+									"});",
+									"\n"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Name\": \"Claire Beier\",\r\n  \"Description\": \"vitae omnis\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/order_types",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order_types"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Order Type retreived successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');\n    pm.expect(jsonRes.Data.Name).to.eql(\"Claire Beier\");\n    pm.expect(jsonRes.Data).to.have.property('Description');\n    pm.expect(jsonRes.Data.Description).to.eql(\"vitae omnis\");",
+									"});",
+									"\n"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order_types/{{ORDER_TYPE_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order_types",
+								"{{ORDER_TYPE_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Order Type records retrieved successfully', function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('Items');",
+									"    pm.expect(jsonRes.Data.Items.length).to.be.at.least(0);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order_types/search?",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order_types",
+								"search"
+							],
+							"query": [
+								{
+									"key": null,
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Order Type updated successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('Name');\n    pm.expect(jsonRes.Data.Name).to.eql(\"Janet Runolfsdottir\");\n    pm.expect(jsonRes.Data).to.have.property('Description');\n    pm.expect(jsonRes.Data.Description).to.eql(\"mollitia iure\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Name\": \"Janet Runolfsdottir\",\r\n  \"Description\": \"mollitia iure\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/order_types/{{ORDER_TYPE_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order_types",
+								"{{ORDER_TYPE_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Order Type deleted successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"    pm.expect(jsonRes.Data).to.have.property('deleted', true);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order_types/{{ORDER_TYPE_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order_types",
+								"{{ORDER_TYPE_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PaymentTransaction",
+			"item": [
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"try {",
+									"    var respData = pm.response.json();",
+									"    pm.environment.set(\"PAYMENT_TRANSACTION_ID\", respData.Data.id);",
+									"}",
+									"catch (error) {",
+									"    console.log(error.message);",
+									"}",
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Payment Transaction created successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('DisplayCode');\n    pm.expect(jsonRes.Data.DisplayCode).to.eql(\"Maiores sed rerum.\");\n    pm.expect(jsonRes.Data).to.have.property('InvoiceNumber');\n    pm.expect(jsonRes.Data.InvoiceNumber).to.eql(\"Odio nulla voluptatum.\");\n    pm.expect(jsonRes.Data).to.have.property('PaymentMode');\n    pm.expect(jsonRes.Data.PaymentMode).to.eql(\"Ducimus aut libero.\");\n    pm.expect(jsonRes.Data).to.have.property('PaymentAmount');\n    pm.expect(jsonRes.Data.PaymentAmount).to.eql(5877.99859295872);\n    pm.expect(jsonRes.Data).to.have.property('PaymentCurrency');\n    pm.expect(jsonRes.Data.PaymentCurrency).to.eql(\"Nostrum officiis ipsum.\");\n    pm.expect(jsonRes.Data).to.have.property('InitiatedDate');\n    pm.expect(jsonRes.Data.InitiatedDate).to.eql(\"2024-10-26T23:57:39\");\n    pm.expect(jsonRes.Data).to.have.property('CompletedDate');\n    pm.expect(jsonRes.Data.CompletedDate).to.eql(\"2025-07-23T15:35:08\");\n    pm.expect(jsonRes.Data).to.have.property('PaymentResponse');\n    pm.expect(jsonRes.Data.PaymentResponse).to.eql(\"Cumque at veritatis.\");\n    pm.expect(jsonRes.Data).to.have.property('PaymentResponseCode');\n    pm.expect(jsonRes.Data.PaymentResponseCode).to.eql(\"Sed qui aut.\");\n    pm.expect(jsonRes.Data).to.have.property('InitiatedBy');\n    pm.expect(jsonRes.Data.InitiatedBy).to.eql(\"Est ut dolores.\");\n    pm.expect(jsonRes.Data).to.have.property('IsRefund');\n    pm.expect(jsonRes.Data.IsRefund).to.eql(true);",
+									"});",
+									"\n"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"DisplayCode\": \"Maiores sed rerum.\",\r\n  \"InvoiceNumber\": \"Odio nulla voluptatum.\",\r\n  \"BankTransactionId\": \"{{BANK_TRANSACTION_ID}}\",\r\n  \"OrderId\": \"{{ORDER_ID}}\",\r\n  \"PaymentGatewayTransactionId\": \"{{PAYMENT_GATEWAY_TRANSACTION_ID}}\",\r\n  \"PaymentMode\": \"Ducimus aut libero.\",\r\n  \"PaymentAmount\": 5877.99859295872,\r\n  \"PaymentCurrency\": \"Nostrum officiis ipsum.\",\r\n  \"InitiatedDate\": \"2024-10-26T23:57:39\",\r\n  \"CompletedDate\": \"2025-07-23T15:35:08\",\r\n  \"PaymentResponse\": \"Cumque at veritatis.\",\r\n  \"PaymentResponseCode\": \"Sed qui aut.\",\r\n  \"InitiatedBy\": \"Est ut dolores.\",\r\n  \"IsRefund\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/payment_transactions",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"payment_transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Payment Transaction retreived successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('DisplayCode');\n    pm.expect(jsonRes.Data.DisplayCode).to.eql(\"Maiores sed rerum.\");\n    pm.expect(jsonRes.Data).to.have.property('InvoiceNumber');\n    pm.expect(jsonRes.Data.InvoiceNumber).to.eql(\"Odio nulla voluptatum.\");\n    pm.expect(jsonRes.Data).to.have.property('PaymentMode');\n    pm.expect(jsonRes.Data.PaymentMode).to.eql(\"Ducimus aut libero.\");\n    pm.expect(jsonRes.Data).to.have.property('PaymentAmount');\n    pm.expect(jsonRes.Data.PaymentAmount).to.eql(5877.99859295872);\n    pm.expect(jsonRes.Data).to.have.property('PaymentCurrency');\n    pm.expect(jsonRes.Data.PaymentCurrency).to.eql(\"Nostrum officiis ipsum.\");\n    pm.expect(jsonRes.Data).to.have.property('InitiatedDate');\n    pm.expect(jsonRes.Data.InitiatedDate).to.eql(\"2024-10-26T23:57:39\");\n    pm.expect(jsonRes.Data).to.have.property('CompletedDate');\n    pm.expect(jsonRes.Data.CompletedDate).to.eql(\"2025-07-23T15:35:08\");\n    pm.expect(jsonRes.Data).to.have.property('PaymentResponse');\n    pm.expect(jsonRes.Data.PaymentResponse).to.eql(\"Cumque at veritatis.\");\n    pm.expect(jsonRes.Data).to.have.property('PaymentResponseCode');\n    pm.expect(jsonRes.Data.PaymentResponseCode).to.eql(\"Sed qui aut.\");\n    pm.expect(jsonRes.Data).to.have.property('InitiatedBy');\n    pm.expect(jsonRes.Data.InitiatedBy).to.eql(\"Est ut dolores.\");\n    pm.expect(jsonRes.Data).to.have.property('IsRefund');\n    pm.expect(jsonRes.Data.IsRefund).to.eql(true);",
+									"});",
+									"\n"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/payment_transactions/{{PAYMENT_TRANSACTION_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"payment_transactions",
+								"{{PAYMENT_TRANSACTION_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Payment Transaction records retrieved successfully', function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('Items');",
+									"    pm.expect(jsonRes.Data.Items.length).to.be.at.least(0);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/payment_transactions/search?",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"payment_transactions",
+								"search"
+							],
+							"query": [
+								{
+									"key": null,
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test(\"Payment Transaction updated successfully\", function () {",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Data).to.have.property('id');",
+									"    pm.expect(jsonRes.Data).to.have.property('DisplayCode');\n    pm.expect(jsonRes.Data.DisplayCode).to.eql(\"Voluptatum repellat dolor.\");\n    pm.expect(jsonRes.Data).to.have.property('InvoiceNumber');\n    pm.expect(jsonRes.Data.InvoiceNumber).to.eql(\"Quam accusantium atque.\");\n    pm.expect(jsonRes.Data).to.have.property('PaymentMode');\n    pm.expect(jsonRes.Data.PaymentMode).to.eql(\"Consequuntur animi maxime.\");\n    pm.expect(jsonRes.Data).to.have.property('PaymentAmount');\n    pm.expect(jsonRes.Data.PaymentAmount).to.eql(1757.755988348736);\n    pm.expect(jsonRes.Data).to.have.property('PaymentCurrency');\n    pm.expect(jsonRes.Data.PaymentCurrency).to.eql(\"At pariatur non.\");\n    pm.expect(jsonRes.Data).to.have.property('InitiatedDate');\n    pm.expect(jsonRes.Data.InitiatedDate).to.eql(\"2024-09-28T00:12:35\");\n    pm.expect(jsonRes.Data).to.have.property('CompletedDate');\n    pm.expect(jsonRes.Data.CompletedDate).to.eql(\"2024-11-24T01:44:24\");\n    pm.expect(jsonRes.Data).to.have.property('PaymentResponse');\n    pm.expect(jsonRes.Data.PaymentResponse).to.eql(\"Magnam eum harum.\");\n    pm.expect(jsonRes.Data).to.have.property('PaymentResponseCode');\n    pm.expect(jsonRes.Data.PaymentResponseCode).to.eql(\"Eligendi maxime aut.\");\n    pm.expect(jsonRes.Data).to.have.property('InitiatedBy');\n    pm.expect(jsonRes.Data.InitiatedBy).to.eql(\"Inventore in cumque.\");\n    pm.expect(jsonRes.Data).to.have.property('IsRefund');\n    pm.expect(jsonRes.Data.IsRefund).to.eql(false);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"DisplayCode\": \"Voluptatum repellat dolor.\",\r\n  \"InvoiceNumber\": \"Quam accusantium atque.\",\r\n  \"BankTransactionId\": \"{{BANK_TRANSACTION_ID}}\",\r\n  \"OrderId\": \"{{ORDER_ID}}\",\r\n  \"PaymentGatewayTransactionId\": \"{{PAYMENT_GATEWAY_TRANSACTION_ID}}\",\r\n  \"PaymentMode\": \"Consequuntur animi maxime.\",\r\n  \"PaymentAmount\": 1757.755988348736,\r\n  \"PaymentCurrency\": \"At pariatur non.\",\r\n  \"InitiatedDate\": \"2024-09-28T00:12:35\",\r\n  \"CompletedDate\": \"2024-11-24T01:44:24\",\r\n  \"PaymentResponse\": \"Magnam eum harum.\",\r\n  \"PaymentResponseCode\": \"Eligendi maxime aut.\",\r\n  \"InitiatedBy\": \"Inventore in cumque.\",\r\n  \"IsRefund\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/payment_transactions/{{PAYMENT_TRANSACTION_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"payment_transactions",
+								"{{PAYMENT_TRANSACTION_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Request is successfull\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"});",
+									"",
+									"pm.test('Payment Transaction deleted successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonRes = pm.response.json();",
+									"    pm.expect(jsonRes.Status).to.eql('success');",
+									"    pm.expect(jsonRes.Data).to.have.property('deleted', true);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"var phonenumber = (Math.floor(Math.random() * 9000000000) + 1000000000).toString();",
+									"var rand = (Math.floor(Math.random() * 900000) + 100000).toString();",
+									"var password = \"Test@123\";",
+									"pm.environment.set(\"PHONE_NUMBER\", phonenumber);",
+									"pm.environment.set(\"EMAIL\", `client.${rand}@nodomain.com`);",
+									"pm.environment.set(\"PASSWORD\", password);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/payment_transactions/{{PAYMENT_TRANSACTION_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"payment_transactions",
+								"{{PAYMENT_TRANSACTION_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
