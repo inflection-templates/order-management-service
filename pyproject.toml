@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "A generic multi-purpose order management service."
 authors = ["Kiran Kharade <Kiran.Kharade@inflectionzone.com>"]
 readme = "README.md"
-packages = [{include = "order_management_service"}]
+packages = [{include = "app"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"

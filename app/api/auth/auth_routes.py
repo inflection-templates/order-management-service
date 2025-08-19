@@ -77,9 +77,10 @@ async def refresh_token(
 async def logout(
     request: Request,
     db_session: Session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    **kwargs
 ):
     """Logout user and revoke tokens"""
+    auth_context = kwargs.get('auth_context')
     return AuthHandler.logout(db_session, request, auth_context)
 
 @router.get("/profile", status_code=status.HTTP_200_OK, response_model=ResponseModel[UserProfileModel])
@@ -87,9 +88,10 @@ async def logout(
 async def get_profile(
     request: Request,
     db_session: Session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    **kwargs
 ):
     """Get current user profile"""
+    auth_context = kwargs.get('auth_context')
     return AuthHandler.get_profile(db_session, request, auth_context)
 
 @router.post("/2fa/setup", status_code=status.HTTP_200_OK, response_model=ResponseModel[TwoFactorSetupResponseModel])
@@ -97,9 +99,10 @@ async def get_profile(
 async def setup_two_factor(
     request: Request,
     db_session: Session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    **kwargs
 ):
     """Setup two-factor authentication"""
+    auth_context = kwargs.get('auth_context')
     return AuthHandler.setup_two_factor(db_session, request, auth_context)
 
 @router.post("/2fa/verify", status_code=status.HTTP_200_OK, response_model=ResponseModel[Dict[str, bool]])
@@ -108,9 +111,10 @@ async def verify_two_factor_setup(
     model: TwoFactorVerificationModel,
     request: Request,
     db_session: Session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    **kwargs
 ):
     """Verify and enable two-factor authentication"""
+    auth_context = kwargs.get('auth_context')
     return AuthHandler.verify_two_factor_setup(model, db_session, request, auth_context)
 
 # External Authentication endpoints
@@ -149,9 +153,10 @@ async def send_invitation(
     model: UserInvitationModel,
     request: Request,
     db_session: Session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    **kwargs
 ):
     """Send user invitation (requires admin/manager role)"""
+    auth_context = kwargs.get('auth_context')
     return AuthHandler.send_invitation(model, db_session, request, auth_context)
 
 @router.post("/accept-invitation", status_code=status.HTTP_200_OK, response_model=ResponseModel[TokenResponseModel])
@@ -187,9 +192,10 @@ async def change_password(
     model: ChangePasswordModel,
     request: Request,
     db_session: Session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    **kwargs
 ):
     """Change user password"""
+    auth_context = kwargs.get('auth_context')
     return AuthHandler.change_password(model, db_session, request, auth_context)
 
 @router.post("/verify/email", status_code=status.HTTP_200_OK, response_model=ResponseModel[Dict[str, bool]])
@@ -206,9 +212,10 @@ async def verify_email(
 async def send_phone_verification(
     request: Request,
     db_session: Session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    **kwargs
 ):
     """Send phone verification OTP"""
+    auth_context = kwargs.get('auth_context')
     return AuthHandler.send_phone_verification(db_session, request, auth_context)
 
 @router.post("/verify/phone", status_code=status.HTTP_200_OK, response_model=ResponseModel[Dict[str, bool]])
@@ -217,7 +224,8 @@ async def verify_phone(
     model: PhoneVerificationModel,
     request: Request,
     db_session: Session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    **kwargs
 ):
     """Verify phone using OTP"""
+    auth_context = kwargs.get('auth_context')
     return AuthHandler.verify_phone(model, db_session, request, auth_context)

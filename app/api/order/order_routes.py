@@ -27,9 +27,10 @@ router = APIRouter(
 async def create_order(
     model: OrderCreateModel,
     request: Request,
-    db_session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    db_session = Depends(get_db_session),  # This will automatically use SQLModel when ORM_TYPE="sqlmodel"
+    **kwargs
 ):
+    auth_context = kwargs.get('auth_context')
     return create_order_(model, db_session)
 
 @router.get("/search", status_code=status.HTTP_200_OK, response_model=ResponseModel[OrderSearchResults|None])
@@ -38,8 +39,9 @@ async def search_order(
     query_params: OrderSearchFilter = Depends(),
     request: Request = None,
     db_session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    **kwargs
 ):
+    auth_context = kwargs.get('auth_context')
     filter = OrderSearchFilter(**query_params.dict())
     return search_orders_(filter, db_session)
 
@@ -49,8 +51,9 @@ async def get_order_by_id(
     id: str,
     request: Request,
     db_session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    **kwargs
 ):
+    auth_context = kwargs.get('auth_context')
     return get_order_by_id_(id, db_session)
 
 @router.put("/{id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[OrderResponseModel|None])
@@ -60,8 +63,9 @@ async def update_order(
     model: OrderUpdateModel,
     request: Request,
     db_session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    **kwargs
 ):
+    auth_context = kwargs.get('auth_context')
     return update_order_(id, model, db_session)
 
 @router.delete("/{id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[bool])
@@ -70,8 +74,9 @@ async def delete_order(
     id: str,
     request: Request,
     db_session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    **kwargs
 ):
+    auth_context = kwargs.get('auth_context')
     return delete_order_(id, db_session)
 
 @router.put("/{id}/status", status_code=status.HTTP_200_OK, response_model=ResponseModel[OrderResponseModel|None])
@@ -81,6 +86,7 @@ async def update_order_status(
     status: OrderStatusTypes,
     request: Request,
     db_session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    **kwargs
 ):
+    auth_context = kwargs.get('auth_context')
     return update_order_status_(id, status, db_session)

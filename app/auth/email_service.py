@@ -1,6 +1,6 @@
 import smtplib
-from email.mime.text import MimeText
-from email.mime.multipart import MimeMultipart
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from typing import Optional
 from app.config.config import get_settings
 import logging
@@ -24,12 +24,12 @@ class EmailService:
                 logger.warning("SMTP not configured, email not sent")
                 return False
 
-            msg = MimeMultipart()
+            msg = MIMEMultipart()
             msg['From'] = from_email or settings.FROM_EMAIL
             msg['To'] = to_email
             msg['Subject'] = subject
 
-            msg.attach(MimeText(body, 'html' if is_html else 'plain'))
+            msg.attach(MIMEText(body, 'html' if is_html else 'plain'))
 
             server = smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT)
 
