@@ -3,7 +3,6 @@ from datetime import datetime
 from enum import Enum
 import json
 from typing import TypeVar, Generic
-from pydantic.generics import GenericModel
 import uuid
 from pygments import highlight, lexers, formatters
 
@@ -14,7 +13,7 @@ class ResponseStatusTypes(str, Enum):
     Failure = "Failure"
     Error = "Error"
 
-class ResponseModel(GenericModel, Generic[T]):
+class ResponseModel(BaseModel, Generic[T]):
     Status: ResponseStatusTypes = Field(description="Status of the response", default=ResponseStatusTypes.Success)
     Message: str = ""
     Data: T | None = None
