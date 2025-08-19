@@ -1,5 +1,5 @@
 from app.common.utils import validate_uuid4
-from app.database.services import payment_transaction_service
+from app.database_alchemy.services import payment_transaction_service
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.payment_transaction import PaymentTransactionResponseModel, PaymentTransactionSearchResults
 from app.telemetry.tracing import trace_span

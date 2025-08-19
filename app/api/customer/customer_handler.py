@@ -1,6 +1,6 @@
 from typing import Optional
 from app.common.utils import validate_uuid4
-from app.database.services import customer_service
+from app.database_alchemy.services import customer_service
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.customer import CustomerResponseModel, CustomerSearchResults
 from app.telemetry.tracing import trace_span

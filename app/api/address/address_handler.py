@@ -1,5 +1,5 @@
 from app.common.utils import validate_uuid4
-from app.database.services import address_service
+from app.database_alchemy.services import address_service
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.address import AddressResponseModel, AddressSearchResults
 from app.telemetry.tracing import trace_span

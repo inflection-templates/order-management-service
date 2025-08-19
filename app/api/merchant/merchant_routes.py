@@ -6,7 +6,7 @@ from app.api.merchant.merchant_handler import (
     delete_merchant_,
     search_merchants_
 )
-from app.database.database_accessor import get_db_session
+from app.database_alchemy.database_accessor import get_db_session
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.merchant import MerchantCreateModel, MerchantUpdateModel, MerchantSearchFilter, MerchantSearchResults, MerchantResponseModel
 

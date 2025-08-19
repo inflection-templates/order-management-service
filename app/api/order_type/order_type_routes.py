@@ -6,7 +6,7 @@ from app.api.order_type.order_type_handler import (
     delete_order_type_,
     search_order_types_
 )
-from app.database.database_accessor import get_db_session
+from app.database_alchemy.database_accessor import get_db_session
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.order_type import OrderTypeCreateModel, OrderTypeResponseModel, OrderTypeUpdateModel, OrderTypeSearchFilter, OrderTypeSearchResults
 

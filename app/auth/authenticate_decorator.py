@@ -4,9 +4,9 @@ from fastapi import HTTPException, status, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 from app.auth.jwt_service import JWTService
-from app.database.database_accessor import get_db_session
-from app.database.models.user import User
-from app.database.models.tenant import Tenant
+from app.database_alchemy.database_accessor import get_db_session
+from app.database_alchemy.models.user import User
+from app.database_alchemy.models.tenant import Tenant
 from app.config.config import get_settings
 from app.auth.decorators import AuthContext, get_current_user, get_current_user_optional
 import logging

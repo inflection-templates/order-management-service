@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, status
-from app.database.database_accessor import get_db_session
+from app.database_alchemy.database_accessor import get_db_session
 from app.api.role.role_handler import (
  create_role_,
  delete_role_,

@@ -6,7 +6,7 @@ from app.api.api_client.api_client_handler import (
     delete_api_client_,
     search_api_clients_
 )
-from app.database.database_accessor import get_db_session
+from app.database_alchemy.database_accessor import get_db_session
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.api_client import ApiClientCreateModel, ApiClientsSearchFilter, ApiClientSearchResults, ApiClientUpdateModel, ApiClientResponseModel
 

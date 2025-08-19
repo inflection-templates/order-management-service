@@ -6,7 +6,7 @@ from app.api.customer.customer_handler import (
     delete_customer_,
     search_customers_
 )
-from app.database.database_accessor import get_db_session
+from app.database_alchemy.database_accessor import get_db_session
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.customer import CustomerCreateModel, CustomerSearchFilter, CustomerSearchResults, CustomerUpdateModel, CustomerResponseModel
 

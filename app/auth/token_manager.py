@@ -22,7 +22,7 @@ class TokenManager:
         """Store a refresh token in the database"""
         try:
             # Import here to avoid circular imports
-            from app.database.models.auth_token import AuthToken
+            from app.database_alchemy.models.auth_token import AuthToken
 
             db_token = AuthToken(
                 UserId=user_id,
@@ -51,7 +51,7 @@ class TokenManager:
         """Store special tokens (password reset, email verification, etc.)"""
         try:
             # Import here to avoid circular imports
-            from app.database.models.auth_token import AuthToken
+            from app.database_alchemy.models.auth_token import AuthToken
 
             db_token = AuthToken(
                 UserId=user_id,
@@ -74,7 +74,7 @@ class TokenManager:
         """Check if a token is revoked in the database"""
         try:
             # Import here to avoid circular imports
-            from app.database.models.auth_token import AuthToken
+            from app.database_alchemy.models.auth_token import AuthToken
 
             # For access tokens, we don't store them, so they can't be revoked
             payload = JWTHandler.decode_token_without_verification(token)
@@ -101,7 +101,7 @@ class TokenManager:
         """Revoke a specific token"""
         try:
             # Import here to avoid circular imports
-            from app.database.models.auth_token import AuthToken
+            from app.database_alchemy.models.auth_token import AuthToken
 
             db_token = session.query(AuthToken).filter(
                 AuthToken.Token == token,
@@ -129,7 +129,7 @@ class TokenManager:
         """Revoke all tokens for a user, optionally filtered by type"""
         try:
             # Import here to avoid circular imports
-            from app.database.models.auth_token import AuthToken
+            from app.database_alchemy.models.auth_token import AuthToken
 
             query = session.query(AuthToken).filter(
                 AuthToken.UserId == user_id,
@@ -158,7 +158,7 @@ class TokenManager:
         """Remove expired tokens from database"""
         try:
             # Import here to avoid circular imports
-            from app.database.models.auth_token import AuthToken
+            from app.database_alchemy.models.auth_token import AuthToken
 
             expired_tokens = session.query(AuthToken).filter(
                 AuthToken.ExpiresAt < datetime.utcnow()
@@ -186,7 +186,7 @@ class TokenManager:
         """Get active tokens for a user"""
         try:
             # Import here to avoid circular imports
-            from app.database.models.auth_token import AuthToken
+            from app.database_alchemy.models.auth_token import AuthToken
 
             query = session.query(AuthToken).filter(
                 AuthToken.UserId == user_id,

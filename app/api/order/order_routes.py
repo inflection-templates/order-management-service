@@ -7,7 +7,7 @@ from app.api.order.order_handler import (
     search_orders_,
     update_order_status_
 )
-from app.database.database_accessor import get_db_session
+from app.database_alchemy.database_accessor import get_db_session
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.order import OrderCreateModel, OrderResponseModel, OrderUpdateModel, OrderSearchFilter, OrderSearchResults
 from app.domain_types.enums.order_status_types import OrderStatusTypes

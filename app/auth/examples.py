@@ -7,7 +7,7 @@ in your FastAPI routes. Copy these patterns to your own route files.
 
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
-from app.database.database_accessor import get_db_session
+from app.database_alchemy.database_accessor import get_db_session
 from app.auth import authenticate_user, AuthContext
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from typing import Dict, Any

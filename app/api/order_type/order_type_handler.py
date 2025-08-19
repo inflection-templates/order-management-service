@@ -1,5 +1,5 @@
 from app.common.utils import validate_uuid4
-from app.database.services import order_type_service
+from app.database_alchemy.services import order_type_service
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.order_type import OrderTypeResponseModel, OrderTypeSearchResults
 from app.telemetry.tracing import trace_span

@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.api.auth.auth_handler import AuthHandler
 from app.api.auth.external_auth_handler import ExternalAuthHandler
-from app.database.database_accessor import get_db_session
+from app.database_alchemy.database_accessor import get_db_session
 from app.domain_types.schemas.auth import (
     EmailPasswordLoginModel, PhonePasswordLoginModel, PhoneOTPLoginModel,
     TokenResponseModel, RefreshTokenModel, UserRegistrationModel,

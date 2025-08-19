@@ -2,7 +2,7 @@ import datetime as dt
 import uuid
 from fastapi import HTTPException, Query, Body
 from app.common.utils import print_colorized_json
-from app.database.database_factory import get_database_session 
+from app.database_alchemy.database_factory import get_database_session 
 from app.database_sqlmodel.models.address import Address
 from app.database_sqlmodel.models.customer_address import CustomerAddress
 from app.domain_types.schemas.address import AddressCreateModel, AddressResponseModel, AddressUpdateModel, AddressSearchFilter, AddressSearchResults
