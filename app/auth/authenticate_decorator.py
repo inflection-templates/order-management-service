@@ -15,27 +15,19 @@ logger = logging.getLogger(__name__)
 settings = get_settings()
 
 def authenticate_user(
-    required: bool = True,
-    roles: Optional[List[str]] = None,
-    permissions: Optional[List[str]] = None
+    required: bool = True
 ):
     """
     Decorator for authenticating users
 
     Args:
         required: Whether authentication is required (default: True)
-        roles: List of required roles
-        permissions: List of required permissions
 
     Usage:
         @authenticate_user(required=True)
         async def protected_endpoint(request: Request, auth_context: AuthContext = None):
             user = auth_context.user
             return {"user_id": user.id}
-
-        @authenticate_user(required=True, roles=["admin"])
-        async def admin_endpoint(request: Request, auth_context: AuthContext = None):
-            return {"message": "Admin access granted"}
 
         @authenticate_user(required=False)
         async def public_endpoint(request: Request, auth_context: AuthContext = None):
@@ -89,20 +81,7 @@ def authenticate_user(
             else:
                 auth_context = await get_current_user_optional(request, credentials, session)
 
-            # Check roles
-            if auth_context and roles:
-                user_roles = set(auth_context.roles)
-                required_roles = set(roles)
-                if not user_roles.intersection(required_roles):
-                    raise HTTPException(
-                        status_code=status.HTTP_403_FORBIDDEN,
-                        detail=f"Required roles: {', '.join(roles)}"
-                    )
 
-            # Check permissions (if implemented)
-            if auth_context and permissions:
-                # TODO: Implement permission checking logic
-                pass
 
             # Add auth_context to kwargs
             kwargs['auth_context'] = auth_context
