@@ -1,9 +1,13 @@
 from app.common.utils import validate_uuid4
-from app.database_alchemy.services import order_service
+from app.common.database.database_interface import db_interface
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.order import OrderResponseModel, OrderSearchResults
 from app.telemetry.tracing import trace_span
 
+# Get the order service dynamically based on ORM type
+order_service = db_interface.get_order_service()
+
+###############################################################################
 
 @trace_span("handler: create_order")
 def create_order_(model, db_session):

@@ -6,9 +6,12 @@ from app.api.customer.customer_handler import (
     delete_customer_,
     search_customers_
 )
-from app.database_alchemy.database_accessor import get_db_session
+from app.common.database.database_interface import db_interface
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.customer import CustomerCreateModel, CustomerSearchFilter, CustomerSearchResults, CustomerUpdateModel, CustomerResponseModel
+
+# Get the database session function dynamically based on ORM type
+get_db_session = db_interface.get_db_session()
 
 ###############################################################################
 

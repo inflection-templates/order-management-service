@@ -1,9 +1,12 @@
 from typing import Optional
 from app.common.utils import validate_uuid4
-from app.database_alchemy.services import user_service
+from app.common.database.database_interface import db_interface
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.user import UserCreateModel, UserResponseModel, UserSearchResults
 from app.telemetry.tracing import trace_span
+
+# Get the user service dynamically based on ORM type
+user_service = db_interface.get_user_service()
 
 @trace_span("handler: create_user")
 def create_user_(model:UserCreateModel, db_session):

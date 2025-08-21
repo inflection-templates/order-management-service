@@ -14,8 +14,7 @@ settings = get_settings()
 # Create the engine
 engine = create_engine(settings.DB_CONNECTION_STRING, echo=False)
 
-# Create the database tables
-SQLModel.metadata.create_all(bind=engine)
+# Note: Table creation is now handled by the database initializer
 
 # Session function
 def get_db_session() -> Session:

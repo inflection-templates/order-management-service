@@ -108,6 +108,11 @@ class Settings(BaseSettings):
     DB_DRIVER: str = "pymysql"
     DB_CONNECTION_STRING: str = f"{DB_DIALECT}+{DB_DRIVER}://{DB_USER_NAME}:{DB_USER_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
+    # ORM Configuration - Switch between "sqlmodel" and "sqlalchemy"  
+    # ORM_TYPE: str = "sqlalchemy"
+
+    ORM_TYPE: str = "sqlmodel"
+
     # Open-telemetry
     TRACING_ENABLED: bool = False
     TRACING_EXPORTER_TYPE: str = 'NoExporter'

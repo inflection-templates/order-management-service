@@ -7,11 +7,14 @@ from app.api.order.order_handler import (
     search_orders_,
     update_order_status_
 )
-from app.database_alchemy.database_accessor import get_db_session
+from app.common.database.database_interface import db_interface
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.order import OrderCreateModel, OrderResponseModel, OrderUpdateModel, OrderSearchFilter, OrderSearchResults
 from app.domain_types.enums.order_status_types import OrderStatusTypes
 from app.auth import authenticate_user, AuthContext
+
+# Get the database session function dynamically based on ORM type
+get_db_session = db_interface.get_db_session()
 
 ###############################################################################
 
@@ -27,7 +30,7 @@ router = APIRouter(
 async def create_order(
     model: OrderCreateModel,
     request: Request,
-    db_session = Depends(get_db_session),  # This will automatically use SQLModel when ORM_TYPE="sqlmodel"
+    db_session = Depends(get_db_session),  # This will automatically use the configured ORM
     **kwargs
 ):
     auth_context = kwargs.get('auth_context')

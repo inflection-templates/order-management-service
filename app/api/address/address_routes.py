@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status, Query, Body
 from app.common.utils import print_colorized_json, validate_uuid4
-from app.database_alchemy.database_accessor import get_db_session
+from app.common.database.database_interface import db_interface
 from app.api.address.address_handler import (
     create_address_,
     get_address_by_id_,
@@ -10,6 +10,11 @@ from app.api.address.address_handler import (
 )
 from app.domain_types.schemas.address import AddressCreateModel, AddressUpdateModel, AddressResponseModel, AddressSearchResults, AddressSearchFilter
 from app.domain_types.miscellaneous.response_model import ResponseModel, ResponseStatusTypes
+
+# Get the database session function dynamically based on ORM type
+get_db_session = db_interface.get_db_session()
+
+###############################################################################
 
 router = APIRouter(
     prefix="/addresses",

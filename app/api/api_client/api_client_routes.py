@@ -6,9 +6,12 @@ from app.api.api_client.api_client_handler import (
     delete_api_client_,
     search_api_clients_
 )
-from app.database_alchemy.database_accessor import get_db_session
+from app.common.database.database_interface import db_interface
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.api_client import ApiClientCreateModel, ApiClientsSearchFilter, ApiClientSearchResults, ApiClientUpdateModel, ApiClientResponseModel
+
+# Get the database session function dynamically based on ORM type
+get_db_session = db_interface.get_db_session()
 
 ###############################################################################
 

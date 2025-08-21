@@ -1,8 +1,10 @@
 from typing import Dict, Any
-from sqlalchemy.orm import Session
+# from sqlalchemy.orm import Session
 from fastapi import HTTPException, status, Request
 import secrets
 import logging
+
+from requests import Session
 
 from app.auth.providers.provider_factory import ProviderFactory
 from app.auth.auth_service import AuthService

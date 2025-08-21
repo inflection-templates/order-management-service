@@ -1,8 +1,11 @@
 from app.common.utils import validate_uuid4
-from app.database_alchemy.services import address_service
+from app.common.database.database_interface import db_interface
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.address import AddressResponseModel, AddressSearchResults
 from app.telemetry.tracing import trace_span
+
+# Get the address service dynamically based on ORM type
+address_service = db_interface.get_address_service()
 
 @trace_span("handler: create_address")
 def create_address_(model, db_session):

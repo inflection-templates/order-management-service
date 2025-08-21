@@ -1,8 +1,11 @@
 from app.common.utils import validate_uuid4
-from app.database_alchemy.services import order_line_item_service
+from app.common.database.database_interface import db_interface
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.order_line_item import OrderLineItemResponseModel, OrderLineItemSearchResults
 from app.telemetry.tracing import trace_span
+
+# Get the order line item service dynamically based on ORM type
+order_line_item_service = db_interface.get_order_line_item_service()
 
 @trace_span("handler: create_order_line_item")
 def create_order_line_item_(model, db_session):

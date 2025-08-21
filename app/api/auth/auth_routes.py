@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.api.auth.auth_handler import AuthHandler
 from app.api.auth.external_auth_handler import ExternalAuthHandler
-from app.database_alchemy.database_accessor import get_db_session
+from app.common.database.database_interface import db_interface
 from app.domain_types.schemas.auth import (
     EmailPasswordLoginModel, PhonePasswordLoginModel, PhoneOTPLoginModel,
     TokenResponseModel, RefreshTokenModel, UserRegistrationModel,
@@ -16,6 +16,11 @@ from app.domain_types.schemas.auth import (
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.auth import authenticate_user, AuthContext
 from typing import Dict, Any
+
+# Get the database session function dynamically based on ORM type
+get_db_session = db_interface.get_db_session()
+
+###############################################################################
 
 router = APIRouter(
     prefix="/auth",

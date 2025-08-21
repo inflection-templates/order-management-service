@@ -1,8 +1,11 @@
 from app.common.utils import validate_uuid4
-from app.database_alchemy.services import payment_transaction_service
+from app.common.database.database_interface import db_interface
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.payment_transaction import PaymentTransactionResponseModel, PaymentTransactionSearchResults
 from app.telemetry.tracing import trace_span
+
+# Get the payment transaction service dynamically based on ORM type
+payment_transaction_service = db_interface.get_payment_transaction_service()
 
 @trace_span("handler: create_payment_transaction")
 def create_payment_transaction_(model, db_session):

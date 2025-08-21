@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, status
-from app.database_alchemy.database_accessor import get_db_session
+from app.common.database.database_interface import db_interface
 from app.api.role.role_handler import (
  create_role_,
  delete_role_,
@@ -9,6 +9,9 @@ from app.api.role.role_handler import (
 )
 from app.domain_types.miscellaneous.response_model import ResponseModel, ResponseStatusTypes
 from app.domain_types.schemas.role.role import RoleCreateModel, RoleResponseModel, RoleSearchFilter, RoleSearchResults, RoleUpdateModel
+
+# Get the database session function dynamically based on ORM type
+get_db_session = db_interface.get_db_session()
 
 ##############################################################################
 

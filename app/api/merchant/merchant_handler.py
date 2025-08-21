@@ -1,8 +1,11 @@
 from app.common.utils import validate_uuid4
-from app.database_alchemy.services import merchant_service
+from app.common.database.database_interface import db_interface
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.merchant import MerchantResponseModel, MerchantSearchResults
 from app.telemetry.tracing import trace_span
+
+# Get the merchant service dynamically based on ORM type
+merchant_service = db_interface.get_merchant_service()
 
 @trace_span("handler: create_merchant")
 def create_merchant_(model, db_session):

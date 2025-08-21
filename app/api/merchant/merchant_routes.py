@@ -6,9 +6,12 @@ from app.api.merchant.merchant_handler import (
     delete_merchant_,
     search_merchants_
 )
-from app.database_alchemy.database_accessor import get_db_session
+from app.common.database.database_interface import db_interface
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.merchant import MerchantCreateModel, MerchantUpdateModel, MerchantSearchFilter, MerchantSearchResults, MerchantResponseModel
+
+# Get the database session function dynamically based on ORM type
+get_db_session = db_interface.get_db_session()
 
 ###############################################################################
 

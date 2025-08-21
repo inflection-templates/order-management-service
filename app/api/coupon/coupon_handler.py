@@ -1,8 +1,11 @@
 from app.common.utils import validate_uuid4
-from app.database_alchemy.services import coupon_service
+from app.common.database.database_interface import db_interface
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.coupon import CouponResponseModel, CouponSearchResults
 from app.telemetry.tracing import trace_span
+
+# Get the coupon service dynamically based on ORM type
+coupon_service = db_interface.get_coupon_service()
 
 @trace_span("handler: create_coupon")
 def create_coupon_(model, db_session):

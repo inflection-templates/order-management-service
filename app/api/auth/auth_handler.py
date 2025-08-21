@@ -1,6 +1,7 @@
 from typing import Dict, Any, Optional
-from sqlalchemy.orm import Session
+# from  import Session
 from fastapi import HTTPException, status, Request
+from requests import Session
 
 from app.auth.auth_service import AuthService
 from app.auth.jwt_service import JWTService
