@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, status
-from app.common.database.database_interface import db_interface
+from app.database.database_interface import db_interface
 from app.api.role.role_handler import (
  create_role_,
  delete_role_,

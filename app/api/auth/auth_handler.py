@@ -17,8 +17,8 @@ from app.domain_types.schemas.auth import (
     EmailVerificationModel, PhoneVerificationModel
 )
 from app.domain_types.miscellaneous.response_model import ResponseModel
-from app.database_alchemy.models.user import User
-from app.database_alchemy.models.tenant import Tenant
+from app.database.sql_alchemy.models.user import User
+from app.database.sql_alchemy.models.tenant import Tenant
 from app.telemetry.tracing import trace_span
 from app.auth.decorators import AuthContext
 import logging

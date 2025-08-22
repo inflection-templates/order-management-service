@@ -6,7 +6,7 @@ from app.api.order_type.order_type_handler import (
     delete_order_type_,
     search_order_types_
 )
-from app.common.database.database_interface import db_interface
+from app.database.database_interface import db_interface
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.order_type import OrderTypeCreateModel, OrderTypeResponseModel, OrderTypeUpdateModel, OrderTypeSearchFilter, OrderTypeSearchResults
 

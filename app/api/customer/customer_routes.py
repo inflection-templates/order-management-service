@@ -6,7 +6,7 @@ from app.api.customer.customer_handler import (
     delete_customer_,
     search_customers_
 )
-from app.common.database.database_interface import db_interface
+from app.database.database_interface import db_interface
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.customer import CustomerCreateModel, CustomerSearchFilter, CustomerSearchResults, CustomerUpdateModel, CustomerResponseModel
 

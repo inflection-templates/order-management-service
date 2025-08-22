@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status, Query, Body
 from app.common.utils import print_colorized_json, validate_uuid4
-from app.common.database.database_interface import db_interface
+from app.database.database_interface import db_interface
 from app.api.address.address_handler import (
     create_address_,
     get_address_by_id_,

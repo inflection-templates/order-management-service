@@ -10,12 +10,14 @@ import io
 import base64
 import json
 
-from app.database_alchemy.models.user import User
-from app.database_alchemy.models.tenant import Tenant
+from app.database.sql_alchemy.models.user import User
+from app.database.sql_alchemy.models.tenant import Tenant
 # Import OTP model - will be available after migration
 # from app.database.models.user.otp import Otp
-from app.database_alchemy.models.auth_token import AuthToken
-from app.database_alchemy.models.user_external_auth import UserExternalAuth
+from app.database.sql_alchemy.models.auth_token import AuthToken
+# from app.database.database_alchemy.models.user.otp import Otp
+from app.database.sql_alchemy.models.users.otp import Otp
+from app.database.sql_alchemy.models.user_external_auth import UserExternalAuth
 from app.auth.jwt_service import JWTService
 from app.config.config import get_settings
 from app.domain_types.miscellaneous.exceptions import NotFound, Conflict
@@ -307,8 +309,8 @@ class AuthService:
     def get_user_roles(user_id: str, session: Session) -> List[str]:
         """Get user roles from database"""
         try:
-            from app.database_alchemy.models.user_role import UserRole
-            from app.database_alchemy.models.role import Role
+            from app.database.sql_alchemy.models.user_role import UserRole
+            from app.database.sql_alchemy.models.role import Role
 
             user_roles = session.query(UserRole).join(Role).filter(
                 UserRole.UserId == user_id

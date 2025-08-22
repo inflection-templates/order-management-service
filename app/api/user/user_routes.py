@@ -6,7 +6,7 @@ from app.api.user.user_handler import (
     delete_user_,
     search_users_
 )
-from app.common.database.database_interface import db_interface
+from app.database.database_interface import db_interface
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.user import UserCreateModel, UserSearchFilters, UserSearchResults, UserUpdateModel, UserResponseModel
 

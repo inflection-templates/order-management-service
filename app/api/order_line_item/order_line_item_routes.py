@@ -6,7 +6,7 @@ from app.api.order_line_item.order_line_item_handler import (
     delete_order_line_item_,
     search_order_line_items_
 )
-from app.common.database.database_interface import db_interface
+from app.database.database_interface import db_interface
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.order_line_item import OrderLineItemCreateModel, OrderLineItemResponseModel, OrderLineItemUpdateModel, OrderLineItemSearchFilter, OrderLineItemSearchResults
 

@@ -6,7 +6,7 @@ from app.api.payment_transaction.payment_transaction_handler import (
     delete_payment_transaction_,
     search_payment_transactions_
 )
-from app.common.database.database_interface import db_interface
+from app.database.database_interface import db_interface
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.payment_transaction import PaymentTransactionCreateModel, PaymentTransactionResponseModel, PaymentTransactionSearchFilter, PaymentTransactionSearchResults
 

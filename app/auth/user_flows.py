@@ -5,11 +5,10 @@ from sqlalchemy import func
 import secrets
 import logging
 
-from app.database_alchemy.models.user import User
-from app.database_alchemy.models.tenant import Tenant
-from app.database_alchemy.models.auth_token import AuthToken
+from app.database.sql_alchemy.models.user import User
+from app.database.sql_alchemy.models.tenant import Tenant
+from app.database.sql_alchemy.models.auth_token import AuthToken
 # Import OTP model - will be available after migration
-# from app.database.models.user.otp import Otp
 from app.auth.jwt_service import JWTService
 from app.auth.auth_service import AuthService
 from app.auth.email_service import EmailService

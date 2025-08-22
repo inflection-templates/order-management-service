@@ -7,7 +7,7 @@ from app.api.order.order_handler import (
     search_orders_,
     update_order_status_
 )
-from app.common.database.database_interface import db_interface
+from app.database.database_interface import db_interface
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.order import OrderCreateModel, OrderResponseModel, OrderUpdateModel, OrderSearchFilter, OrderSearchResults
 from app.domain_types.enums.order_status_types import OrderStatusTypes

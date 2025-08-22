@@ -1,7 +1,7 @@
 from typing import Optional
 from app.common.utils import validate_uuid4
 # from app.database_alchemy.services import api_client_service
-from app.common.database.database_interface import db_interface
+from app.database.database_interface import db_interface
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.api_client import ApiClientCreateModel, ApiClientResponseModel, ApiClientSearchResults
 from app.telemetry.tracing import trace_span
