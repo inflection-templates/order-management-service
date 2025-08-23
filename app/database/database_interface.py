@@ -1,22 +1,22 @@
 from typing import Callable, Any
-from app.database.orm_factory import orm_factory
+from app.database.orm_factory import database_factory
 
 class DatabaseInterface:
     """Unified interface for database operations across ORMs"""
     
     def __init__(self):
-        self.orm_factory = orm_factory
+        self.database_factory = database_factory
         self._service_cache = {}  # Cache imported services
-        print(f"Database Interface initialized with {self.orm_factory.orm_type.value.upper()} ORM")
+        print(f"Database Interface initialized with {self.database_factory.database_type.value.upper()} database")
     
     def get_db_session(self):
-        """Get database session for the active ORM"""
-        return self.orm_factory.get_database_accessor()
+        """Get database session for the active database"""
+        return self.database_factory.get_database_accessor()
     
     def _get_service(self, service_name: str):
         """Get service with caching"""
         if service_name not in self._service_cache:
-            self._service_cache[service_name] = self.orm_factory.get_service_module(service_name)
+            self._service_cache[service_name] = self.database_factory.get_service_module(service_name)
         return self._service_cache[service_name]
     
     def get_order_service(self):

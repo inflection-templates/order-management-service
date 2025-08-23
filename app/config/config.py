@@ -108,9 +108,22 @@ class Settings(BaseSettings):
     DB_DRIVER: str = "pymysql"
     DB_CONNECTION_STRING: str = f"{DB_DIALECT}+{DB_DRIVER}://{DB_USER_NAME}:{DB_USER_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
-    # ORM Configuration - Switch between "sqlmodel" and "sqlalchemy"  
-    ORM_TYPE: str = "sqlalchemy"
+    # Database Type Configuration - Switch between "mysql" and "mongodb"
+    DATABASE_TYPE: str = "mysql"  # Options: "mysql", "mongodb"
+    
+    # ORM Configuration - Switch between "sqlmodel" and "sqlalchemy" (for MySQL only)
+    ORM_TYPE: str = "sqlalchemy"  # Only applies when DATABASE_TYPE = "mysql"
 
+    # MongoDB Configuration
+    MONGODB_URI: str = "mongodb://localhost:27017"
+    MONGODB_DATABASE: str = "order_management"
+    MONGODB_MAX_POOL_SIZE: int = 100
+    MONGODB_MIN_POOL_SIZE: int = 0
+    MONGODB_MAX_IDLE_TIME_MS: int = 30000
+    MONGODB_CONNECT_TIMEOUT_MS: int = 20000
+    MONGODB_SERVER_SELECTION_TIMEOUT_MS: int = 5000
+
+    # ORM Configuration - Switch between "sqlmodel" and "sqlalchemy"  
     # ORM_TYPE: str = "sqlmodel"
 
     # Open-telemetry
