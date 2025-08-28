@@ -12,15 +12,3 @@ class PaymentTransactionModel(MongoDBBaseModel):
     PaymentStatus: PaymentStatusTypes = Field(default=PaymentStatusTypes.INITIATED)  # Use INITIATED, not NONE
     TransactionReference: Optional[str] = Field(None, max_length=100)
     GatewayResponse: Optional[dict] = Field(None)
-    
-    class Config:
-        collection_name = "payment_transactions"
-        json_schema_extra = {  # Use json_schema_extra for Pydantic v2
-            "example": {
-                "OrderId": "order123",
-                "Amount": 99.99,
-                "Currency": "USD",
-                "PaymentMethod": "credit_card",
-                "PaymentStatus": "Initiated"
-            }
-        }

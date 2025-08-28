@@ -10,15 +10,3 @@ class OrderHistoryModel(MongoDBBaseModel):
     PreviousStatus: Optional[OrderStatusTypes] = Field(None)
     Notes: Optional[str] = Field(None, max_length=500)
     ChangedBy: Optional[str] = Field(None, max_length=100)
-    
-    class Config:
-        collection_name = "order_history"
-        schema_extra = {
-            "example": {
-                "OrderId": "order123",
-                "Status": "CONFIRMED",
-                "PreviousStatus": "PENDING",
-                "Notes": "Order confirmed by customer",
-                "ChangedBy": "system"
-            }
-        }

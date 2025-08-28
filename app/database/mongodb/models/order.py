@@ -20,15 +20,4 @@ class OrderModel(MongoDBBaseModel):
     Notes: Optional[str] = Field(None, max_length=1024)
     Coupons: Optional[List[str]] = Field(default=[])
     OrderStatus: OrderStatusTypes = Field(default=OrderStatusTypes.DRAFT)
-    
-    class Config:
-        collection_name = "orders"
-        schema_extra = {
-            "example": {
-                "DisplayCode": "ORD-001",
-                "CustomerId": "customer123",
-                "TotalItemsCount": 2,
-                "OrderStatus": "DRAFT"
-            }
-        }
 

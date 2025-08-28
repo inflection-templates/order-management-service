@@ -16,17 +16,3 @@ class UserModel(MongoDBBaseModel):
     roles: List[str] = Field(default=[])
     failed_login_attempts: int = Field(default=0)
     locked_until: Optional[datetime] = Field(None)
-    
-    class Config:
-        collection_name = "users"
-        schema_extra = {
-            "example": {
-                "email": "user@example.com",
-                "username": "johndoe",
-                "first_name": "John",
-                "last_name": "Doe",
-                "is_active": True,
-                "tenant_id": "default",
-                "roles": ["user"]
-            }
-        }

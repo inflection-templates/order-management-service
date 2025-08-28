@@ -12,18 +12,3 @@ class AddressModel(MongoDBBaseModel):
     PostalCode: str = Field(..., max_length=20)
     Country: str = Field(..., max_length=100)
     IsDefault: bool = Field(default=False)
-    
-    class Config:
-        collection_name = "addresses"
-        schema_extra = {
-            "example": {
-                "CustomerId": "customer123",
-                "AddressType": "shipping",
-                "StreetAddress": "123 Main St",
-                "City": "New York",
-                "State": "NY",
-                "PostalCode": "10001",
-                "Country": "USA",
-                "IsDefault": True
-            }
-        }

@@ -14,15 +14,3 @@ class CouponModel(MongoDBBaseModel):
     IsActive: bool = Field(default=True)
     ValidFrom: Optional[datetime] = Field(None)
     ValidTo: Optional[datetime] = Field(None)
-    
-    class Config:
-        collection_name = "coupons"
-        schema_extra = {
-            "example": {
-                "Code": "SAVE20",
-                "Description": "20% off on orders",
-                "DiscountPercentage": 20.0,
-                "DiscountAmount": 0.0,
-                "MinimumOrderAmount": 50.0
-            }
-        }

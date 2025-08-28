@@ -8,14 +8,3 @@ class RoleModel(MongoDBBaseModel):
     Description: Optional[str] = Field(None, max_length=500)
     Permissions: List[str] = Field(default=[])
     IsActive: bool = Field(default=True)
-    
-    class Config:
-        collection_name = "roles"
-        schema_extra = {
-            "example": {
-                "Name": "admin",
-                "Description": "Administrator role with full access",
-                "Permissions": ["read", "write", "delete", "admin"],
-                "IsActive": True
-            }
-        }

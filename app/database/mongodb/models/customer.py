@@ -10,14 +10,3 @@ class CustomerModel(MongoDBBaseModel):
     phone: Optional[str] = Field(None, max_length=20)
     is_active: bool = Field(default=True)
     tenant_id: Optional[str] = Field(default="default")
-    
-    class Config:
-        collection_name = "customers"
-        schema_extra = {
-            "example": {
-                "email": "customer@example.com",
-                "first_name": "John",
-                "last_name": "Doe",
-                "is_active": True
-            }
-        }

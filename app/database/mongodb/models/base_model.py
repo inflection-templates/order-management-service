@@ -25,13 +25,6 @@ class MongoDBBaseModel(BaseModel):
         validate_by_name = True  # Instead of allow_population_by_field_name
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
-        json_schema_extra = {  # Changed from schema_extra
-            "example": {
-                "id": "507f1f77bcf86cd799439011",
-                "created_at": "2023-01-01T00:00:00Z",
-                "updated_at": "2023-01-01T00:00:00Z"
-            }
-        }
     
     def update_timestamp(self):
         """Update the updated_at timestamp"""
