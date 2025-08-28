@@ -13,18 +13,18 @@ class MongoDBUserService:
         self.db = db
         self.collection: Collection = db.users
     
-    def create_user(self, user_data: UserCreateModel) -> UserModel:
+    def create_user(self, model: UserCreateModel) -> UserModel:
         """Create a new user"""
         try:
-            user_dict = user_data.dict()
+            user_dict = model.model_dump()
             user = UserModel(**user_dict)
             user.update_timestamp()
             
-            result = self.collection.insert_one(user.dict(by_alias=True))
+            result = self.collection.insert_one(user.model_dump(by_alias=True))
             user.id = result.inserted_id
             
             logger.info(f"Created user with ID: {user.id}")
-            return user
+            return user.__dict__
         except Exception as e:
             logger.error(f"Failed to create user: {e}")
             raise
@@ -52,11 +52,11 @@ class MongoDBUserService:
             logger.error(f"Failed to get user by email {email}: {e}")
             raise
     
-    def update_user(self, user_id: str, user_data: UserUpdateModel) -> Optional[UserModel]:
+    def update_user(self, user_id: str, model: UserUpdateModel) -> Optional[UserModel]:
         """Update user"""
         try:
             from bson import ObjectId
-            update_data = user_data.dict(exclude_unset=True)
+            update_data = model.model_dump(exclude_unset=True)
             update_data["updated_at"] = datetime.utcnow()
             
             result = self.collection.update_one(

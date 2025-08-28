@@ -13,18 +13,18 @@ class MongoDBOrderHistoryService:
         self.db = db
         self.collection: Collection = db.order_history
     
-    def create_order_history(self, history_data: OrderHistoryCreateModel) -> OrderHistoryModel:
+    def create_order_history(self, model: OrderHistoryCreateModel) -> OrderHistoryModel:
         """Create a new order history entry"""
         try:
-            history_dict = history_data.dict()
+            history_dict = model.model_dump()
             history = OrderHistoryModel(**history_dict)
             history.update_timestamp()
             
-            result = self.collection.insert_one(history.dict(by_alias=True))
+            result = self.collection.insert_one(history.model_dump(by_alias=True))
             history.id = result.inserted_id
             
             logger.info(f"Created order history with ID: {history.id}")
-            return history
+            return history.__dict__
         except Exception as e:
             logger.error(f"Failed to create order history: {e}")
             raise
@@ -41,11 +41,11 @@ class MongoDBOrderHistoryService:
             logger.error(f"Failed to get order history by ID {history_id}: {e}")
             raise
     
-    def update_order_history(self, history_id: str, history_data: OrderHistoryUpdateModel) -> Optional[OrderHistoryModel]:
+    def update_order_history(self, history_id: str, model: OrderHistoryUpdateModel) -> Optional[OrderHistoryModel]:
         """Update order history"""
         try:
             from bson import ObjectId
-            update_data = history_data.dict(exclude_unset=True)
+            update_data = model.model_dump(exclude_unset=True)
             update_data["updated_at"] = datetime.utcnow()
             
             result = self.collection.update_one(

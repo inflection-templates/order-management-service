@@ -13,18 +13,18 @@ class MongoDBCartService:
         self.db = db
         self.collection: Collection = db.carts
     
-    def create_cart(self, cart_data: CartCreateModel) -> CartModel:
+    def create_cart(self, model: CartCreateModel) -> CartModel:
         """Create a new cart"""
         try:
-            cart_dict = cart_data.dict()
+            cart_dict = model.model_dump()
             cart = CartModel(**cart_dict)
             cart.update_timestamp()
             
-            result = self.collection.insert_one(cart.dict(by_alias=True))
+            result = self.collection.insert_one(cart.model_dump(by_alias=True))
             cart.id = result.inserted_id
             
             logger.info(f"Created cart with ID: {cart.id}")
-            return cart
+            return cart.__dict__
         except Exception as e:
             logger.error(f"Failed to create cart: {e}")
             raise
@@ -41,11 +41,11 @@ class MongoDBCartService:
             logger.error(f"Failed to get cart by ID {cart_id}: {e}")
             raise
     
-    def update_cart(self, cart_id: str, cart_data: CartUpdateModel) -> Optional[CartModel]:
+    def update_cart(self, cart_id: str, model: CartUpdateModel) -> Optional[CartModel]:
         """Update cart"""
         try:
             from bson import ObjectId
-            update_data = cart_data.dict(exclude_unset=True)
+            update_data = model.model_dump(exclude_unset=True)
             update_data["updated_at"] = datetime.utcnow()
             
             result = self.collection.update_one(

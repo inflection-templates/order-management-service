@@ -13,18 +13,18 @@ class MongoDBCouponService:
         self.db = db
         self.collection: Collection = db.coupons
     
-    def create_coupon(self, coupon_data: CouponCreateModel) -> CouponModel:
+    def create_coupon(self, model: CouponCreateModel) -> CouponModel:
         """Create a new coupon"""
         try:
-            coupon_dict = coupon_data.dict()
+            coupon_dict = model.model_dump()
             coupon = CouponModel(**coupon_dict)
             coupon.update_timestamp()
             
-            result = self.collection.insert_one(coupon.dict(by_alias=True))
+            result = self.collection.insert_one(coupon.model_dump(by_alias=True))
             coupon.id = result.inserted_id
             
             logger.info(f"Created coupon with ID: {coupon.id}")
-            return coupon
+            return coupon.__dict__
         except Exception as e:
             logger.error(f"Failed to create coupon: {e}")
             raise
@@ -41,11 +41,11 @@ class MongoDBCouponService:
             logger.error(f"Failed to get coupon by ID {coupon_id}: {e}")
             raise
     
-    def update_coupon(self, coupon_id: str, coupon_data: CouponUpdateModel) -> Optional[CouponModel]:
+    def update_coupon(self, coupon_id: str, model: CouponUpdateModel) -> Optional[CouponModel]:
         """Update coupon"""
         try:
             from bson import ObjectId
-            update_data = coupon_data.dict(exclude_unset=True)
+            update_data = model.model_dump(exclude_unset=True)
             update_data["updated_at"] = datetime.utcnow()
             
             result = self.collection.update_one(

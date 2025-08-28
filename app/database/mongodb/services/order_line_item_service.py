@@ -13,18 +13,18 @@ class MongoDBOrderLineItemService:
         self.db = db
         self.collection: Collection = db.order_line_items
     
-    def create_order_line_item(self, line_item_data: OrderLineItemCreateModel) -> OrderLineItemModel:
+    def create_order_line_item(self, model: OrderLineItemCreateModel) -> OrderLineItemModel:
         """Create a new order line item"""
         try:
-            line_item_dict = line_item_data.dict()
+            line_item_dict = model.model_dump()
             line_item = OrderLineItemModel(**line_item_dict)
             line_item.update_timestamp()
             
-            result = self.collection.insert_one(line_item.dict(by_alias=True))
+            result = self.collection.insert_one(line_item.model_dump(by_alias=True))
             line_item.id = result.inserted_id
             
             logger.info(f"Created order line item with ID: {line_item.id}")
-            return line_item
+            return line_item.__dict__
         except Exception as e:
             logger.error(f"Failed to create order line item: {e}")
             raise
@@ -41,11 +41,11 @@ class MongoDBOrderLineItemService:
             logger.error(f"Failed to get order line item by ID {line_item_id}: {e}")
             raise
     
-    def update_order_line_item(self, line_item_id: str, line_item_data: OrderLineItemUpdateModel) -> Optional[OrderLineItemModel]:
+    def update_order_line_item(self, line_item_id: str, model: OrderLineItemUpdateModel) -> Optional[OrderLineItemModel]:
         """Update order line item"""
         try:
             from bson import ObjectId
-            update_data = line_item_data.dict(exclude_unset=True)
+            update_data = model.model_dump(exclude_unset=True)
             update_data["updated_at"] = datetime.utcnow()
             
             result = self.collection.update_one(

@@ -13,18 +13,18 @@ class MongoDBOrderTypeService:
         self.db = db
         self.collection: Collection = db.order_types
     
-    def create_order_type(self, order_type_data: OrderTypeCreateModel) -> OrderTypeModel:
+    def create_order_type(self, model: OrderTypeCreateModel) -> OrderTypeModel:
         """Create a new order type"""
         try:
-            order_type_dict = order_type_data.dict()
+            order_type_dict = model.model_dump()
             order_type = OrderTypeModel(**order_type_dict)
             order_type.update_timestamp()
             
-            result = self.collection.insert_one(order_type.dict(by_alias=True))
+            result = self.collection.insert_one(order_type.model_dump(by_alias=True))
             order_type.id = result.inserted_id
             
             logger.info(f"Created order type with ID: {order_type.id}")
-            return order_type
+            return order_type.__dict__
         except Exception as e:
             logger.error(f"Failed to create order type: {e}")
             raise
@@ -41,11 +41,11 @@ class MongoDBOrderTypeService:
             logger.error(f"Failed to get order type by ID {order_type_id}: {e}")
             raise
     
-    def update_order_type(self, order_type_id: str, order_type_data: OrderTypeUpdateModel) -> Optional[OrderTypeModel]:
+    def update_order_type(self, order_type_id: str, model: OrderTypeUpdateModel) -> Optional[OrderTypeModel]:
         """Update order type"""
         try:
             from bson import ObjectId
-            update_data = order_type_data.dict(exclude_unset=True)
+            update_data = model.model_dump(exclude_unset=True)
             update_data["updated_at"] = datetime.utcnow()
             
             result = self.collection.update_one(

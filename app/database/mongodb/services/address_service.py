@@ -13,18 +13,18 @@ class MongoDBAddressService:
         self.db = db
         self.collection: Collection = db.addresses
     
-    def create_address(self, address_data: AddressCreateModel) -> AddressModel:
+    def create_address(self, model: AddressCreateModel) -> AddressModel:
         """Create a new address"""
         try:
-            address_dict = address_data.dict()
+            address_dict = model.model_dump()
             address = AddressModel(**address_dict)
             address.update_timestamp()
             
-            result = self.collection.insert_one(address.dict(by_alias=True))
+            result = self.collection.insert_one(address.model_dump(by_alias=True))
             address.id = result.inserted_id
             
             logger.info(f"Created address with ID: {address.id}")
-            return address
+            return address.__dict__
         except Exception as e:
             logger.error(f"Failed to create address: {e}")
             raise
@@ -41,11 +41,11 @@ class MongoDBAddressService:
             logger.error(f"Failed to get address by ID {address_id}: {e}")
             raise
     
-    def update_address(self, address_id: str, address_data: AddressUpdateModel) -> Optional[AddressModel]:
+    def update_address(self, address_id: str, model: AddressUpdateModel) -> Optional[AddressModel]:
         """Update address"""
         try:
             from bson import ObjectId
-            update_data = address_data.dict(exclude_unset=True)
+            update_data = model.model_dump(exclude_unset=True)
             update_data["updated_at"] = datetime.utcnow()
             
             result = self.collection.update_one(

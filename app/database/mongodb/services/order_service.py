@@ -13,18 +13,18 @@ class MongoDBOrderService:
         self.db = db
         self.collection: Collection = db.orders
     
-    def create_order(self, order_data: OrderCreateModel) -> OrderModel:
+    def create_order(self, model: OrderCreateModel) -> OrderModel:
         """Create a new order"""
         try:
-            order_dict = order_data.dict()
+            order_dict = model.model_dump()
             order = OrderModel(**order_dict)
             order.update_timestamp()
             
-            result = self.collection.insert_one(order.dict(by_alias=True))
+            result = self.collection.insert_one(order.model_dump(by_alias=True))
             order.id = result.inserted_id
             
             logger.info(f"Created order with ID: {order.id}")
-            return order
+            return order.__dict__
         except Exception as e:
             logger.error(f"Failed to create order: {e}")
             raise
@@ -41,11 +41,11 @@ class MongoDBOrderService:
             logger.error(f"Failed to get order by ID {order_id}: {e}")
             raise
     
-    def update_order(self, order_id: str, order_data: OrderUpdateModel) -> Optional[OrderModel]:
+    def update_order(self, order_id: str, model: OrderUpdateModel) -> Optional[OrderModel]:
         """Update order"""
         try:
             from bson import ObjectId
-            update_data = order_data.dict(exclude_unset=True)
+            update_data = model.model_dump(exclude_unset=True)
             update_data["updated_at"] = datetime.utcnow()
             
             result = self.collection.update_one(

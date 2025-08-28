@@ -13,18 +13,18 @@ class MongoDBMerchantService:
         self.db = db
         self.collection: Collection = db.merchants
     
-    def create_merchant(self, merchant_data: MerchantCreateModel) -> MerchantModel:
+    def create_merchant(self, model: MerchantCreateModel) -> MerchantModel:
         """Create a new merchant"""
         try:
-            merchant_dict = merchant_data.dict()
+            merchant_dict = model.model_dump()
             merchant = MerchantModel(**merchant_dict)
             merchant.update_timestamp()
             
-            result = self.collection.insert_one(merchant.dict(by_alias=True))
+            result = self.collection.insert_one(merchant.model_dump(by_alias=True))
             merchant.id = result.inserted_id
             
             logger.info(f"Created merchant with ID: {merchant.id}")
-            return merchant
+            return merchant.__dict__
         except Exception as e:
             logger.error(f"Failed to create merchant: {e}")
             raise
@@ -41,11 +41,11 @@ class MongoDBMerchantService:
             logger.error(f"Failed to get merchant by ID {merchant_id}: {e}")
             raise
     
-    def update_merchant(self, merchant_id: str, merchant_data: MerchantUpdateModel) -> Optional[MerchantModel]:
+    def update_merchant(self, merchant_id: str, model: MerchantUpdateModel) -> Optional[MerchantModel]:
         """Update merchant"""
         try:
             from bson import ObjectId
-            update_data = merchant_data.dict(exclude_unset=True)
+            update_data = model.model_dump(exclude_unset=True)
             update_data["updated_at"] = datetime.utcnow()
             
             result = self.collection.update_one(

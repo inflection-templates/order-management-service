@@ -13,18 +13,18 @@ class MongoDBCustomerService:
         self.db = db
         self.collection: Collection = db.customers
     
-    def create_customer(self, customer_data: CustomerCreateModel) -> CustomerModel:
+    def create_customer(self, model: CustomerCreateModel) -> CustomerModel:
         """Create a new customer"""
         try:
-            customer_dict = customer_data.dict()
+            customer_dict = model.model_dump()
             customer = CustomerModel(**customer_dict)
             customer.update_timestamp()
             
-            result = self.collection.insert_one(customer.dict(by_alias=True))
+            result = self.collection.insert_one(customer.model_dump(by_alias=True))
             customer.id = result.inserted_id
             
             logger.info(f"Created customer with ID: {customer.id}")
-            return customer
+            return customer.__dict__
         except Exception as e:
             logger.error(f"Failed to create customer: {e}")
             raise
@@ -41,11 +41,11 @@ class MongoDBCustomerService:
             logger.error(f"Failed to get customer by ID {customer_id}: {e}")
             raise
     
-    def update_customer(self, customer_id: str, customer_data: CustomerUpdateModel) -> Optional[CustomerModel]:
+    def update_customer(self, customer_id: str, model: CustomerUpdateModel) -> Optional[CustomerModel]:
         """Update customer"""
         try:
             from bson import ObjectId
-            update_data = customer_data.dict(exclude_unset=True)
+            update_data = model.model_dump(exclude_unset=True)
             update_data["updated_at"] = datetime.utcnow()
             
             result = self.collection.update_one(

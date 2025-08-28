@@ -13,18 +13,18 @@ class MongoDBPaymentTransactionService:
         self.db = db
         self.collection: Collection = db.payment_transactions
     
-    def create_payment_transaction(self, transaction_data: PaymentTransactionCreateModel) -> PaymentTransactionModel:
+    def create_payment_transaction(self, model: PaymentTransactionCreateModel) -> PaymentTransactionModel:
         """Create a new payment transaction"""
         try:
-            transaction_dict = transaction_data.dict()
+            transaction_dict = model.model_dump()
             transaction = PaymentTransactionModel(**transaction_dict)
             transaction.update_timestamp()
             
-            result = self.collection.insert_one(transaction.dict(by_alias=True))
+            result = self.collection.insert_one(transaction.model_dump(by_alias=True))
             transaction.id = result.inserted_id
             
             logger.info(f"Created payment transaction with ID: {transaction.id}")
-            return transaction
+            return transaction.__dict__
         except Exception as e:
             logger.error(f"Failed to create payment transaction: {e}")
             raise
@@ -41,11 +41,11 @@ class MongoDBPaymentTransactionService:
             logger.error(f"Failed to get payment transaction by ID {transaction_id}: {e}")
             raise
     
-    def update_payment_transaction(self, transaction_id: str, transaction_data: dict) -> Optional[PaymentTransactionModel]:
+    def update_payment_transaction(self, transaction_id: str, model: dict) -> Optional[PaymentTransactionModel]:
         """Update payment transaction"""
         try:
             from bson import ObjectId
-            update_data = transaction_data.copy()
+            update_data = model.model_dump(exclude_unset=True)
             update_data["updated_at"] = datetime.utcnow()
             
             result = self.collection.update_one(

@@ -13,18 +13,18 @@ class MongoDBRoleService:
         self.db = db
         self.collection: Collection = db.roles
     
-    def create_role(self, role_data: RoleCreateModel) -> RoleModel:
+    def create_role(self, model: RoleCreateModel) -> RoleModel:
         """Create a new role"""
         try:
-            role_dict = role_data.dict()
+            role_dict = model.model_dump()
             role = RoleModel(**role_dict)
             role.update_timestamp()
             
-            result = self.collection.insert_one(role.dict(by_alias=True))
+            result = self.collection.insert_one(role.model_dump(by_alias=True))
             role.id = result.inserted_id
             
             logger.info(f"Created role with ID: {role.id}")
-            return role
+            return role.__dict__
         except Exception as e:
             logger.error(f"Failed to create role: {e}")
             raise
@@ -41,11 +41,11 @@ class MongoDBRoleService:
             logger.error(f"Failed to get role by ID {role_id}: {e}")
             raise
     
-    def update_role(self, role_id: str, role_data: RoleUpdateModel) -> Optional[RoleModel]:
+    def update_role(self, role_id: str, model: RoleUpdateModel) -> Optional[RoleModel]:
         """Update role"""
         try:
             from bson import ObjectId
-            update_data = role_data.dict(exclude_unset=True)
+            update_data = model.model_dump(exclude_unset=True)
             update_data["updated_at"] = datetime.utcnow()
             
             result = self.collection.update_one(

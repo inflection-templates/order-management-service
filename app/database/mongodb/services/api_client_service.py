@@ -13,18 +13,18 @@ class MongoDBApiClientService:
         self.db = db
         self.collection: Collection = db.api_clients
     
-    def create_api_client(self, api_client_data: ApiClientCreateModel) -> ApiClientModel:
+    def create_api_client(self, model: ApiClientCreateModel) -> ApiClientModel:
         """Create a new API client"""
         try:
-            api_client_dict = api_client_data.dict()
+            api_client_dict = model.model_dump()
             api_client = ApiClientModel(**api_client_dict)
             api_client.update_timestamp()
             
-            result = self.collection.insert_one(api_client.dict(by_alias=True))
+            result = self.collection.insert_one(api_client.model_dump(by_alias=True))
             api_client.id = result.inserted_id
             
             logger.info(f"Created API client with ID: {api_client.id}")
-            return api_client
+            return api_client.__dict__
         except Exception as e:
             logger.error(f"Failed to create API client: {e}")
             raise
@@ -41,11 +41,11 @@ class MongoDBApiClientService:
             logger.error(f"Failed to get API client by ID {api_client_id}: {e}")
             raise
     
-    def update_api_client(self, api_client_id: str, api_client_data: ApiClientUpdateModel) -> Optional[ApiClientModel]:
+    def update_api_client(self, api_client_id: str, model: ApiClientUpdateModel) -> Optional[ApiClientModel]:
         """Update API client"""
         try:
             from bson import ObjectId
-            update_data = api_client_data.dict(exclude_unset=True)
+            update_data = model.model_dump(exclude_unset=True)
             update_data["updated_at"] = datetime.utcnow()
             
             result = self.collection.update_one(
