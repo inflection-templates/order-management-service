@@ -1,0 +1,1763 @@
+{
+	"info": {
+		"_postman_id": "2c29abc7-219b-4833-8fbf-20dfc82788e0",
+		"name": "Order management Golang Copy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18989262",
+		"_collection_link": "https://blue-resonance-338823.postman.co/workspace/order-management~31a894a0-959d-4f2d-a382-dbf0bdee588a/collection/18989262-2c29abc7-219b-4833-8fbf-20dfc82788e0?action=share&source=collection_link&creator=18989262"
+	},
+	"item": [
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{ADMIN}}\",\r\n    \"password\": \"password123\",\r\n    \"username\": \"admin\",\r\n    \"role\": \"admin\",\r\n    \"f\":\"efe\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/register",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"password123\"    \r\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{USER}}\",\r\n    \"password\": \"password123\",\r\n    \"username\": \"user\",\r\n    \"role\": \"user\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/register",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"user\",\r\n    \"password\": \"password123\"\r\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Merchant",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ReferenceId\": \"12asdf\",  \r\n\t\"Name\": \"merchant\",        \r\n\t\"Email\": \"merchant2@gmail\",       \r\n\t\"Phone\": \"1234567894\",       \r\n\t\"Logo\": \"asdf\",        \r\n\t\"WebsiteUrl\": \"https://www.bing.com/\", \r\n\t\"TaxNumber\":\"123wAB4\",   \r\n\t\"GSTNumber\": \"BCD123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/merchant",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"merchant"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/merchant/{{MERCHANT_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"merchant",
+								"{{MERCHANT_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\"ReferenceId\": \"12asdf\",\r\n        \"Name\": \"merchant\",\r\n        \"Email\": \"merchant@gmail\",\r\n        \"Phone\": \"1234567899\",\r\n        \"Logo\": \"asdf\",\r\n        \"WebsiteUrl\": \"https://www.bing.com/\",\r\n        \"TaxNumber\": \"123ABC\",\r\n        \"GSTNumber\": \"BCD123\"",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/merchant/search?email=merchant@gmail",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"merchant",
+								"search"
+							],
+							"query": [
+								{
+									"key": "reference_id",
+									"value": "12asdf",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "merchant",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "merchant@gmail"
+								},
+								{
+									"key": "phone",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "logo",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "website_url",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "tax_number",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "gst_number",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ReferenceId\": \"12asdf\",  \r\n\t\"Name\": \"Sharma\",        \r\n\t\"Email\": \"sharma@gmail\",       \r\n\t\"Phone\": \"1234567899\",       \r\n\t\"Logo\": \"asdf\",        \r\n\t\"WebsiteUrl\": \"https://www.bing.com/\", \r\n\t\"TaxNumber\":\"123ABC\",   \r\n\t\"GSTNumber\": \"BCD123\"  \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/merchant/{{MERCHANT_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"merchant",
+								"{{MERCHANT_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/merchant/{{MERCHANT_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"merchant",
+								"{{MERCHANT_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Address",
+			"item": [
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"try {\r",
+									"    var jsonRes = pm.response.json();\r",
+									"    pm.environment.set(\"ADDRESS_ID\", jsonRes.Data.id);\r",
+									"}\r",
+									"catch (error) {\r",
+									"    console.log(error.message);\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"AddressLine1\":\"asfgdfg\",\r\n    \"AddressLine2\": \"Rafgshin road\",         \r\n\t\"City\"       :  \"Wagfgholi\",       \r\n\t\"State\"   :     \"Maharashtra\",         \r\n\t\"Country\"    :  \"India\",         \r\n\t\"ZipCode\"    :  \"234256\",      \r\n\t\"CreatedBy\"  :  \"Magfdhura\",\r\n    \"MerchantId\": \"d8f1f113-146c-4fd1-bcf8-dec797e5a071\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/address",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"address"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get  By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/address/{{ADDRESS_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"address",
+								"{{ADDRESS_ID}}"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/address/search?state=Maharashtra",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"address",
+								"search"
+							],
+							"query": [
+								{
+									"key": "city",
+									"value": "Wagholi",
+									"disabled": true
+								},
+								{
+									"key": "country",
+									"value": "India",
+									"disabled": true
+								},
+								{
+									"key": "address_line1",
+									"value": "Umang premiere ",
+									"disabled": true
+								},
+								{
+									"key": "address_line2",
+									"value": "Kuldharan road",
+									"disabled": true
+								},
+								{
+									"key": "zip_code",
+									"value": "23456",
+									"disabled": true
+								},
+								{
+									"key": "state",
+									"value": "Maharashtra"
+								},
+								{
+									"key": "AddressType",
+									"value": "Home",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"AddressLine1\":\"Behind stand\"    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/address/{{ADDRESS_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"address",
+								"{{ADDRESS_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/address/{{ADDRESS_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"address",
+								"{{ADDRESS_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customer",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"ReferenceId\":           \"12asdf\",\r\n\t\"Name\":                     \"Madhura\",\r\n\t\"Email\":                    \"madhu2@gmail.com\",\r\n\t\"PhoneCode\":                \"1210\",\r\n\t\"Phone\":                    \"1234679712\",\r\n\t\"ProfilePicture\":           \"abc.jpg\",\r\n\t\"TaxNumber\":           \"1312\"\r\n\t\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/customer",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/customer/{{CUSTOMER_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"customer",
+								"{{CUSTOMER_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/customer/search?name=Mayuresh",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"customer",
+								"search"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Mayuresh"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"MayureshR\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/customer/{{CUSTOMER_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"customer",
+								"{{CUSTOMER_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/customer/{{CUSTOMER_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"customer",
+								"{{CUSTOMER_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Coupon",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Name\": \"PQRST\",\r\n\t\"Description\": \"asdfg zxcvbn asdfg\",\r\n\t\"CouponCode\": \"A12\",\r\n\t\"CouponType\": \"Shopping\",\r\n\t\"Discount\": 25,\r\n\t\"DiscountType\": \"Flat\",\r\n\t\"DiscountPercentage\": 10.5,\r\n\t\"DiscountMaxAmount\": 20.5,\r\n\t\"StartDate\": \"2006-01-02T15:04:05Z\",\r\n\t\"EndDate\": \"2006-01-02T15:04:05Z\",\r\n\t\"MaxUsage\": 2,\r\n\t\"MaxUsagePerUser\": 2,\r\n\t\"MaxUsagePerOrder\": 1,\r\n\t\"MinOrderAmount\": 500.50,\r\n\t\"Code\": \"1213sdfg\",\r\n\t\"DiscountValue\": 30.5,\r\n\t\"Applied\": true,\r\n\t\"AppliedAt\": \"2006-01-02T15:04:05Z\",\r\n\t\"IsActive\": true,\r\n\t\"CreatedBy\": \"Myntra\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/coupons",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"coupons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/coupon/{{COUPON_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"coupon",
+								"{{COUPON_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/coupon/search?name=Abcd",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"coupon",
+								"search"
+							],
+							"query": [
+								{
+									"key": "coupon_type",
+									"value": "Shopping",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Abcd"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Name\": \"xyz\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/coupon/{{COUPON_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"coupon",
+								"{{COUPON_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/coupon/{{COUPON_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"coupon",
+								"{{COUPON_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"customerId\": \"1bf2f79f-d964-4070-838e-af891637e698\",\r\n    \"totalItemsCount\": 1,\r\n    \"totalTax\": 0.0,\r\n    \"totalDiscount\": 0.0,\r\n    \"totalAmount\": 100.0,\r\n    \"cartToOrderTimestamp\": \"2024-03-20T10:00:00Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/carts",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"carts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Auth",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/carts/{{CART_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"carts",
+								"{{CART_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/cart/search",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"cart",
+								"search"
+							],
+							"query": [
+								{
+									"key": "total_items_count",
+									"value": "20",
+									"disabled": true
+								},
+								{
+									"key": "total_tax",
+									"value": "10.5",
+									"disabled": true
+								},
+								{
+									"key": "total_discount",
+									"value": "10.5",
+									"disabled": true
+								},
+								{
+									"key": "total_amount",
+									"value": "500",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TotalItemsCount\": 20\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/cart/{{CART_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"cart",
+								"{{CART_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/cart/{{CART_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"cart",
+								"{{CART_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order Type",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\":        \"market\", \r\n\t\"Description\": \"asdfghjkl\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/order-type",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order-type"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order-type/{{ORDER_TYPE_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order-type",
+								"{{ORDER_TYPE_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order-type/search?name=limit",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order-type",
+								"search"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "limit"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"limit\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/order-type/{{ORDER_TYPE_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order-type",
+								"{{ORDER_TYPE_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order-type/{{ORDER_TYPE_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order-type",
+								"{{ORDER_TYPE_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"DisplayCode\":      \"1234\",\r\n\t\"OrderStatus\":       \"Confirmed\",\r\n\t\"InvoiceNumber\":     \"123VN\",\r\n\t\"TotalItemsCount\": 3,\r\n\t\"OrderDiscount\":     5.0,\r\n\t\"TipApplicable\" :    true,\r\n\t\"TipAmount\" :        10.0,\r\n\t\"TotalTax\"  :        2.0,\r\n\t\"TotalDiscount\":     5.0,\r\n\t\"TotalAmount\":       1500,\r\n\t\"Notes\":             \"asdfghj cvb\",\r\n\t\"AssociatedCartId\":  \"{{CART_ID}}\",\r\n\t\"CustomerId\":        \"{{CUSTOMER_ID}}\",\r\n\t\"ShippingAddressId\": \"{{ADDRESS_ID}}\",\r\n\t\"BillingAddressId\":  \"{{ADDRESS_ID}}\",\r\n\t\"OrderTypeId\":       \"{{ORDER_TYPE_ID}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/order",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order/{{ORDER_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order",
+								"{{ORDER_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order/search?tipApplicable=false",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order",
+								"search"
+							],
+							"query": [
+								{
+									"key": "tipApplicable",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"DisplayCode\": \"4321\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/order/{{ORDER_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order",
+								"{{ORDER_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order/{{ORDER_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order",
+								"{{ORDER_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order History",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"PreviousStatus\" : \"Placed\",\r\n\t\"Status\":          \"Shipped\",\r\n\t\"UpdatedByUserId\": \"1213cv\",\r\n\t\"Timestamp\":       \"2006-01-02T15:04:05Z\",\r\n    \"OrderID\": \"650fad58-719f-48d5-83c3-ba37e7a2b847\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/order-history",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order-history"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order-history/{{ORDER_HISTORY_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order-history",
+								"{{ORDER_HISTORY_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order-history/search?updated_by_user_id=1213cv",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order-history",
+								"search"
+							],
+							"query": [
+								{
+									"key": "previous_status",
+									"value": "Placed",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "Shipped",
+									"disabled": true
+								},
+								{
+									"key": "updated_by_user_id",
+									"value": "1213cv"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"PreviousStatus\" : \"Placed\",\r\n\t\"Status\":          \"Shipped\",\r\n\t\"UpdatedByUserId\": \"1213cv\",\r\n\t\"Timestamp\":       \"2006-01-02T15:04:05Z\",\r\n    \"OrderID\": \"650fad58-719f-48d5-83c3-ba37e7a2b847\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/order-history/{{ORDER_HISTORY_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order-history",
+								"{{ORDER_HISTORY_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order-history/{{ORDER_HISTORY_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order-history",
+								"{{ORDER_HISTORY_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order Line Item",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\":             \"Home decor\",\r\n\t\"CatalogId\":        \"101000\",\r\n\t\"Quantity\":         2,\r\n\t\"UnitPrice\":        200.0,\r\n\t\"Discount\":         5.0,\r\n\t\"DiscountSchemeId\": \"6325\",\r\n\t\"Tax\" :             2.0,\r\n\t\"ItemSubTotal\":     300.0,\r\n\t\"OrderId\" :         \"{{ORDER_ID}}\",\r\n\t\"CartId\"  :         \"{{CART_ID}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/order-line-item",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order-line-item"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order-line-item/{{ORDER_LINE_ITEM_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order-line-item",
+								"{{ORDER_LINE_ITEM_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order-line-item/search?name=Home decorr",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order-line-item",
+								"search"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Home decorr"
+								},
+								{
+									"key": "catalog_id",
+									"value": "101000",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"Furnishing\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/order-line-item/{{ORDER_LINE_ITEM_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order-line-item",
+								"{{ORDER_LINE_ITEM_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/order-line-item/{{ORDER_LINE_ITEM_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"order-line-item",
+								"{{ORDER_LINE_ITEM_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment Transaction",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"DisplayCode\":                 \"asd12\",\r\n\t\"InvoiceNumber\":               \"er123\",\r\n\t\"BankTransactionId\":           \"AD456\",\r\n\t\"PaymentGatewayTransactionId\": \"1234566asd\",\r\n\t\"PaymentStatus\":               \"Refunded\",\r\n\t\"PaymentMode\" :                \"online\",\r\n\t\"PaymentAmount\":               500.0,\r\n\t\"PaymentCurrency\":             \"Rupee\",\r\n\t\"InitiatedDate\":               \"2006-01-02T15:04:05Z\",\r\n\t\"CompletedDate\":               \"2006-01-02T15:04:05Z\",\r\n\t\"PaymentResponse\":             \"done\",\r\n\t\"PaymentResponseCode\":         \"cvbn\",\r\n\t\"InitiatedBy\":                 \"asdf\",\r\n\t\"IsRefund\":                    true,\r\n\t\"OrderId\":                     \"{{ORDER_ID}}\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/payment-transaction",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"payment-transaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/payment-transaction/{{PAYMENT_TRANSACTION_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"payment-transaction",
+								"{{PAYMENT_TRANSACTION_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/payment-transaction/search?displayCode=asd12",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"payment-transaction",
+								"search"
+							],
+							"query": [
+								{
+									"key": "displayCode",
+									"value": "asd12"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_JWT}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"DisplayCode\": \"asd25\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/payment-transaction/{{PAYMENT_TRANSACTION_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"payment-transaction",
+								"{{PAYMENT_TRANSACTION_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_JWT}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/payment-transaction/{{PAYMENT_TRANSACTION_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"payment-transaction",
+								"{{PAYMENT_TRANSACTION_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
