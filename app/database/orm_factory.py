@@ -18,14 +18,14 @@ class DatabaseFactory:
     def __init__(self):
         self.settings = get_settings()
         
-        # Clean the DATABASE_TYPE value
-        database_type_value = self._clean_value(self.settings.DATABASE_TYPE)
+        # Clean the DB_DIALECT value (replaces DATABASE_TYPE)
+        db_dialect_value = self._clean_value(self.settings.DB_DIALECT)
         orm_type_value = self._clean_value(self.settings.ORM_TYPE)
         
         try:
-            self._database_type = DatabaseType(database_type_value.lower())
+            self._database_type = DatabaseType(db_dialect_value.lower())
         except ValueError as e:
-            print(f"⚠️  Invalid DATABASE_TYPE '{database_type_value}'. Valid options are: {[db.value for db in DatabaseType]}")
+            print(f"⚠️  Invalid DB_DIALECT '{db_dialect_value}'. Valid options are: {[db.value for db in DatabaseType]}")
             print(f"   Falling back to default: {DatabaseType.MYSQL.value}")
             self._database_type = DatabaseType.MYSQL
         

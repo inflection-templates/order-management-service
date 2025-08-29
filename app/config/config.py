@@ -104,17 +104,14 @@ class Settings(BaseSettings):
     DB_POOL_SIZE: int = 10
     DB_POOL_RECYCLE: int = 1800
     DB_POOL_TIMEOUT: int = 30
-    DB_DIALECT: str = "mysql"
+    DB_DIALECT: str = "mysql"  # Options: "mysql", "mongodb"
     DB_DRIVER: str = "pymysql"
     DB_CONNECTION_STRING: str = f"{DB_DIALECT}+{DB_DRIVER}://{DB_USER_NAME}:{DB_USER_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
-    # Database Type Configuration - Switch between "mysql" and "mongodb"
-    DATABASE_TYPE: str = "mysql"  # Options: "mysql", "mongodb"
-    
     # ORM Configuration - Switch between "sqlmodel" and "sqlalchemy" (for MySQL only)
-    ORM_TYPE: str = "sqlalchemy"  # Only applies when DATABASE_TYPE = "mysql"
+    ORM_TYPE: str = "sqlalchemy"  # Only applies when DB_DIALECT = "mysql"
 
-    # MongoDB Configuration
+    # MongoDB Configuration (only used when DB_DIALECT = "mongodb")
     MONGODB_URI: str = "mongodb://localhost:27017"
     MONGODB_DATABASE: str = "order_management"
     MONGODB_MAX_POOL_SIZE: int = 100
