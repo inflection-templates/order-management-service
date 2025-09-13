@@ -12,7 +12,7 @@ class User(Base):
     __tablename__ = "users"
 
     id               = Column(String(36), primary_key=True, index=True, default=generate_uuid4)
-    TenantId         = Column(String(36), ForeignKey("tenants.id"), nullable=False)
+    TenantId         = Column(String(36), ForeignKey("tenants.id"), nullable=True)
     Prefix           = Column(String(16), nullable=True)
     FirstName        = Column(String(70), nullable=True)
     MiddleName       = Column(String(70), nullable=True)

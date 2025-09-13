@@ -9,7 +9,7 @@ class User(SQLModel, table=True):
     __tablename__ = "users"
 
     id: str = Field(default_factory=generate_uuid4, primary_key=True, index=True, max_length=36)
-    TenantId: str = Field(foreign_key="tenants.id", max_length=36)
+    TenantId: str = Field(foreign_key="tenants.id", max_length=36, nullable=True)
     Prefix: Optional[str] = Field(default=None, max_length=16)
     FirstName: Optional[str] = Field(default=None, max_length=70)
     MiddleName: Optional[str] = Field(default=None, max_length=70)
