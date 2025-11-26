@@ -109,6 +109,80 @@ def delete_api_client(session: Session, api_client_id: str):
     session.commit()
     return True
 
+@trace_span("service: seed_default_clients")
+def seed_default_clients(session: Session) -> bool:
+    """Seed default client apps from seed data file"""
+    import json
+    from pathlib import Path
+    from app.common.logger import logger
+    
+    def load_json_seed_file(filename: str):
+        """Load JSON seed file from seed.data directory"""
+        # Get project root using current working directory (where main.py is run from)
+        project_root = Path.cwd()
+        seed_data_path = project_root / "seed.data" / filename
+        
+        if not seed_data_path.exists():
+            raise FileNotFoundError(f"Seed file not found: {seed_data_path}")
+        
+        with open(seed_data_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        
+        return data
+    from app.database.models.user import User
+    from sqlalchemy import func
+    
+    try:
+        print("Seeding default client apps...")
+        logger.info("Seeding default client apps...")
+        clients_data = load_json_seed_file("internal.clients.seed.json")
+        
+        if not isinstance(clients_data, list):
+            clients_data = [clients_data]
+        
+        # Get first user as owner (should be system admin)
+        users = session.query(User).all()
+        if len(users) == 0:
+            logger.warning("No users found. Seed users before client apps.")
+            return False
+        
+        owner = users[0]
+        
+        for client_data in clients_data:
+            client_code = client_data.get("ClientCode", "")
+            
+            # Check if client with code already exists
+            existing_client = session.query(ApiClient).filter(ApiClient.ClientCode == client_code).first()
+            if existing_client:
+                logger.info(f"Client with code '{client_code}' already exists. Skipping.")
+                continue
+            
+            # Create client app directly (bypass service function to avoid verbose output)
+            from app.database.services.api_client_service import hash_password
+            import secrets
+            
+            db_model = ApiClient(
+                ClientCode=client_code,
+                ClientName=client_data.get("ClientName", ""),
+                Email=client_data.get("Email", "support@example.com"),
+                Password=hash_password(client_data.get("Password", "ChangeMe123!")),
+                ApiKey=client_data.get("ApiKey", "api") or secrets.token_urlsafe(32),
+                IsPrivileged=client_data.get("IsPrivileged", False),
+                CountryCode="+91",
+                Phone="0000000000",
+                ClientInterfaceType="MobileApp"
+            )
+            db_model.UpdatedAt = dt.datetime.now()
+            session.add(db_model)
+            session.commit()
+            logger.info(f"Client app '{client_code}' created successfully.")
+        
+        logger.info("Default client apps seeded successfully.")
+        return True
+    except Exception as e:
+        logger.error(f"Error seeding default client apps: {str(e)}")
+        return False
+
 from passlib.context import CryptContext
 
 # Initialize passlib context for bcrypt
