@@ -1,0 +1,11 @@
+{
+    "FirstName": "<your-first-name>",
+    "PhoneNumber": "<your-phone-number>",
+    "Email": "<your-email@gmail.com>",
+    "UserName": "<your-username>",
+    "Password": "<admin-password>",
+    "DefaultTimeZone": "<DefaultTimeZone>",
+    "CurrentTimeZone": "<CurrentTimeZone>",
+    "PhoneCode": "+91"
+}
+

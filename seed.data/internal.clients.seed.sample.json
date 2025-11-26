@@ -1,0 +1,12 @@
+[
+    {
+        "ClientCode": "<your-client-code>",
+        "ClientName": "<your-client-name>",
+        "Email": "<your-email@gmail.com>",
+        "Password": "<your-client-password>",
+        "ApiKey": "<Your-api-key>",
+        "Description": "<your-description>",
+        "IsPrivileged": true
+    }
+]
+
