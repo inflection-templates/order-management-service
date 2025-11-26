@@ -12,6 +12,8 @@ from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.domain_types.schemas.order import OrderCreateModel, OrderResponseModel, OrderUpdateModel, OrderSearchFilter, OrderSearchResults
 from app.domain_types.enums.order_status_types import OrderStatusTypes
 from app.auth import authenticate_user, AuthContext
+from app.auth.authorization_decorator import authorize_user
+from typing import Optional, Any
 
 ###############################################################################
 
@@ -28,7 +30,7 @@ async def create_order(
     model: OrderCreateModel,
     request: Request,
     db_session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    auth_context: Optional[Any] = None
 ):
     return create_order_(model, db_session)
 
@@ -38,7 +40,7 @@ async def search_order(
     query_params: OrderSearchFilter = Depends(),
     request: Request = None,
     db_session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    auth_context: Optional[Any] = None
 ):
     filter = OrderSearchFilter(**query_params.dict())
     return search_orders_(filter, db_session)
@@ -49,38 +51,41 @@ async def get_order_by_id(
     id: str,
     request: Request,
     db_session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    auth_context: Optional[Any] = None
 ):
     return get_order_by_id_(id, db_session)
 
 @router.put("/{id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[OrderResponseModel|None])
-@authenticate_user(required=True, roles=["admin", "manager"])  # Only admins and managers can update orders
+@authenticate_user(required=True)
+@authorize_user(roles=["admin", "manager"])  # Only admins and managers can update orders
 async def update_order(
     id: str,
     model: OrderUpdateModel,
     request: Request,
     db_session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    auth_context: Optional[Any] = None
 ):
     return update_order_(id, model, db_session)
 
 @router.delete("/{id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[bool])
-@authenticate_user(required=True, roles=["admin"])  # Only admins can delete orders
+@authenticate_user(required=True)
+@authorize_user(roles=["admin"])  # Only admins can delete orders
 async def delete_order(
     id: str,
     request: Request,
     db_session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    auth_context: Optional[Any] = None
 ):
     return delete_order_(id, db_session)
 
 @router.put("/{id}/status", status_code=status.HTTP_200_OK, response_model=ResponseModel[OrderResponseModel|None])
-@authenticate_user(required=True, roles=["admin", "manager", "staff"])  # Staff can update order status
+@authenticate_user(required=True)
+@authorize_user(roles=["admin", "manager", "staff"])  # Staff can update order status
 async def update_order_status(
     id: str,
     status: OrderStatusTypes,
     request: Request,
     db_session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    auth_context: Optional[Any] = None
 ):
     return update_order_status_(id, status, db_session)

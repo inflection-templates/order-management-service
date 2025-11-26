@@ -12,7 +12,15 @@ from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from app.database.models.role import Role
 from app.database.models.user_role import UserRole
-from app.database.models.role.role_permissions import RolePermission
+# Import RolePermission directly from the file to avoid conflict with role.py
+import importlib.util
+from pathlib import Path
+# __file__ is at app/auth/authorization_decorator.py, so go up to app/ then to database/models/role/
+role_permissions_path = Path(__file__).parent.parent / 'database' / 'models' / 'role' / 'role_permissions.py'
+spec = importlib.util.spec_from_file_location("role_permissions", str(role_permissions_path))
+role_permissions_module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(role_permissions_module)
+RolePermission = role_permissions_module.RolePermission
 from app.auth.decorators import AuthContext
 import logging
 import re

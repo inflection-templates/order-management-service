@@ -15,7 +15,8 @@ from app.domain_types.schemas.auth import (
 )
 from app.domain_types.miscellaneous.response_model import ResponseModel
 from app.auth import authenticate_user, AuthContext
-from typing import Dict, Any
+from app.auth.authorization_decorator import authorize_user
+from typing import Dict, Any, Optional
 
 router = APIRouter(
     prefix="/auth",
@@ -77,7 +78,7 @@ async def refresh_token(
 async def logout(
     request: Request,
     db_session: Session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    auth_context: Optional[Any] = None
 ):
     """Logout user and revoke tokens"""
     return AuthHandler.logout(db_session, request, auth_context)
@@ -87,7 +88,7 @@ async def logout(
 async def get_profile(
     request: Request,
     db_session: Session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    auth_context: Optional[Any] = None
 ):
     """Get current user profile"""
     return AuthHandler.get_profile(db_session, request, auth_context)
@@ -97,7 +98,7 @@ async def get_profile(
 async def setup_two_factor(
     request: Request,
     db_session: Session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    auth_context: Optional[Any] = None
 ):
     """Setup two-factor authentication"""
     return AuthHandler.setup_two_factor(db_session, request, auth_context)
@@ -108,7 +109,7 @@ async def verify_two_factor_setup(
     model: TwoFactorVerificationModel,
     request: Request,
     db_session: Session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    auth_context: Optional[Any] = None
 ):
     """Verify and enable two-factor authentication"""
     return AuthHandler.verify_two_factor_setup(model, db_session, request, auth_context)
@@ -144,12 +145,13 @@ async def external_auth_callback(
 # User Flow endpoints
 
 @router.post("/invite", status_code=status.HTTP_200_OK, response_model=ResponseModel[Dict[str, str]])
-@authenticate_user(required=True, roles=["admin", "manager"])
+@authenticate_user(required=True)
+@authorize_user(roles=["admin", "manager"])
 async def send_invitation(
     model: UserInvitationModel,
     request: Request,
     db_session: Session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    auth_context: Optional[Any] = None
 ):
     """Send user invitation (requires admin/manager role)"""
     return AuthHandler.send_invitation(model, db_session, request, auth_context)
@@ -187,7 +189,7 @@ async def change_password(
     model: ChangePasswordModel,
     request: Request,
     db_session: Session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    auth_context: Optional[Any] = None
 ):
     """Change user password"""
     return AuthHandler.change_password(model, db_session, request, auth_context)
@@ -206,7 +208,7 @@ async def verify_email(
 async def send_phone_verification(
     request: Request,
     db_session: Session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    auth_context: Optional[Any] = None
 ):
     """Send phone verification OTP"""
     return AuthHandler.send_phone_verification(db_session, request, auth_context)
@@ -217,7 +219,7 @@ async def verify_phone(
     model: PhoneVerificationModel,
     request: Request,
     db_session: Session = Depends(get_db_session),
-    auth_context: AuthContext = None
+    auth_context: Optional[Any] = None
 ):
     """Verify phone using OTP"""
     return AuthHandler.verify_phone(model, db_session, request, auth_context)
