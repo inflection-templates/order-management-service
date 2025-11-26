@@ -1,11 +1,8 @@
 import json
-from sqlalchemy import Boolean, Column, Date, DateTime, ForeignKey, String, Float
-from sqlalchemy.orm import relationship
+from sqlalchemy import Boolean, Column, Date, DateTime, ForeignKey, String
 from app.common.utils import generate_uuid4
 from app.database.base import Base
 from sqlalchemy.sql import func
-from app.database.models.person.person import Person
-from app.database.models.role import Role
 
 class UserLoginSession(Base):
 

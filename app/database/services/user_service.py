@@ -122,3 +122,86 @@ def hash_password(password: str) -> str:
 # Function to verify the password
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
+
+@trace_span("service: seed_system_admin")
+def seed_system_admin(session: Session) -> bool:
+    """Seed system admin user from seed data file"""
+    import json
+    from pathlib import Path
+    from app.common.logger import logger
+    
+    def load_json_seed_file(filename: str):
+        """Load JSON seed file from seed.data directory"""
+        # Get project root using current working directory (where main.py is run from)
+        project_root = Path.cwd()
+        seed_data_path = project_root / "seed.data" / filename
+        
+        if not seed_data_path.exists():
+            raise FileNotFoundError(f"Seed file not found: {seed_data_path}")
+        
+        with open(seed_data_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        
+        return data
+    from app.database.models.tenant import Tenant
+    from sqlalchemy import func
+    
+    try:
+        print("Seeding default user...")
+        logger.info("Seeding system admin user...")
+        seed_data = load_json_seed_file("system.admin.seed.json")
+        
+        # Check if user with email already exists
+        existing_user = session.query(User).filter(func.lower(User.Email) == func.lower(seed_data.get("Email", ""))).first()
+        if existing_user:
+            logger.info(f"User with email '{seed_data.get('Email')}' already exists. Skipping seed.")
+            return True
+        
+        # Get default tenant
+        default_tenant = session.query(Tenant).filter(func.lower(Tenant.Code) == "default").first()
+        if not default_tenant:
+            logger.error("Default tenant not found. Please seed tenant first.")
+            return False
+        
+        # Get default role (System Admin) - we'll create it if it doesn't exist
+        from app.database.models.role import Role
+        admin_role = session.query(Role).filter(Role.RoleName == "System Admin").first()
+        if not admin_role:
+            # Create a temporary role ID, will be fixed after role seeding
+            admin_role_id = 1
+        else:
+            admin_role_id = admin_role.id
+        
+        # Create user from seed data
+        user_model = UserCreateModel(
+            FirstName=seed_data.get("FirstName", "system-admin"),
+            Email=seed_data.get("Email", "sys.admin@example.com"),
+            UserName=seed_data.get("UserName", "admin"),
+            Password=seed_data.get("Password", "ChangeMe123!"),
+            Phone=seed_data.get("PhoneNumber", "0000000000"),
+            CountryCode=seed_data.get("PhoneCode", "+91"),
+            RoleId=admin_role_id
+        )
+        
+        # Set TenantId directly on the model dict since it's not in the schema
+        model_dict = user_model.dict()
+        model_dict.pop('RoleId', None)
+        # Hash the password before storing (same as client_app)
+        model_dict['Password'] = hash_password(model_dict['Password'])
+        db_model = User(**model_dict)
+        db_model.TenantId = default_tenant.id
+        db_model.UpdatedAt = dt.datetime.now()
+        session.add(db_model)
+        session.commit()
+        
+        # Create user role relationship if role exists
+        if admin_role:
+            user_role = UserRole(UserId=db_model.id, RoleId=admin_role_id)
+            session.add(user_role)
+            session.commit()
+        
+        logger.info(f"System admin user '{seed_data.get('UserName', 'admin')}' seeded successfully.")
+        return True
+    except Exception as e:
+        logger.error(f"Error seeding system admin: {str(e)}")
+        return False
