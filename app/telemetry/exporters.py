@@ -9,6 +9,7 @@ class TracingExporterType(str, Enum):
     JaegerProtobuf   = 'JaegerProtobuf'
     Otlp             = 'Otlp'
     Console          = 'Console'
+    NoExporter       = 'NoExporter'
 
 def get_tracing_exporter_type(exporter: str):
     if exporter.lower() == "ZipkinJson".lower():
@@ -23,8 +24,10 @@ def get_tracing_exporter_type(exporter: str):
         return TracingExporterType.Otlp
     elif exporter.lower() == "Console".lower():
         return TracingExporterType.Console
+    elif exporter.lower() == "NoExporter".lower():
+        return TracingExporterType.NoExporter
     else:
-        return TracingExporterType.Console
+        return TracingExporterType.NoExporter
 
 #################################################################
 
@@ -45,8 +48,10 @@ def get_tracing_exporter(
         return get_otlp_exporter(collector_endpoint)
     elif exporter == TracingExporterType.Console:
         return get_console_exporter()
+    elif exporter == TracingExporterType.NoExporter:
+        return get_no_exporter()
     else:
-        return get_console_exporter()
+        return get_no_exporter()
 
 def get_zipkin_exporter_protobuf(collector_endpoint: str):
     from opentelemetry.exporter.zipkin.proto.http import ZipkinExporter
@@ -89,3 +94,19 @@ def get_console_exporter():
     from opentelemetry.sdk.trace.export import ConsoleSpanExporter
     console_exporter = ConsoleSpanExporter()
     return console_exporter
+
+def get_no_exporter():
+    """Returns a silent exporter that discards all spans (no console output)"""
+    from opentelemetry.sdk.trace.export import SpanExporter, SpanExportResult
+    from opentelemetry.trace import Span
+    
+    class SilentSpanExporter(SpanExporter):
+        """Silent exporter that discards all spans without printing"""
+        def export(self, spans):
+            # Discard spans silently
+            return SpanExportResult.SUCCESS
+        
+        def shutdown(self):
+            pass
+    
+    return SilentSpanExporter()

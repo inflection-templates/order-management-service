@@ -4,8 +4,15 @@ from sqlalchemy.orm import sessionmaker, Session
 from app.config.config import get_settings
 from .base import Base
 
-from .models import Address, Cart, Coupon, Customer, Merchant, Order
-from .models import OrderCoupon, OrderLineItem, OrderType, OrderHistory, PaymentTransaction, customer_address
+# Import all models to ensure SQLAlchemy can resolve string references in relationships
+# Similar to Node.js database.connector.ts which explicitly imports all entities
+from .models import (
+    Address, Cart, Coupon, Customer, CustomerAddress, Merchant, Order,
+    OrderCoupon, OrderLineItem, OrderType, OrderHistory, 
+    PaymentTransaction, ApiClient, User, Role, UserRole,
+    Tenant, AuthToken, UserExternalAuth, Otp, UserLoginSession,
+    Person, PersonRole, PersonAddresses
+)
 
 settings = get_settings()
 print(settings.DB_CONNECTION_STRING)
@@ -24,6 +31,7 @@ engine = create_engine(settings.DB_CONNECTION_STRING, echo=False)
 #     echo=True,
 # )
 
+# Create all tables - this ensures all models are registered with SQLAlchemy
 Base.metadata.create_all(bind=engine)
 
 LocalSession = sessionmaker(autocommit=False, autoflush=False, bind=engine)
