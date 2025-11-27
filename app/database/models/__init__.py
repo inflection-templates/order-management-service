@@ -14,6 +14,7 @@ from .api_client import ApiClient
 
 # Authentication models - Import these before User to avoid circular dependencies
 from .tenant import Tenant
+from .organization import Organization
 from .auth_token import AuthToken
 from .user_external_auth import UserExternalAuth
 

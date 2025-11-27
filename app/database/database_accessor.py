@@ -10,7 +10,7 @@ from .models import (
     Address, Cart, Coupon, Customer, CustomerAddress, Merchant, Order,
     OrderCoupon, OrderLineItem, OrderType, OrderHistory, 
     PaymentTransaction, ApiClient, User, Role, UserRole,
-    Tenant, AuthToken, UserExternalAuth, Otp, UserLoginSession,
+    Tenant, Organization, AuthToken, UserExternalAuth, Otp, UserLoginSession,
     Person, PersonRole, PersonAddresses
 )
 
