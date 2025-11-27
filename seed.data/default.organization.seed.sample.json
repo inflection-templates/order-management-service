@@ -1,0 +1,19 @@
+{
+    "Name": "<your-organization-name>",
+    "Code": "<your-organization-code>",
+    "Domain": "<your-domain.com>",
+    "Industry": "<your-industry>",
+    "Description": "<your-organization-description>",
+    "WebsiteUrl": "<https://your-website.com>",
+    "LogoUrl": "<https://your-logo-url.com/logo.png>",
+    "ContactEmail": "<your-contact-email@example.com>",
+    "ContactPhone": "<your-contact-phone>",
+    "Address": "<your-address>",
+    "City": "<your-city>",
+    "State": "<your-state>",
+    "PostalCode": "<your-postal-code>",
+    "Country": "<your-country>",
+    "TenantId": "<your-tenant-id>"
+  }
+  
+  

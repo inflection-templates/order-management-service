@@ -1,0 +1,10 @@
+{
+    "Name": "<your-team-name>",
+    "Code": "<your-team-code>",
+    "Description": "<your-team-description>",
+    "OrganizationId": "<your-organization-id>",
+    "OwnerUserId": "<your-owner-user-id>",
+    "Permissions": []
+  }
+  
+  
