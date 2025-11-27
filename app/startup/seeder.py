@@ -44,6 +44,7 @@ class Seeder:
         from app.database.services import role_service
         from app.database.services import api_client_service
         from app.database.services import organization_service
+        from app.database.services import team_service
         
         session = get_db_session()
         try:
@@ -63,6 +64,9 @@ class Seeder:
             
             # 5. Seed default organization
             organization_service.seed_default_organization(session)
+            
+            # 6. Seed default team
+            team_service.seed_default_team(session)
             
             logger.info("Database seeding completed successfully.")
         except Exception as e:

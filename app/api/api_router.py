@@ -13,6 +13,7 @@ from .user.user_routes import router as user_router
 from .role.role_routes import router as role_router
 from .tenant.tenant_routes import router as tenant_router
 from .organization.organization_routes import router as organization_router
+from .team.team_routes import router as team_router
 
 router = APIRouter(prefix=API_PREFIX)
 
@@ -20,6 +21,7 @@ def add_routes():
     router.include_router(auth_router)
     router.include_router(tenant_router)
     router.include_router(organization_router)
+    router.include_router(team_router)
     router.include_router(role_router)
     router.include_router(user_router)
     router.include_router(order_router)
